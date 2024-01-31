@@ -126,7 +126,8 @@ Basic things such as user vars, basic keyboard stuff or trashing and scrolling b
 	    ("NEXT" . "#8bdb12")
 	    ("ONGOING" . "#38c211")
 	    ("IDEA" . "#11b0c2"))
-    ))
+	  )
+    )
 #+end_src
 
 *** Highlight indentation
@@ -342,32 +343,34 @@ Add all useful bindings
 ** Marginalia
 Enable rich annotations because I want to know what I will pick
 #+begin_src elisp
-(use-package marginalia
-  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
-  ;; available in the *Completions* buffer, add it to the
-  ;; `completion-list-mode-map'.
-  :bind (:map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
+  (use-package marginalia
+    ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+    ;; available in the *Completions* buffer, add it to the
+    ;; `completion-list-mode-map'.
+    :bind
+    (:map minibuffer-local-map
+	  ("M-A" . marginalia-cycle)
+	  )
 
-  ;; The :init section is always executed.
-  :init
-  ;; Marginalia must be activated in the :init section of use-package such that
-  ;; the mode gets enabled right away. Note that this forces loading the
-  ;; package.
-  (marginalia-mode))
+    ;; The :init section is always executed.
+    :init
+    ;; Marginalia must be activated in the :init section of use-package such that
+    ;; the mode gets enabled right away. Note that this forces loading the
+    ;; package.
+    (marginalia-mode))
 #+end_src
 
 ** Orderless
 Orderless completion style, because I like seeing in the future
 #+begin_src elisp
-(use-package orderless
-  :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+  (use-package orderless
+    :init
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+    (setq completion-styles '(orderless basic)
+	  completion-category-defaults nil
+	  completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 
 ** Nerd-icons
@@ -449,42 +452,42 @@ In-buffer auto completion
 #+begin_src elisp
   (use-package cape
     ;; Bind dedicated completion commands
-  ;; Alternative prefix keys: C-c p, M-p, M-+, ...
-  ;; :bind (("C-c p p" . completion-at-point) ;; capf
-  ;;        ("C-c p t" . complete-tag)        ;; etags
-  ;;        ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
-  ;;        ("C-c p h" . cape-history)
-  ;;        ("C-c p f" . cape-file)
-  ;;        ("C-c p k" . cape-keyword)
-  ;;        ("C-c p s" . cape-elisp-symbol)
-  ;;        ("C-c p e" . cape-elisp-block)
-  ;;        ("C-c p a" . cape-abbrev)
-  ;;        ("C-c p l" . cape-line)
-  ;;        ("C-c p w" . cape-dict)
-  ;;        ("C-c p :" . cape-emoji)
-  ;;        ("C-c p \\" . cape-tex)
-  ;;        ("C-c p _" . cape-tex)
-  ;;        ("C-c p ^" . cape-tex)
-  ;;        ("C-c p &" . cape-sgml)
-  ;;        ("C-c p r" . cape-rfc1345))
-  :init
-  ;; Add to the global default value of `completion-at-point-functions' which is
-  ;; used by `completion-at-point'.  The order of the functions matters, the
-  ;; first function returning a result wins.  Note that the list of buffer-local
-  ;; completion functions takes precedence over the global list.
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
-  ;;(add-to-list 'completion-at-point-functions #'cape-history)
-  ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
-  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
-  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
-  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
-  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
-  ;;(add-to-list 'completion-at-point-functions #'cape-line)
-  )
+    ;; Alternative prefix keys: C-c p, M-p, M-+, ...
+    ;; :bind (("C-c p p" . completion-at-point) ;; capf
+    ;;        ("C-c p t" . complete-tag)        ;; etags
+    ;;        ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
+    ;;        ("C-c p h" . cape-history)
+    ;;        ("C-c p f" . cape-file)
+    ;;        ("C-c p k" . cape-keyword)
+    ;;        ("C-c p s" . cape-elisp-symbol)
+    ;;        ("C-c p e" . cape-elisp-block)
+    ;;        ("C-c p a" . cape-abbrev)
+    ;;        ("C-c p l" . cape-line)
+    ;;        ("C-c p w" . cape-dict)
+    ;;        ("C-c p :" . cape-emoji)
+    ;;        ("C-c p \\" . cape-tex)
+    ;;        ("C-c p _" . cape-tex)
+    ;;        ("C-c p ^" . cape-tex)
+    ;;        ("C-c p &" . cape-sgml)
+    ;;        ("C-c p r" . cape-rfc1345))
+    :init
+    ;; Add to the global default value of `completion-at-point-functions' which is
+    ;; used by `completion-at-point'.  The order of the functions matters, the
+    ;; first function returning a result wins.  Note that the list of buffer-local
+    ;; completion functions takes precedence over the global list.
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+    ;;(add-to-list 'completion-at-point-functions #'cape-history)
+    ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+    ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+    ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+    ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+    ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+    ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+    ;;(add-to-list 'completion-at-point-functions #'cape-line)
+    )
 #+end_src
 
 ** Embark
@@ -604,10 +607,10 @@ Basic configuration stuff
 
     :bind
     ((:prefix-map org-map
-		   :prefix-docstring "Org map"
-		   :prefix "C-c n"
-		   ("c" . org-capture)
-		   )
+		  :prefix-docstring "Org map"
+		  :prefix "C-c n"
+		  ("c" . org-capture)
+		  )
      (:map org-mode-map
 	   ("M-<down>" . org-move-subtree-down)
 	   ("M-<up>" . org-move-subtree-up))
@@ -621,7 +624,7 @@ Basic configuration stuff
 			)
 	   )
      (:map search-map
-	  ("h" . consult-org-heading)))
+	   ("h" . consult-org-heading)))
 
     :config
     ;; Org Babel default headers args
@@ -645,7 +648,7 @@ Basic configuration stuff
 
     ;; Latex to PDF stuff
     (setq org-latex-pdf-process '("latexmk -f -bibtex -pdf -%latex -synctex=1 -interaction=nonstopmode -output-directory=%o %f"))
-  )
+    )
 #+end_src
 
 ** FIXME Theming
@@ -721,8 +724,8 @@ TODO keywords do not have correct font in super-agenda
   (use-package doct
     :after org
     :config
-      (setq org-capture-templates
-	(doct '(("Tasks" :keys "t"
+    (setq org-capture-templates
+	  (doct '(("Tasks" :keys "t"
 		   :file org-capture-todo-file
 		   :prepend t
 		   :headline "General Tasks"
@@ -735,70 +738,70 @@ TODO keywords do not have correct font in super-agenda
 			       :extra "\nDEADLINE: %^{Deadline:}t")
 			      ("Scheduled Task" :keys "s"
 			       :extra "\nSCHEDULED: %^{Start time:}t")))
-		("Scheduled stuff" :keys "s"
-		 :file org-capture-todo-file
-		 :prepend t
-		 :headline "Scheduled"
-		 :type entry
-		 :template ("* %?"
-			    "SCHEDULED: %^{Date:}t"))
-		("PhD" :keys "d"
-		 :file org-capture-phd-file
-		 :type entry
-		 :headline "PhD Tasks"
-		 :children (("PhD Tasks" :keys "t"
-			    :prepend t
-			    :template ("* TODO %?"
-				       "%i %a")
-			    :children (("General task" :keys "k"
-					:template ("* TODO %?"
-						   "%i %a"))
-				       ("Task with deadline" :keys "d"
-					:template ("* TODO %?"
-						   "DEADLINE: %^{Deadline:}t"
-						   "%i %a"))
-				       ("Scheduled Task" :keys "s"
-					:template ("* TODO %?"
-						   "SCHEDULED: %^{Start time:}t"))))
-			    ("Meetings" :keys "m"
-			     :headline "Meetings"
-			     :type entry
-			     :children (("Meeting" :keys "m"
-					 :template ("* %?"
-						    "SCHEDULED: %^{Date:}T"))
-					("Regular advancement meeting" :keys "r"
-					 :headline "Regular advancement meetings"
-					 :template ("* Regular advancement meeting"
-						    "SCHEDULED: %^{Date:}T"
-						    "https://orga2.webex.com/meet/Username2"))
-					 ))
-			    ("Formations" :keys "f"
-			     :headline "Formations / Conferences"
-			     :type entry
-			     :template ("* %?"
-					"SCHEDULED: %^{Date:}T"))
-			    ("Scheduled stuff" :keys "s"
-			     :headline "Scheduled"
-			     :template ("* %?"
-					"SCHEDULED: %^{Date:}t"))
-			    ("Ideas" :keys "i"
-			     :headline "Ideas"
-			     :type entry
-			     :template ("* IDEA %?"))))
-		("Protocol with selection" :keys "p"
-		 :file my/generate-org-note-name
-		 :type plain
-		 :template ("#+TITLE: %:description\n"
-			    "Added on: %u"
-			    "Source: %:link\n\n %i %?"))
-		("Protocol without selection" :keys "L"
-		 :file my/generate-org-note-name
-		 :type plain
-		 :template ("#+TITLE: %:description\n"
-			    "Added on: %u"
-			    "Source: %:link\n\n %i %?"))
-		)))
-  )
+		  ("Scheduled stuff" :keys "s"
+		   :file org-capture-todo-file
+		   :prepend t
+		   :headline "Scheduled"
+		   :type entry
+		   :template ("* %?"
+			      "SCHEDULED: %^{Date:}t"))
+		  ("PhD" :keys "d"
+		   :file org-capture-phd-file
+		   :type entry
+		   :headline "PhD Tasks"
+		   :children (("PhD Tasks" :keys "t"
+			       :prepend t
+			       :template ("* TODO %?"
+					  "%i %a")
+			       :children (("General task" :keys "k"
+					   :template ("* TODO %?"
+						      "%i %a"))
+					  ("Task with deadline" :keys "d"
+					   :template ("* TODO %?"
+						      "DEADLINE: %^{Deadline:}t"
+						      "%i %a"))
+					  ("Scheduled Task" :keys "s"
+					   :template ("* TODO %?"
+						      "SCHEDULED: %^{Start time:}t"))))
+			      ("Meetings" :keys "m"
+			       :headline "Meetings"
+			       :type entry
+			       :children (("Meeting" :keys "m"
+					   :template ("* %?"
+						      "SCHEDULED: %^{Date:}T"))
+					  ("Regular advancement meeting" :keys "r"
+					   :headline "Regular advancement meetings"
+					   :template ("* Regular advancement meeting"
+						      "SCHEDULED: %^{Date:}T"
+						      "https://orga2.webex.com/meet/Username2"))
+					  ))
+			      ("Formations" :keys "f"
+			       :headline "Formations / Conferences"
+			       :type entry
+			       :template ("* %?"
+					  "SCHEDULED: %^{Date:}T"))
+			      ("Scheduled stuff" :keys "s"
+			       :headline "Scheduled"
+			       :template ("* %?"
+					  "SCHEDULED: %^{Date:}t"))
+			      ("Ideas" :keys "i"
+			       :headline "Ideas"
+			       :type entry
+			       :template ("* IDEA %?"))))
+		  ("Protocol with selection" :keys "p"
+		   :file my/generate-org-note-name
+		   :type plain
+		   :template ("#+TITLE: %:description\n"
+			      "Added on: %u"
+			      "Source: %:link\n\n %i %?"))
+		  ("Protocol without selection" :keys "L"
+		   :file my/generate-org-note-name
+		   :type plain
+		   :template ("#+TITLE: %:description\n"
+			      "Added on: %u"
+			      "Source: %:link\n\n %i %?"))
+		  )))
+    )
 #+end_src
 
 ** Roam
@@ -821,17 +824,17 @@ TODO keywords do not have correct font in super-agenda
 			     ("j" . org-roam-dailies-capture-today))
 		(:map org-roam-map
 		      (:prefix-map org-roam-add-map
-			    :prefix-docstring "prefix for add functions"
-			    :prefix "a"
-			    ("a" . org-roam-alias-add)
-			    ("r" . org-roam-ref-add)
-			    ("t" . org-roam-tag-add))
-			 (:prefix-map org-roam-remove-map
-			    :prefix-docstring "prefix for remove functions"
-			    :prefix "A"
-			    ("a" . org-roam-alias-remove)
-			    ("r" . org-roam-ref-remove)
-			    ("t" . org-roam-tag-remove)))
+				   :prefix-docstring "prefix for add functions"
+				   :prefix "a"
+				   ("a" . org-roam-alias-add)
+				   ("r" . org-roam-ref-add)
+				   ("t" . org-roam-tag-add))
+		      (:prefix-map org-roam-remove-map
+				   :prefix-docstring "prefix for remove functions"
+				   :prefix "A"
+				   ("a" . org-roam-alias-remove)
+				   ("r" . org-roam-ref-remove)
+				   ("t" . org-roam-tag-remove)))
 		)
     :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
@@ -841,10 +844,10 @@ TODO keywords do not have correct font in super-agenda
     ;; (require 'org-roam-protocol)
 
     (add-to-list 'org-roam-capture-templates
-	       '("r" "Bibliography reference" plain "\n- tags :: [[roam:Unreviewed papers]] %?"
-		 :target
-		 (file+head "${citar-citekey}.org" "#+title: ${citar-title}")
-		 :unnarrowed t))
+		 '("r" "Bibliography reference" plain "\n- tags :: [[roam:Unreviewed papers]] %?"
+		   :target
+		   (file+head "${citar-citekey}.org" "#+title: ${citar-title}")
+		   :unnarrowed t))
 
     (cl-defmethod org-roam-node-directories ((node org-roam-node))
       (if-let ((dirs (file-name-directory (file-relative-name     (org-roam-node-file node) org-roam-directory))))
@@ -872,10 +875,10 @@ TODO keywords do not have correct font in super-agenda
 
   (use-package org-roam-ui
     :after org-roam
-  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;;         a hookable mode anymore, you're advised to pick something yourself
-  ;;         if you don't care about startup time, use
-  ;;  :hook (after-init . org-roam-ui-mode)
+    ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+    ;;         a hookable mode anymore, you're advised to pick something yourself
+    ;;         if you don't care about startup time, use
+    ;;  :hook (after-init . org-roam-ui-mode)
     :bind
     (:map org-roam-map
 	  (:prefix-map org-roam-ui-map
@@ -885,36 +888,36 @@ TODO keywords do not have correct font in super-agenda
 		       ("l" . org-roam-ui-node-local)
 		       ("z" . org-roam-ui-node-zoom))
 	  )
-      :config
-      (setq org-roam-ui-sync-theme t
-	    org-roam-ui-follow t
-	    org-roam-ui-update-on-save t
-	    org-roam-ui-open-on-start t))
+    :config
+    (setq org-roam-ui-sync-theme t
+	  org-roam-ui-follow t
+	  org-roam-ui-update-on-save t
+	  org-roam-ui-open-on-start t))
 #+end_src
 
 *** Roam bibtex
 #+begin_src elisp
-(use-package org-roam-bibtex
-  :after org-roam
-  :config
-  (require 'org-ref)
-)
+  (use-package org-roam-bibtex
+    :after org-roam
+    :config
+    (require 'org-ref)
+    )
 #+end_src
 ** Ref + bibtex
 #+begin_src elisp
-    (use-package org-ref
-      :after org
-      ;; :init
-      ;; (setq bibtex-autokey-year-length 2
-      ;;       bibtex-autokey-name-year-separator ""
-      ;;       bibtex-autokey-year-title-separator "-"
-      ;;       bibtex-autokey-titleword-separator "_"
-      ;;       bibtex-autokey-titlewords 3
-      ;;       bibtex-autokey-titlewords-stretch 1
-      ;;       bibtex-autokey-titleword-length 5)
+  (use-package org-ref
+    :after org
+    ;; :init
+    ;; (setq bibtex-autokey-year-length 2
+    ;;       bibtex-autokey-name-year-separator ""
+    ;;       bibtex-autokey-year-title-separator "-"
+    ;;       bibtex-autokey-titleword-separator "_"
+    ;;       bibtex-autokey-titlewords 3
+    ;;       bibtex-autokey-titlewords-stretch 1
+    ;;       bibtex-autokey-titleword-length 5)
 
-      :bind
-      (:map org-map
+    :bind
+    (:map org-map
 	  (:prefix-map org-ref-paper-map
 		       :prefix-docstring "Add papers with org-ref"
 		       :prefix "p"
@@ -922,7 +925,7 @@ TODO keywords do not have correct font in super-agenda
 		       ("d" . doi-add-bibtex-entry)
 		       ("p" . pubmed-insert-bibtex-from-pmid))
 	  )
-      )
+    )
 #+end_src
 
 ** Citar
@@ -1027,7 +1030,7 @@ TODO keywords do not have correct font in super-agenda
     ;; Have citation link faces look closer to as they were for `org-ref'
     (org-cite ((t (:foreground "DarkSeaGreen4"))))
     (org-cite-key ((t (:foreground "forest green" :slant italic))))
-  )
+    )
 
   (use-package citar-embark
     :after (citar embark)
@@ -1286,18 +1289,18 @@ Treesit is now included in Emacs 29, so doesn't need much
 
 * Spell highlighting
 #+begin_src elisp
-      (use-package jinx
-	:hook (((text-mode conf-mode) . jinx-mode))
-	:bind (("M-$" . jinx-correct)
-	       ("C-M-$" . jinx-languages)
-	       (:map jinx-overlay-map
-		     ("<mouse-1>" . nil)))
-	:config
-	(setq jinx-languages "en_US fr_FR") ;; Languages need to be separated by a space
-	(vertico-multiform-mode 1)
-	(add-to-list 'vertico-multiform-categories
-		     '(jinx grid (vertico-grid-annotate . 20)))
-	)
+  (use-package jinx
+    :hook (((text-mode conf-mode) . jinx-mode))
+    :bind (("M-$" . jinx-correct)
+	   ("C-M-$" . jinx-languages)
+	   (:map jinx-overlay-map
+		 ("<mouse-1>" . nil)))
+    :config
+    (setq jinx-languages "en_US fr_FR") ;; Languages need to be separated by a space
+    (vertico-multiform-mode 1)
+    (add-to-list 'vertico-multiform-categories
+		 '(jinx grid (vertico-grid-annotate . 20)))
+    )
 #+end_src
 
 * Coding languages
@@ -1337,16 +1340,16 @@ Apheleia seems easier to work with for now
     :config
     ;; Python formatting
     (setf (alist-get 'ruff apheleia-formatters)
-      '("ruff" "format"
-       (apheleia-formatters-fill-column "--line-length")
-       "--stdin-filename" filepath "-"))
+	  '("ruff" "format"
+	    (apheleia-formatters-fill-column "--line-length")
+	    "--stdin-filename" filepath "-"))
     (push '(ruff-imports . ("ruff" "--select" "I" "--select" "F401" "--fix"
-       (apheleia-formatters-fill-column "--line-length")
-       "--stdin-filename" filepath "-")) apheleia-formatters)
+			    (apheleia-formatters-fill-column "--line-length")
+			    "--stdin-filename" filepath "-")) apheleia-formatters)
     (setf (alist-get 'python-mode apheleia-mode-alist)
-      '(ruff ruff-imports))
+	  '(ruff ruff-imports))
     (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-      '(ruff ruff-imports))
+	  '(ruff ruff-imports))
     )
 #+end_src
 
@@ -1363,8 +1366,7 @@ Apheleia seems easier to work with for now
 
   (use-package eglot
     :hook
-    ((eglot-managed-mode . my/eglot-capf)
-     (after-save . eglot-format))
+    ((eglot-managed-mode . my/eglot-capf))
     :bind
     (:prefix-map eglot-map
 		 :prefix-docstring "Eglot map"
@@ -1972,33 +1974,33 @@ Only works on X11, unfortunate
 	  mu4e-headers-thread-child-prefix         '("├>" . "├▶")
 	  mu4e-headers-thread-last-child-prefix    '("└>" . "╰▶")
 	  mu4e-headers-fields '((:maildir . 5)
-			       (:human-date . 12)
-			       (:flags . 10)
-			       (:from-or-to . 25)
-			       (:subject))
+				(:human-date . 12)
+				(:flags . 10)
+				(:from-or-to . 25)
+				(:subject))
 	  )
     (setq mu4e-bookmarks
 	  '((:name "Unread messages"
-	     :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/en/Corbeille"
-	     :key ?u)
+		   :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/en/Corbeille"
+		   :key ?u)
 	    (:name "Today's messages"
-	     :query "date:today..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/orga1-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
-	     :key ?t)
+		   :query "date:today..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/orga1-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+		   :key ?t)
 	    (:name "Last 7 days"
-	     :query "date:7d..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/orga1-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
-	     :key ?w)
+		   :query "date:7d..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/orga1-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+		   :key ?w)
 	    (:name "PhD supervisor messages"
-	     :query "from:jane doe OR from:john doe OR from:bob doe"
-	     :key ?p)
+		   :query "from:jane doe OR from:john doe OR from:bob doe"
+		   :key ?p)
 	    (:name "Flagged messages"
-	     :query "flag:flagged"
-	     :key ?f)))
+		   :query "flag:flagged"
+		   :key ?f)))
 #+end_src
 
 ** Mu4e contexts
 *** Orga2 context
 #+begin_src elisp
- (setq mu4e-contexts
+  (setq mu4e-contexts
 	(list
 	 (make-mu4e-context
 	  :name "orga2-short"
@@ -2063,7 +2065,7 @@ Only works on X11, unfortunate
    :match-func (lambda (msg)
 		 (when msg
 		   (string-match-p "^/orga4" (mu4e-message-field msg :maildir))))
-   :vars '((user-mail-address . "Username@orga4.net")
+   :vars '((user-mail-address . "Username1@orga4.net")
 	   (user-full-name . "Name2")
 	   (mu4e-sent-folder . "/orga4/Sent")
 	   (mu4e-drafts-folder . "/orga4/drafts")
@@ -2072,7 +2074,7 @@ Only works on X11, unfortunate
 	   (org-msg-signature . "\n--\nName2")
 	   (mu4e-compose-format-flowed . t)
 	   (smtpmail-queue-dir . "~/.mail/orga4/queue/cur")
-	   (smtpmail-smtp-user . "Username")
+	   (smtpmail-smtp-user . "Username1")
 	   (smtpmail-default-smtp-server . "mail.orga4.net")
 	   (smtpmail-smtp-server . "mail.orga4.net")
 	   (smtpmail-smtp-service . 587)
@@ -2327,7 +2329,7 @@ SyncState *
 
 IMAPAccount orga4
 Host mail.orga4.net
-User Username@orga4.net
+User Username1@orga4.net
 PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/orga4.net.gpg"
 AuthMechs LOGIN
 SSLType IMAPS
