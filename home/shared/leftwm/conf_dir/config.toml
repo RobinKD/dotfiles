@@ -1,0 +1,377 @@
+#possible keybindings
+#https://github.com/leftwm/leftwm/blob/master/leftwm-core/src/utils/xkeysym_lookup.rs
+
+#Mod4 = Super key
+modkey = "Mod4"
+workspaces = []
+tags = ["emacs", "web", "files", "Terminal", "email", "chats", "7", "8", "9"]
+#tags = ["www", "edit", "gimp", "inkscape", "meld", "video","vm", "files", "music"]
+
+#layouts = ["MainAndVertStack", "MainAndHorizontalStack", "MainAndDeck", "GridHorizontal", "EvenHorizontal", "EvenVertical", "Fibonacci", "CenterMain", "CenterMainBalanced", "Monocle", "RightWiderLeftStack", "LeftWiderRightStack"]
+layouts = ["MainAndVertStack", "MainAndDeck", "Monocle"]
+layout_mode = "Tag"
+scratchpad = [{ name = "Alacritty scratchpad", value = "alacritty", x = 360, y = 190, height = 800, width = 1200 },
+{ name = "Featherpad scratchpad", value = "featherpad", x = 360, y = 190, height = 800, width = 1200 },]
+disable_current_tag_swap = true
+focus_behaviour = "Sloppy"
+focus_new_windows = true
+
+[[keybind]]
+command = "Execute"
+value = "conky"
+modifier = ["modkey"]
+key = "c"
+
+[[keybind]]
+command = "Execute"
+value = "pkill conky"
+modifier = ["modkey", "Shift"]
+key = "c"
+
+[[keybind]]
+command = "Execute"
+value = "$HOME/.config/rofi/launchers/type-3/launcher.sh"
+modifier = ["modkey"]
+key = "d"
+
+[[keybind]]
+command = "Execute"
+value = "dmenu_run -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=14'"
+modifier = ["modkey","Shift"]
+key = "d"
+
+[[keybind]]
+command = "Execute"
+value = "emacsclient -c -a emacs"
+modifier = ["modkey"]
+key = "e"
+
+[[keybind]]
+command = "Execute"
+value = "emacsclient --eval '(emacs-everywhere)'"
+modifier = ["modkey", "Alt"]
+key = "e"
+
+[[keybind]]
+command = "Execute"
+value = "rofi -modi window -show window -show-icons -window-thumbnail -theme $HOME/.config/leftwm/themes/current/rofi/previews.rasi -window-format '{c} {t:12}'"
+modifier = ["modkey"]
+key = "Tab"
+
+[[keybind]]
+command = "Execute"
+value = "brightnessctl s 1%-"
+modifier = []
+key = "XF86XK_MonBrightnessDown"
+
+[[keybind]]
+command = "Execute"
+value = "brightnessctl s 1%+"
+modifier = []
+key = "XF86XK_MonBrightnessUp"
+
+[[keybind]]
+command = "Execute"
+value = "amixer set Master toggle"
+modifier = []
+key = "XF86XK_AudioMute"
+
+[[keybind]]
+command = "Execute"
+value = "amixer set Master 1%+"
+modifier = []
+key = "XF86XK_AudioRaiseVolume"
+
+[[keybind]]
+command = "Execute"
+value = "amixer set Master 1%-"
+modifier = []
+key = "XF86XK_AudioLowerVolume"
+
+[[keybind]]
+command = "Execute"
+value = "amixer set Capture toggle"
+modifier = []
+key = "XF86XK_AudioMicMute"
+
+[[keybind]]
+command = "Execute"
+value = "loginctl kill-session $XDG_SESSION_ID"
+modifier = ["modkey", "Shift"]
+key = "x"
+
+[[keybind]]
+command = "Execute"
+value = "betterlockscreen -l dim"
+modifier = ["modkey", "Shift"]
+key = "l"
+
+[[keybind]]
+command = "Execute"
+value = "systemctl suspend"
+modifier = ["modkey", "Shift"]
+key = "s"
+
+[[keybind]]
+command = "Execute"
+value = "$HOME/.config/rofi/powermenu/type-4/powermenu.sh"
+modifier = ["modkey", "Alt"]
+key = "p"
+
+[[keybind]]
+command = "Execute"
+value = "leftwm-command ToggleFullScreen"
+modifier = ["modkey"]
+key = "f"
+
+[[keybind]]
+command = "Execute"
+value = "alacritty"
+modifier = ["modkey"]
+key = "Return"
+
+[[keybind]]
+command = "Execute"
+value = "flameshot full"
+modifier = ["modkey"]
+key = "Print"
+
+[[keybind]]
+command = "Execute"
+value = "flameshot gui"
+modifier = []
+key = "Print"
+
+[[keybind]]
+command = "CloseWindow"
+modifier = ["modkey"]
+key = "q"
+
+[[keybind]]
+command = "Execute"
+value = "xdotool getwindowfocus windowkill"
+modifier = ["modkey", "Shift"]
+key = "q"
+
+[[keybind]]
+command = "Execute"
+value = "kill -SIGUSR2 `xdotool getwindowfocus getwindowpid`"
+modifier = ["modkey", "Control"]
+key = "q"
+
+[[keybind]]
+command = "HardReload"
+modifier = ["modkey", "Shift"]
+key = "b"
+
+[[keybind]]
+command = "SoftReload"
+modifier = ["modkey", "Shift"]
+key = "r"
+
+[[keybind]]
+command = "SwapTags"
+modifier = ["modkey", "Shift"]
+key = "w"
+
+[[keybind]]
+command = "MoveWindowUp"
+modifier = ["modkey", "Shift"]
+key = "k"
+
+[[keybind]]
+command = "MoveWindowUp"
+modifier = ["modkey", "Shift"]
+key = "Up"
+
+[[keybind]]
+command = "MoveWindowDown"
+modifier = ["modkey", "Shift"]
+key = "j"
+
+[[keybind]]
+command = "MoveWindowDown"
+modifier = ["modkey", "Shift"]
+key = "Down"
+
+[[keybind]]
+command = "FocusWindowUp"
+modifier = ["modkey"]
+key = "k"
+
+[[keybind]]
+command = "FocusWindowDown"
+modifier = ["modkey"]
+key = "j"
+
+[[keybind]]
+command = "NextLayout"
+modifier = ["modkey"]
+key = "space"
+
+[[keybind]]
+command = "FocusWorkspaceNext"
+modifier = ["modkey"]
+key = "l"
+
+[[keybind]]
+command = "FocusWorkspacePrevious"
+modifier = ["modkey"]
+key = "h"
+
+[[keybind]]
+command = "FocusNextTag"
+modifier = ["modkey"]
+key = "Right"
+
+[[keybind]]
+command = "FocusPreviousTag"
+modifier = ["modkey"]
+key = "Left"
+
+[[keybind]]
+command = "GotoTag"
+value = "1"
+modifier = ["modkey"]
+key = "ampersand"
+
+[[keybind]]
+command = "GotoTag"
+value = "2"
+modifier = ["modkey"]
+key = "eacute"
+
+[[keybind]]
+command = "GotoTag"
+value = "3"
+modifier = ["modkey"]
+key = "quotedbl"
+
+[[keybind]]
+command = "GotoTag"
+value = "4"
+modifier = ["modkey"]
+key = "apostrophe"
+
+[[keybind]]
+command = "GotoTag"
+value = "5"
+modifier = ["modkey"]
+key = "parenleft"
+
+[[keybind]]
+command = "GotoTag"
+value = "6"
+modifier = ["modkey"]
+key = "minus"
+
+[[keybind]]
+command = "GotoTag"
+value = "7"
+modifier = ["modkey"]
+key = "egrave"
+
+[[keybind]]
+command = "GotoTag"
+value = "8"
+modifier = ["modkey"]
+key = "underscore"
+
+[[keybind]]
+command = "GotoTag"
+value = "9"
+modifier = ["modkey"]
+key = "ccedilla"
+
+[[keybind]]
+command = "MoveToTag"
+value = "1"
+modifier = ["modkey", "Shift"]
+key = "ampersand"
+
+[[keybind]]
+command = "MoveToTag"
+value = "2"
+modifier = ["modkey", "Shift"]
+key = "eacute"
+
+[[keybind]]
+command = "MoveToTag"
+value = "3"
+modifier = ["modkey", "Shift"]
+key = "quotedbl"
+
+[[keybind]]
+command = "MoveToTag"
+value = "4"
+modifier = ["modkey", "Shift"]
+key = "apostrophe"
+
+[[keybind]]
+command = "MoveToTag"
+value = "5"
+modifier = ["modkey", "Shift"]
+key = "parenleft"
+
+[[keybind]]
+command = "MoveToTag"
+value = "6"
+modifier = ["modkey", "Shift"]
+key = "minus"
+
+[[keybind]]
+command = "MoveToTag"
+value = "7"
+modifier = ["modkey", "Shift"]
+key = "egrave"
+
+[[keybind]]
+command = "MoveToTag"
+value = "8"
+modifier = ["modkey", "Shift"]
+key = "underscore"
+
+[[keybind]]
+command = "MoveToTag"
+value = "9"
+modifier = ["modkey", "Shift"]
+key = "ccedilla"
+
+[[keybind]]
+command = "ToggleScratchPad"
+value = "Featherpad scratchpad" # Name set for the scratchpad
+modifier = ["modkey"]
+key = "p"
+
+[[keybind]]
+command = "ToggleScratchPad"
+value = "Alacritty scratchpad" # Name set for the scratchpad
+modifier = ["modkey", "Shift"]
+key = "p"
+
+[[keybind]]
+command = "IncreaseMainWidth"
+value = "1"
+modifier = ["modkey"]
+key = "a"
+
+[[keybind]]
+command = "DecreaseMainWidth"
+value = "1"
+modifier = ["modkey", "Shift"]
+key = "a"
+
+[[keybind]]
+command = "ToggleSticky"
+modifier = ["modkey"]
+key = "v"
+
+[[keybind]]
+command = "FloatingToTile"
+modifier = ["modkey", "Shift"]
+key = "t"
+
+[[keybind]]
+command = "TileToFloating"
+modifier = ["modkey"]
+key = "t"

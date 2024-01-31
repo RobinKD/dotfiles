@@ -1,0 +1,2356 @@
+#+title: My Emacs config
+#+auto_tangle: t
+#+property: header-args:elisp :tangle ~/.emacs.d/init.el
+#+export_file_name: config_public.org
+#+options: author:nil prop:t
+#+exclude_tags: noexport
+
+* Basic stuff
+Basic things such as user vars, basic keyboard stuff or trashing and scrolling behaviour.
+
+#+begin_src elisp
+  ;;; package --- Summary
+  ;;; Commentary:
+  ;;; My personal Emacs config
+
+  ;;; Very basic stuff
+  (setq user-full-name "Name1"
+	user-mail-address "example@email.com")
+
+  (setq auth-sources '(password-store)
+	auth-source-cache-expiry 86400) ; default is 7200 (2h)
+  (auth-source-pass-enable)
+
+  (setq delete-by-moving-to-trash t                      ; Delete files to trash
+	window-combination-resize t                      ; take new window space from all other windows (not just current)
+	standard-indent 2
+	x-stretch-cursor t                               ; Stretch cursor to the glyph width
+	password-cache-expiry nil                   ; I can trust my computers ... can't I?
+	;; scroll-preserve-screen-position 'always     ; Don't have `point' jump around
+	scroll-margin 2                                  ; It's nice to maintain a little margin
+	browse-url-browser-function 'browse-url-firefox
+	file-name-version-regexp "\\(?:~\\|\\.~[-[:alnum:]:#@^._]+\\(?:~[[:digit:]]+\\)?~\\|\\##[.[:alnum:]]+\\)";; To have correct mode for yadm alternate files
+	display-line-numbers-type t
+	auto-save-default nil
+	make-backup-files nil
+	auto-save-visited-interval 30
+	split-width-threshold 120
+	)
+
+  (global-auto-revert-mode)                        ; Revert buffer automatically if changed on disk
+  (auto-save-visited-mode)
+
+  ;; Remap Keypad numbers
+  (keymap-global-set "<kp-0>" "0")
+  (keymap-global-set "<kp-1>" "1")
+  (keymap-global-set "<kp-2>" "2")
+  (keymap-global-set "<kp-3>" "3")
+  (keymap-global-set "<kp-4>" "4")
+  (keymap-global-set "<kp-5>" "5")
+  (keymap-global-set "<kp-6>" "6")
+  (keymap-global-set "<kp-7>" "7")
+  (keymap-global-set "<kp-8>" "8")
+  (keymap-global-set "<kp-9>" "9")
+
+  ;; Remap annoying suspend-emacs and suspend-frame
+  (keymap-global-set "C-z" nil)
+  (keymap-global-set "C-x C-z" nil)
+
+  (use-package which-key
+    :init
+    (which-key-mode)
+    )
+
+  ;; I really want new windows created to get focus
+  (defun my/split-window-right ()
+    (interactive)
+    (select-window (split-window-right)))
+
+  (defun my/split-window-below ()
+    (interactive)
+    (select-window (split-window-below)))
+
+  (keymap-global-set "C-x 2" #'my/split-window-below)
+  (keymap-global-set "C-x 3" #'my/split-window-right)
+#+end_src
+
+* Basic Theming stuff
+** Remove ugly emacs things
+#+begin_src elisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+** Catppuccin colors
+#+begin_src elisp
+(load-theme 'catppuccin :no-confirm)
+#+end_src
+
+** Basic font
+#+begin_src elisp
+  (set-face-attribute 'default nil :font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16 :weight 'semi-bold))
+  (add-hook 'server-after-make-frame-hook (lambda () (if #'daemonp (set-face-attribute 'default nil :font (font-spec :family "SauceCodePro Nerd Font Mono" :size 16 :weight 'semi-bold)))))
+#+end_src
+
+** Coding stuff
+*** Electric pair
+#+begin_src elisp
+  (use-package electric-pair
+    :hook ((text-mode prog-mode) . electric-pair-mode))
+#+end_src
+
+*** Line numbers
+#+begin_src elisp
+(use-package display-line-numbers
+  :hook (prog-mode . global-display-line-numbers-mode)
+  )
+#+end_src
+
+*** Highlight TODOs
+#+begin_src elisp
+  (use-package hl-todo
+    :init
+    (global-hl-todo-mode)
+    :config
+    (setq hl-todo-keyword-faces
+	  '(("TODO"   . "#db9112")
+	    ("FIXME"  . "#cc1714")
+	    ("DEBUG"  . "#dbd112")
+	    ("DONE" . "gray20")
+	    ("KILL" . "gray20")
+	    ("STRT" . "#8bdb12")
+	    ("WAIT" . "#dbd112")
+	    ("HOLD" . "#dbd112")
+	    ("PROJ" . "#db9112")
+	    ("REVIEW" . "#8b12db")
+	    ("NEXT" . "#8bdb12")
+	    ("ONGOING" . "#38c211")
+	    ("IDEA" . "#11b0c2"))
+    ))
+#+end_src
+
+*** Highlight indentation
+#+begin_src elisp
+(use-package highlight-indent-guides
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :init (setq highlight-indent-guides-method 'character)
+  :config
+  (setq highlight-indent-guides-auto-enabled nil)
+  (set-face-foreground 'highlight-indent-guides-character-face "gray25")
+  )
+#+end_src
+*** Git gutter
+Highlight changes wrt git in left margin
+#+begin_src elisp
+(use-package git-gutter
+  :init
+  (global-git-gutter-mode)
+  )
+#+end_src
+
+** Doom modeline
+#+begin_src elisp
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom-face (doom-modeline-buffer-modified ((t (:foreground "orange"))))
+  )
+#+end_src
+
+* Meow config
+This is how I type and I like it!
+#+begin_src elisp
+  ;; Meow config
+  (defun meow-setup ()
+    (add-to-list 'meow-keypad-start-keys '(?l . ?l))
+    (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+    (meow-motion-overwrite-define-key
+     '("j" . meow-next)
+     '("k" . meow-prev)
+     '("<escape>" . ignore))
+    (meow-leader-define-key
+     ;; SPC j/k will run the original command in MOTION state.
+     '("j" . "H-j")
+     '("k" . "H-k")
+     ;; Use SPC (0-9) for digit arguments.
+     '("1" . meow-digit-argument)
+     '("2" . meow-digit-argument)
+     '("3" . meow-digit-argument)
+     '("4" . meow-digit-argument)
+     '("5" . meow-digit-argument)
+     '("6" . meow-digit-argument)
+     '("7" . meow-digit-argument)
+     '("8" . meow-digit-argument)
+     '("9" . meow-digit-argument)
+     '("0" . meow-digit-argument)
+     '("/" . meow-keypad-describe-key)
+     ;; '("a" . "C-c o s")
+     '("b" . consult-buffer)
+     ;; '("C" . "C-c c")
+     '("d" . dired)
+     '("D" . magit-list-repositories)
+     '("e" . eglot)
+     ;; '("f" . "C-c f")
+     ;; '("i" . "C-c i")
+     '("M" . mu4e)
+     '("n" . "C-c n")
+     ;; '("o" . "C-c o")
+     '("p" . "C-x p")
+     ;; '("q" . "C-c q")
+     '("Q" . kill-this-buffer)
+     '("s" . "C-c s")
+     '("t" . "C-x t")
+     '("v" . "C-c v")
+     ;; '("w" . "C-c w")
+     '("?" . meow-cheatsheet))
+    (meow-normal-define-key
+     '("0" . meow-expand-0)
+     '("9" . meow-expand-9)
+     '("8" . meow-expand-8)
+     '("7" . meow-expand-7)
+     '("6" . meow-expand-6)
+     '("5" . meow-expand-5)
+     '("4" . meow-expand-4)
+     '("3" . meow-expand-3)
+     '("2" . meow-expand-2)
+     '("1" . meow-expand-1)
+     '("-" . negative-argument)
+     '(";" . meow-reverse)
+     '("," . meow-inner-of-thing)
+     '("." . meow-bounds-of-thing)
+     '("(" . meow-beginning-of-thing)
+     '(")" . meow-end-of-thing)
+     '("a" . meow-append)
+     '("A" . meow-open-below)
+     '("b" . meow-back-word)
+     '("B" . meow-back-symbol)
+     '("c" . meow-change)
+     '("d" . meow-delete)
+     '("D" . meow-backward-delete)
+     '("e" . meow-next-word)
+     '("E" . meow-next-symbol)
+     '("f" . meow-find)
+     '("g" . meow-cancel-selection)
+     '("G" . meow-grab)
+     '("h" . meow-left)
+     '("H" . meow-left-expand)
+     '("i" . meow-insert)
+     '("I" . meow-open-above)
+     '("j" . meow-next)
+     '("J" . meow-next-expand)
+     '("k" . meow-prev)
+     '("K" . meow-prev-expand)
+     '("l" . meow-right)
+     '("L" . meow-right-expand)
+     '("m" . meow-join)
+     '("n" . meow-search)
+     '("o" . meow-block)
+     '("O" . meow-to-block)
+     '("p" . meow-yank)
+     '("q" . meow-quit)
+     '("Q" . meow-goto-line)
+     '("r" . meow-replace)
+     '("R" . meow-swap-grab)
+     '("s" . meow-kill)
+     '("t" . meow-till)
+     '("u" . meow-undo)
+     '("U" . meow-undo-in-selection)
+     '("v" . meow-visit)
+     '("w" . meow-mark-word)
+     '("W" . meow-mark-symbol)
+     '("x" . meow-line)
+     '("X" . meow-goto-line)
+     '("y" . meow-save)
+     '("Y" . meow-sync-grab)
+     '("z" . meow-pop-selection)
+     '("Z" . meow-pop-all-selection)
+     '("'" . repeat)
+     '("%" . meow-query-replace)
+     '("µ" . meow-query-replace-regexp)
+     '("<escape>" . ignore)))
+
+  (use-package meow
+    :config
+    (meow-setup)
+    (meow-global-mode 1)
+    :custom
+    (meow-use-cursor-position-hack t)
+    (meow-use-clipboard t)
+    ;; (meow-goto-line-function 'consult-goto-line)
+    )
+#+end_src
+
+* Tab mode
+Cause I really like to work in workspaces
+#+begin_src elisp
+  (use-package tab-bar
+    :config
+    (setq tab-bar-show nil
+	  tab-bar-history-mode t)
+    :bind
+    (("C-x t c" . tab-new)
+     ("C-x t C" . tab-close))
+    )
+#+end_src
+
+* Completion - because I'm lazy
+** Vertico
+For a mini-buffer showing completion candidates
+#+begin_src elisp
+  (use-package vertico
+    :init
+    (vertico-mode)
+    :config
+    (setq vertico-cycle t)
+    )
+#+end_src
+
+** Consult
+Add all useful bindings
+#+begin_src elisp
+  (defun get-meow-selection ()
+    (if (symbol-value 'meow--selection)
+	(let* ((meow-selected (cdr (symbol-value 'meow--selection)))
+	       (argone (pop meow-selected))
+	       (argtwo (pop meow-selected)))
+	  (buffer-substring argone argtwo))
+      )
+    )
+
+  (use-package consult
+    :bind
+    (:prefix-map search-map
+		 :prefix-docstring "Searching map"
+		 :prefix "C-c s"
+		 ("s" . consult-line)
+		 ("S" . consult-line-multi)
+		 ("r" . consult-ripgrep)
+		 ("i" . consult-imenu)
+		 ("I" . consult-imenu-multi)
+		 ("m" . consult-mark)
+		 ("f" . consult-flymake)
+		 ("c d" . xref-find-definitions)
+		 ("c r" . xref-find-references)
+		 )
+    :config
+    (setq consult-narrow-key "<")
+    (consult-customize
+     consult-line
+     :initial (get-meow-selection))
+    )
+#+end_src
+
+** Marginalia
+Enable rich annotations because I want to know what I will pick
+#+begin_src elisp
+(use-package marginalia
+  ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+  ;; available in the *Completions* buffer, add it to the
+  ;; `completion-list-mode-map'.
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  ;; The :init section is always executed.
+  :init
+  ;; Marginalia must be activated in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (marginalia-mode))
+#+end_src
+
+** Orderless
+Orderless completion style, because I like seeing in the future
+#+begin_src elisp
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+#+end_src
+
+** Nerd-icons
+Because I want fancy icons in autocompletion minibuffers
+#+begin_src elisp
+  (use-package nerd-icons-completion
+    :after marginalia
+    :config
+    (nerd-icons-completion-mode)
+    (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
+  (use-package nerd-icons-corfu
+    :after corfu
+    :config
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
+
+    ;; Optionally:
+    ;; Remember to add an entry for `t', the library uses that as default.)
+    ;; (setq nerd-icons-corfu-mapping
+    ;; 	`((array ,(nerd-icons-codicon "nf-cod-symbol_array") :face font-lock-type-face)
+    ;; 	  (boolean ,(nerd-icons-codicon "nf-cod-symbol_boolean") :face font-lock-builtin-face)
+    ;; 	  ;; ...
+    ;; 	  (t ,(nerd-icons-codicon "nf-cod-code") :face font-lock-warning-face)))
+    )
+#+end_src
+
+** Corfu
+In-buffer auto completion
+#+begin_src elisp
+  (use-package corfu
+    ;; Optional customizations
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    ;; (corfu-separator ?\s)          ;; Orderless field separator
+    ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+    ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+    ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+    ;; Enable Corfu only for certain modes.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
+    ;; be used globally (M-/).  See also the customization variable
+    ;; `global-corfu-modes' to exclude certain modes.
+    :init
+    (global-corfu-mode)
+    :bind
+    (:map corfu-map
+	  ;; Option 1: Unbind RET completely
+	  ("RET" . nil)
+	  ;; Option 2: Use RET only in shell modes
+	  ;; ("RET" . (menu-item "" nil :filter corfu-insert-shell-filter))
+	  )
+    )
+
+  ;; A few more useful configurations...
+  (use-package emacs
+    :init
+    ;; TAB cycle if there are only few candidates
+    (setq completion-cycle-threshold 3)
+
+    ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+    ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (setq tab-always-indent 'complete))
+#+end_src
+
+** Cape
+#+begin_src elisp
+  (use-package cape
+    ;; Bind dedicated completion commands
+  ;; Alternative prefix keys: C-c p, M-p, M-+, ...
+  ;; :bind (("C-c p p" . completion-at-point) ;; capf
+  ;;        ("C-c p t" . complete-tag)        ;; etags
+  ;;        ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
+  ;;        ("C-c p h" . cape-history)
+  ;;        ("C-c p f" . cape-file)
+  ;;        ("C-c p k" . cape-keyword)
+  ;;        ("C-c p s" . cape-elisp-symbol)
+  ;;        ("C-c p e" . cape-elisp-block)
+  ;;        ("C-c p a" . cape-abbrev)
+  ;;        ("C-c p l" . cape-line)
+  ;;        ("C-c p w" . cape-dict)
+  ;;        ("C-c p :" . cape-emoji)
+  ;;        ("C-c p \\" . cape-tex)
+  ;;        ("C-c p _" . cape-tex)
+  ;;        ("C-c p ^" . cape-tex)
+  ;;        ("C-c p &" . cape-sgml)
+  ;;        ("C-c p r" . cape-rfc1345))
+  :init
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.  The order of the functions matters, the
+  ;; first function returning a result wins.  Note that the list of buffer-local
+  ;; completion functions takes precedence over the global list.
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  ;;(add-to-list 'completion-at-point-functions #'cape-history)
+  ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+  ;;(add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+  ;;(add-to-list 'completion-at-point-functions #'cape-line)
+  )
+#+end_src
+
+** Embark
+Cause what best than easier action after autocompletion?
+#+begin_src elisp
+  (use-package embark
+    :bind
+    (("C-;" . embark-act)         ;; pick some comfortable binding
+     ("C-." . embark-dwim)        ;; good alternative: M-.
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    :init
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
+
+    ;; Show the Embark target at point via Eldoc. You may adjust the
+    ;; Eldoc strategy, if you want to see the documentation from
+    ;; multiple providers. Beware that using this can be a little
+    ;; jarring since the message shown in the minibuffer can be more
+    ;; than one line, causing the modeline to move up and down:
+
+    ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+		 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+		   nil
+		   (window-parameters (mode-line-format . none)))))
+
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+
+* Searching
+** Ripgrep menu
+#+begin_src elisp
+(use-package rg
+  )
+#+end_src
+
+* Projects
+Because it is easier to switch projects and not be cluttered with all buffers
+#+begin_src elisp :tangle no
+  (use-package projectile
+    :init
+    (projectile-mode)
+    :bind (("C-c p" . projectile-command-map)
+	   (:map projectile-command-map
+		 ("b" . consult-project-buffer)
+		 ("f" . consult-find)
+		 ("s c" . consult-line-multi))
+	   )
+    )
+#+end_src
+
+Switch to project.el seems more integrated to the rest
+#+begin_src elisp
+  (use-package project
+    :bind
+    (("C-x p b" . consult-project-buffer)
+     ("C-x p e" . nil)
+     ("C-x p v" . magit-status)
+     ("C-x p s" . consult-ripgrep)
+     )
+    )
+#+end_src
+
+It's nice to create new tabs when opening projects
+#+begin_src elisp
+  (use-package project-tab-groups
+    :config
+    (project-tab-groups-mode 1))
+#+end_src
+** Emacs-direnv
+Cool to have emacs pick-up declared direnvs
+#+begin_src elisp
+  (use-package envrc
+    :init
+    (envrc-global-mode))
+#+end_src
+** Vterm
+#+begin_src elisp
+  (use-package vterm
+    :bind (:map project-prefix-map
+		("t" . project-vterm))
+    :preface
+    (defun project-vterm ()
+      (interactive)
+      (defvar vterm-buffer-name)
+      (let* ((default-directory (project-root     (project-current t)))
+	     (vterm-buffer-name (project-prefixed-buffer-name "vterm"))
+	     (vterm-buffer (get-buffer vterm-buffer-name)))
+	(if (and vterm-buffer (not current-prefix-arg))
+	    (pop-to-buffer vterm-buffer  (bound-and-true-p display-comint-buffer-action))
+	  (vterm-other-window))))
+    )
+#+end_src
+
+* Org
+Basic configuration stuff
+#+begin_src elisp
+  (use-package org
+    :init
+    (setq org-directory "~/notes/"
+	  org-agenda-files '("~/notes/tasks.org" "~/notes/PhD_whatever.org")
+	  org-use-property-inheritance t
+	  org-log-done 'time
+	  org-log-into-drawer t
+	  org-export-with-sub-superscripts '{}
+	  org-icalendar-include-body nil
+	  org-screenshot-image-directory "./screenshots/"
+	  org-capture-todo-file "~/notes/tasks.org"
+	  org-capture-phd-file "~/notes/PhD_whatever.org")
+
+    :bind
+    ((:prefix-map org-map
+		   :prefix-docstring "Org map"
+		   :prefix "C-c n"
+		   ("c" . org-capture)
+		   )
+     (:map org-mode-map
+	   ("M-<down>" . org-move-subtree-down)
+	   ("M-<up>" . org-move-subtree-up))
+     (:map org-map
+	   (:prefix-map org-beamer-map
+			:prefix-docstring "Org Beamer map"
+			:prefix "b"
+			("p" . org-beamer-export-to-pdf)
+			("l" . org-beamer-export-to-latex)
+			("e" . org-beamer-select-environment)
+			)
+	   )
+     (:map search-map
+	  ("h" . consult-org-heading)))
+
+    :config
+    ;; Org Babel default headers args
+    (setq org-babel-default-header-args
+	  '((:session . "none")
+	    (:results . "replace")
+	    (:exports . "code")
+	    (:cache . "no")
+	    (:noweb . "no")
+	    (:hlines . "no")
+	    (:tangle . "no")
+	    (:comments . "no")))
+
+    ;; Org todo keywords
+    (setq org-todo-keywords
+	  '((sequence "TODO(t)" "PROJ(p)" "STRT(s!)" "WAIT(w)" "NEXT(n)" "ONGOING(o!)" "REVIEW(r)" "FIXME(f)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+	    (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")))
+
+    (setq org-priority-highest ?A
+	  org-priority-lowest ?F)
+
+    ;; Latex to PDF stuff
+    (setq org-latex-pdf-process '("latexmk -f -bibtex -pdf -%latex -synctex=1 -interaction=nonstopmode -output-directory=%o %f"))
+  )
+#+end_src
+
+** FIXME Theming
+TODO keywords do not have correct font in super-agenda
+#+begin_src elisp
+  (use-package org-modern
+    :after org
+    :hook ((org-mode . org-modern-mode)
+	   (org-modern-mode . auto-fill-mode))
+    :config
+    (setq org-modern-priority-faces
+	  '((?A . '(nerd-icons-red :weight bold :height 1.5))
+	    (?B . '(nerd-icons-orange :weight bold :height 1.5))
+	    (?C . '(nerd-icons-yellow :weight bold :height 1.5))
+	    (?D . '(nerd-icons-green :weight bold :height 1.5))
+	    (?E . '(nerd-icons-blue :weight bold :height 1.5))
+	    (?F . '(nerd-icons-purple :weight bold :height 1.5))))
+
+    (setq org-modern-todo-faces
+	  '(
+	    ("TODO" :height 1.5 :weight bold :background "#db9112" :foreground "black")
+	    ("DONE" :height 1.5 :weight bold :background "gray20" :foreground "white")
+	    ("KILL" :height 1.5 :weight bold :background "gray20" :foreground "white")
+	    ("STRT" :height 1.5 :weight bold :background "#8bdb12" :foreground "black")
+	    ("WAIT" :height 1.5 :weight bold :background "#dbd112" :foreground "black")
+	    ("HOLD" :height 1.5 :weight bold :background "#dbd112" :foreground "black")
+	    ("PROJ" :height 1.5 :weight bold :background "#db9112" :foreground "black")
+	    ("FIXME" :height 1.5 :weight bold :background "#cc1714" :foreground "black")
+	    ("REVIEW" :height 1.5 :weight bold :background "#8b12db" :foreground "white")
+	    ("NEXT" :height 1.5 :weight bold :background "#8bdb12" :foreground "black")
+	    ("ONGOING" :height 1.5 :weight bold :background "#38c211" :foreground "white")
+	    ("IDEA" :height 1.5 :weight bold :background "#11b0c2" :foreground "black")
+	    ("[ ]" :height 1.5 :weight bold :foreground "white")
+	    ("[-]" :height 1.5 :weight bold :foreground "white")
+	    ("[?]" :height 1.5 :weight bold :foreground "white")
+	    )
+	  )
+
+    (set-face-attribute 'org-modern-tag nil :height 1.5 :weight 'bold :background "#9a69b5" :foreground "white")
+    )
+#+end_src
+
+** auto tangling
+#+begin_src elisp
+(use-package org-auto-tangle
+  :hook (org-mode . org-auto-tangle-mode))
+#+end_src
+
+** Org download
+#+begin_src elisp
+  (use-package org-download
+    :after org
+    :config
+    (setq org-download-screenshot-method
+	  (if (string= (getenv "DESKTOP_SESSION") "hyprland")
+	      "grimblast --freeze save area %s"
+	    "scrot -fs %s")
+	  )
+    :bind
+    (:map org-map
+	  ("d" . org-download-screenshot)
+	  )
+    )
+#+end_src
+
+** Captures
+#+begin_src elisp
+  (defun my/generate-org-note-name ()
+    (setq my-org-note--name (read-string "Filename: "))
+    (setq my-org-note--time (format-time-string "%Y%m%d%H%M%S"))
+    (expand-file-name (format "%s-%s.org" my-org-note--time my-org-note--name) "~/notes"))
+
+  (use-package doct
+    :after org
+    :config
+      (setq org-capture-templates
+	(doct '(("Tasks" :keys "t"
+		   :file org-capture-todo-file
+		   :prepend t
+		   :headline "General Tasks"
+		   :type entry
+		   :template ("* TODO %? %^G%{extra}"
+			      "%i %a")
+		   :children (("General Task" :keys "t"
+			       :extra "")
+			      ("Task with deadline" :keys "d"
+			       :extra "\nDEADLINE: %^{Deadline:}t")
+			      ("Scheduled Task" :keys "s"
+			       :extra "\nSCHEDULED: %^{Start time:}t")))
+		("Scheduled stuff" :keys "s"
+		 :file org-capture-todo-file
+		 :prepend t
+		 :headline "Scheduled"
+		 :type entry
+		 :template ("* %?"
+			    "SCHEDULED: %^{Date:}t"))
+		("PhD" :keys "d"
+		 :file org-capture-phd-file
+		 :type entry
+		 :headline "PhD Tasks"
+		 :children (("PhD Tasks" :keys "t"
+			    :prepend t
+			    :template ("* TODO %?"
+				       "%i %a")
+			    :children (("General task" :keys "k"
+					:template ("* TODO %?"
+						   "%i %a"))
+				       ("Task with deadline" :keys "d"
+					:template ("* TODO %?"
+						   "DEADLINE: %^{Deadline:}t"
+						   "%i %a"))
+				       ("Scheduled Task" :keys "s"
+					:template ("* TODO %?"
+						   "SCHEDULED: %^{Start time:}t"))))
+			    ("Meetings" :keys "m"
+			     :headline "Meetings"
+			     :type entry
+			     :children (("Meeting" :keys "m"
+					 :template ("* %?"
+						    "SCHEDULED: %^{Date:}T"))
+					("Regular advancement meeting" :keys "r"
+					 :headline "Regular advancement meetings"
+					 :template ("* Regular advancement meeting"
+						    "SCHEDULED: %^{Date:}T"
+						    "https://orga2.webex.com/meet/Username2"))
+					 ))
+			    ("Formations" :keys "f"
+			     :headline "Formations / Conferences"
+			     :type entry
+			     :template ("* %?"
+					"SCHEDULED: %^{Date:}T"))
+			    ("Scheduled stuff" :keys "s"
+			     :headline "Scheduled"
+			     :template ("* %?"
+					"SCHEDULED: %^{Date:}t"))
+			    ("Ideas" :keys "i"
+			     :headline "Ideas"
+			     :type entry
+			     :template ("* IDEA %?"))))
+		("Protocol with selection" :keys "p"
+		 :file my/generate-org-note-name
+		 :type plain
+		 :template ("#+TITLE: %:description\n"
+			    "Added on: %u"
+			    "Source: %:link\n\n %i %?"))
+		("Protocol without selection" :keys "L"
+		 :file my/generate-org-note-name
+		 :type plain
+		 :template ("#+TITLE: %:description\n"
+			    "Added on: %u"
+			    "Source: %:link\n\n %i %?"))
+		)))
+  )
+#+end_src
+
+** Roam
+#+begin_src elisp
+  (use-package org-roam
+    :after org
+    :custom
+    (org-roam-directory (file-truename org-directory))
+    :bind (:map org-map
+		(:prefix-map org-roam-map
+			     :prefix-docstring "Org Roam map"
+			     :prefix "r"
+			     ("b" . org-roam-buffer-toggle)
+			     ("B" . org-roam-buffer-display-dedicated)
+			     ("f" . org-roam-node-find)
+			     ("r" . org-roam-ref-find)
+			     ("i" . org-roam-node-insert)
+			     ("c" . org-roam-capture)
+			     ;; Dailies
+			     ("j" . org-roam-dailies-capture-today))
+		(:map org-roam-map
+		      (:prefix-map org-roam-add-map
+			    :prefix-docstring "prefix for add functions"
+			    :prefix "a"
+			    ("a" . org-roam-alias-add)
+			    ("r" . org-roam-ref-add)
+			    ("t" . org-roam-tag-add))
+			 (:prefix-map org-roam-remove-map
+			    :prefix-docstring "prefix for remove functions"
+			    :prefix "A"
+			    ("a" . org-roam-alias-remove)
+			    ("r" . org-roam-ref-remove)
+			    ("t" . org-roam-tag-remove)))
+		)
+    :config
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode)
+    ;; If using org-roam-protocol
+    ;; (require 'org-roam-protocol)
+
+    (add-to-list 'org-roam-capture-templates
+	       '("r" "Bibliography reference" plain "\n- tags :: [[roam:Unreviewed papers]] %?"
+		 :target
+		 (file+head "${citar-citekey}.org" "#+title: ${citar-title}")
+		 :unnarrowed t))
+
+    (cl-defmethod org-roam-node-directories ((node org-roam-node))
+      (if-let ((dirs (file-name-directory (file-relative-name     (org-roam-node-file node) org-roam-directory))))
+	  (format "(%s)" (car (f-split dirs)))
+	""))
+
+    (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+      (let* ((count (caar (org-roam-db-query
+			   [:select (funcall count source)
+				    :from links
+				    :where (= dest $s1)
+				    :and (= type "id")]
+			   (org-roam-node-id node)))))
+	(format "[%d]" count)))
+
+    (setq org-roam-node-display-template "${tags:30} ${title:100} ${backlinkscount:6}")
+    )
+#+end_src
+
+*** TODO roam protocol
+*** Roam UI
+#+begin_src elisp
+  (use-package websocket
+    :after org-roam)
+
+  (use-package org-roam-ui
+    :after org-roam
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+    :bind
+    (:map org-roam-map
+	  (:prefix-map org-roam-ui-map
+		       :prefix-docstring "Org Roam UI map"
+		       :prefix "g"
+		       ("o" . org-roam-ui-open)
+		       ("l" . org-roam-ui-node-local)
+		       ("z" . org-roam-ui-node-zoom))
+	  )
+      :config
+      (setq org-roam-ui-sync-theme t
+	    org-roam-ui-follow t
+	    org-roam-ui-update-on-save t
+	    org-roam-ui-open-on-start t))
+#+end_src
+
+*** Roam bibtex
+#+begin_src elisp
+(use-package org-roam-bibtex
+  :after org-roam
+  :config
+  (require 'org-ref)
+)
+#+end_src
+** Ref + bibtex
+#+begin_src elisp
+    (use-package org-ref
+      :after org
+      ;; :init
+      ;; (setq bibtex-autokey-year-length 2
+      ;;       bibtex-autokey-name-year-separator ""
+      ;;       bibtex-autokey-year-title-separator "-"
+      ;;       bibtex-autokey-titleword-separator "_"
+      ;;       bibtex-autokey-titlewords 3
+      ;;       bibtex-autokey-titlewords-stretch 1
+      ;;       bibtex-autokey-titleword-length 5)
+
+      :bind
+      (:map org-map
+	  (:prefix-map org-ref-paper-map
+		       :prefix-docstring "Add papers with org-ref"
+		       :prefix "p"
+		       ("a" . arxiv-get-pdf-add-bibtex-entry)
+		       ("d" . doi-add-bibtex-entry)
+		       ("p" . pubmed-insert-bibtex-from-pmid))
+	  )
+      )
+#+end_src
+
+** Citar
+#+begin_src elisp
+  (use-package citar
+    :after org
+    :init
+    (setq bibtex-autokey-year-length 2
+	  bibtex-autokey-name-year-separator ""
+	  bibtex-autokey-year-title-separator "-"
+	  bibtex-autokey-titleword-separator "_"
+	  bibtex-autokey-titlewords 3
+	  bibtex-autokey-titlewords-stretch 1
+	  bibtex-autokey-titleword-length 5)
+    :hook
+    ((org-mode . citar-capf-setup)
+     (LaTeX-mode . citar-capf-setup))
+    :bind
+    (:map org-map
+	  ("i" . org-cite-insert)
+	  ("o" . citar-open)
+	  (:prefix-map citar-map
+		       :prefix-docstring "Citar map"
+		       :prefix "C"
+		       ("a" . citar-add-file-to-library)
+		       ("n" . citar-open-note)
+		       ("e" . citar-open-entry)
+		       ("f" . citar-open-files)
+		       ("l" . citar-open-links)))
+    :custom
+    (org-cite-global-bibliography  (directory-files
+				    (concat (getenv "HOME") "/notes/bibliography") t
+				    "^[A-Z|a-z].+.bib$")
+				   )
+    (org-cite-insert-processor 'citar)
+    (org-cite-follow-processor 'citar)
+    (org-cite-activate-processor 'citar)
+    (citar-bibliography org-cite-global-bibliography)
+    (bibtex-completion-bibliography org-cite-global-bibliography)
+    (citar-library-paths '("~/notes/pdfs/PhD/" "~/notes/pdfs/World_notes/"))
+    (citar-notes-paths '("~/notes/"))
+    (citar-at-point-function 'embark-act)
+
+    (citar-register-notes-source
+     'orb-citar-source
+     (list :name "Org-Roam Notes"
+	   :category 'org-roam-node
+	   :items #'citar-org-roam--get-candidates
+	   :hasitems #'citar-org-roam-has-notes
+	   :open #'citar-org-roam-open-note
+	   :create #'orb-citar-edit-note
+	   :annotate #'citar-org-roam--annotate))
+    (citar-notes-source 'orb-citar-source)
+
+    (org-cite-export-processors
+     '((latex bibtex)
+       (t basic)))
+    (bibtex-completion-library-path '("~/notes/pdfs/PhD/" "~/notes/pdfs/World_notes/"))
+
+    :config
+    (defvar citar-indicator-files-icons
+      (citar-indicator-create
+       :symbol (nerd-icons-faicon
+		"nf-fa-file_o"
+		:face 'nerd-icons-green
+		:v-adjust -0.1)
+       :function #'citar-has-files
+       :padding "  " ; need this because the default padding is too low for these icons
+       :tag "has:files"))
+    (defvar citar-indicator-links-icons
+      (citar-indicator-create
+       :symbol (nerd-icons-faicon
+		"nf-fa-link"
+		:face 'nerd-icons-orange
+		:v-adjust 0.01)
+       :function #'citar-has-links
+       :padding "  "
+       :tag "has:links"))
+    (defvar citar-indicator-notes-icons
+      (citar-indicator-create
+       :symbol (nerd-icons-codicon
+		"nf-cod-note"
+		:face 'nerd-icons-blue
+		:v-adjust -0.3)
+       :function #'citar-has-notes
+       :padding "    "
+       :tag "has:notes"))
+    (defvar citar-indicator-cited-icons
+      (citar-indicator-create
+       :symbol (nerd-icons-faicon
+		"nf-fa-circle_o"
+		:face 'nerd-icon-green)
+       :function #'citar-is-cited
+       :padding "  "
+       :tag "is:cited"))
+    (setq citar-indicators
+	  (list citar-indicator-files-icons
+		citar-indicator-links-icons
+		citar-indicator-notes-icons
+		citar-indicator-cited-icons)) 
+    :custom-face
+    ;; Have citation link faces look closer to as they were for `org-ref'
+    (org-cite ((t (:foreground "DarkSeaGreen4"))))
+    (org-cite-key ((t (:foreground "forest green" :slant italic))))
+  )
+
+  (use-package citar-embark
+    :after (citar embark)
+    :config (citar-embark-mode))
+
+  (use-package citar-org-roam
+    :after citar
+    :config
+    (citar-org-roam-mode)
+    (org-roam-db-sync)
+    (setq citar-org-roam-capture-template-key "r")
+    )
+#+end_src
+
+** Org protocol
+#+begin_src elisp
+  (use-package org-protocol
+    :after org
+    ;; Capture on firefox is done through org-protocol-extension
+    )
+#+end_src
+
+** Org noter
+#+begin_src elisp
+  (use-package org-noter
+    :after org-roam
+    :config
+    (setq
+     org-noter-notes-window-behavior '(start)
+     org-noter-insert-selected-text-inside-note nil
+     org-noter-highlight-selected-text t
+     org-noter-use-indirect-buffer nil
+     ;; The WM can handle splits
+     org-noter-notes-window-location 'other-frame
+     ;; Please stop opening frames
+     org-noter-always-create-frame nil
+     ;; Everything is relative to the main notes file
+     org-noter-notes-search-path (list org-directory)))
+#+end_src
+
+** REVIEW Super agenda
+Super Agenda doesn't work well with org modern faces
+Some preparations for the hard stuff
+#+begin_src elisp
+  (defun org-super-agenda-phd-view ()
+    (interactive)
+    (org-agenda nil "cp")) ; where ! is a a custom-agenda-command key
+
+  (defun org-super-agenda-normal-view ()
+    (interactive)
+    (org-agenda nil "cn")) ; where ! is a a custom-agenda-command key
+
+  (defun org-super-agenda-full-view ()
+    (interactive)
+    (org-agenda nil "cf")) ; where ! is a a custom-agenda-command key
+
+  (use-package org-agenda
+    )
+#+end_src
+Now onto the hard stuff
+#+begin_src elisp
+  (use-package org-super-agenda
+    :after org-agenda
+    :hook
+    (org-agenda-mode . org-super-agenda-mode)
+    :bind
+    (:map org-map
+	  (:prefix-map org-super-agenda-map
+		       :prefix-docstring "Map for Org Super Agenda"
+		       :prefix "a"
+		       ("p" . org-super-agenda-phd-view)
+		       ("n" . org-super-agenda-normal-view)
+		       ("f" . org-super-agenda-full-view)
+		       )
+	  )
+    :init
+    (setq org-agenda-skip-scheduled-if-done t
+	  org-agenda-skip-deadline-if-done t
+	  org-agenda-include-deadlines t
+	  org-agenda-skip-deadline-prewarning-if-scheduled t
+	  org-agenda-show-all-dates nil
+	  org-agenda-block-separator nil
+	  org-deadline-warning-days 0
+	  org-agenda-compact-blocks t
+	  org-agenda-start-day nil ;; i.e. today
+	  org-agenda-start-on-weekday nil)
+    (setq org-agenda-custom-commands
+	  '(("c" . "Super view")
+	    ("cp" "PhD view"
+	     (
+	      (agenda "Dated stuff" ((org-agenda-span 30)
+				     (org-super-agenda-groups
+				      '(
+					(:name "Today"
+					       :and (:date today :tag "PhD")
+					       :order 1)
+					;; (:name "Due next three days"
+					;;  :deadline (before ,(org-read-date nil nil "+3d"))
+					;;  :order 2)
+					;; (:name "Due next week"
+					;;  :deadline (before ,(org-read-date nil nil "+1w"))
+					;;  :order 3)
+					(:name "Something to do"
+					       :and (:deadline future :tag "PhD")
+					       :order 4)
+					(:name "Nothing to do"
+					       :and (:scheduled future :tag "PhD")
+					       :order 5)
+					(:discard (:anything t))
+					))))
+	      (alltodo "Undated stuff" ((org-agenda-overriding-header "")
+					(org-super-agenda-groups
+					 '(
+					   (:name "Important"
+						  :and (:priority>= "B" :tag "PhD")
+						  :order 1)
+					   (:name "Ongoing tasks"
+						  :and (:todo "ONGOING" :tag "PhD")
+						  :order 2)
+					   (:name "Next tasks"
+						  :and (:todo "NEXT" :tag "PhD")
+						  :order 3)
+					   (:name "Stuff to fix"
+						  :and (:todo "FIXME" :tag "PhD")
+						  :order 4)
+					   (:name "Past"
+						  :and (:tag "PhD" :deadline past :not(:todo "DONE"))
+						  :and (:tag "PhD" :scheduled past :not(:todo "DONE"))
+						  :order 7)
+					   (:name "PhD todos"
+						  :and (:tag "PhD" :todo "TODO" :not (:deadline future) :not (:scheduled future))
+						  :order 5)
+					   (:name "Overdue"
+						  :and (:deadline past :tag "PhD" :todo t)
+						  :order 7)
+					   (:name "PhD other"
+						  :tag "PhD"
+						  :order 6)
+					   (:discard (:not (:todo t) :not (:tag "PhD")))
+					   ))))))
+	    ("cn" "normal view"
+	     (
+	      (alltodo "" ((org-agenda-overriding-header "")
+			   (org-super-agenda-groups
+			    '(
+			      (:name "Important"
+				     :and (:priority>= "B" :not (:tag "PhD"))
+				     :order 1)
+			      (:name "Overdue tasks"
+				     :and (:deadline past :not (:tag "PhD"))
+				     :and (:scheduled past :not (:tag "PhD"))
+				     :order 3)
+			      (:name "Today tasks"
+				     :and (:deadline today :not (:tag "PhD"))
+				     :and (:scheduled today :not (:tag "PhD"))
+				     :order 2)
+			      (:name "Timed tasks"
+				     :and (:deadline future :not (:tag "PhD"))
+				     :and (:scheduled future :not (:tag "PhD"))
+				     :order 5)
+			      (:name "Todos"
+				     :and (:todo "TODO" :not (:tag "PhD"))
+				     :order 9)
+			      (:discard (:not (:todo t) :tag "PhD"))
+			      ))))
+	      ))
+	    ("cf" "Full agenda view"
+	     (
+	      (agenda "Full agenda (3 months)" ((org-agenda-span 100)
+						(org-super-agenda-groups
+						 '(
+						   (:name "Something to do"
+							  :deadline future
+							  :order 4)
+						   (:name "Nothing to do"
+							  :scheduled future
+							  :order 5)
+						   (:discard (:anything t))
+						   ))))))
+	    ))
+    )
+#+end_src
+
+** Beamer
+#+begin_src elisp
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+		 '("clean_beamer"
+		   "\\documentclass[presentation]{beamer}
+		    [NO-DEFAULT-PACKAGES]
+		    [NO-PACKAGES]
+		    [NO-EXTRA]"
+		   ("\\section{%s}" . "\\section*{%s}")
+		   ("\\subsection{%s}" . "\\subsection*{%s}")
+		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
+    (add-to-list 'org-latex-classes
+		 '("report"
+		   "\\documentclass{report}
+    \\usepackage{amsmath,amsfonts, amssymb}
+    \\usepackage{algorithmic}
+    \\usepackage{algorithm}
+    \\usepackage[utf8]{inputenc}
+    \\usepackage{array}
+    \\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+    \\usepackage{textcomp}
+    \\usepackage{stfloats}
+    \\usepackage{url}
+    \\usepackage{verbatim}
+    \\usepackage{graphicx}
+    \\usepackage{xcolor}
+    \\usepackage{cite}
+    \\usepackage{multirow}
+    \\usepackage{hyperref}
+    [No-DEFAULT-PACKAGES]
+		    "
+		   ("\\chapter{%s}" . "\\chapter*{%s}")
+		   ("\\section{%s}" . "\\section*{%s}")
+		   ("\\subsection{%s}" . "\\subsection*{%s}")
+		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+    (add-to-list 'org-latex-classes
+		 '("IEEEtran"
+		   "\\documentclass{IEEEtran}
+    \\usepackage{amsmath,amsfonts, amssymb}
+    \\usepackage{algorithmic}
+    \\usepackage{algorithm}
+    \\usepackage{array}
+    \\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+    \\usepackage{textcomp}
+    \\usepackage{stfloats}
+    \\usepackage{url}
+    \\usepackage{verbatim}
+    \\usepackage{graphicx}
+    \\usepackage{xcolor}
+    \\usepackage{cite}
+    \\usepackage{multirow}
+    \\usepackage{hyperref}
+    [No-DEFAULT-PACKAGES]
+		    "
+		   ("\\section{%s}" . "\\section*{%s}")
+		   ("\\subsection{%s}" . "\\subsection*{%s}")
+		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+		   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+		   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+    )
+#+end_src
+
+* Treesit highlighting
+Treesit is now included in Emacs 29, so doesn't need much
+#+begin_src elisp
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
+#+end_src
+
+* Spell highlighting
+#+begin_src elisp
+      (use-package jinx
+	:hook (((text-mode conf-mode) . jinx-mode))
+	:bind (("M-$" . jinx-correct)
+	       ("C-M-$" . jinx-languages)
+	       (:map jinx-overlay-map
+		     ("<mouse-1>" . nil)))
+	:config
+	(setq jinx-languages "en_US fr_FR") ;; Languages need to be separated by a space
+	(vertico-multiform-mode 1)
+	(add-to-list 'vertico-multiform-categories
+		     '(jinx grid (vertico-grid-annotate . 20)))
+	)
+#+end_src
+
+* Coding languages
+** Yaml
+#+begin_src elisp
+  (use-package yaml-pro
+    :after treesit-auto
+    :hook (yaml-ts-mode . yaml-pro-ts-mode)
+    )
+#+end_src
+** Python
+#+begin_src elisp
+  (use-package python-pytest
+    :after python
+    :bind
+    (:map python-ts-mode-map ;; Change map if using another python major-mode
+	  ("C-c T" . python-pytest-dispatch)))
+#+end_src
+
+* Code formatting
+#+begin_src elisp :tangle no
+  (use-package format-all
+     :commands format-all-mode
+     :hook (prog-mode . format-all-mode)
+     :config
+     (setq-default format-all-formatters '(("Python" (ruff "format"))
+					   ;; ("C"     (astyle "--mode=c"))
+					   ;; ("Shell" (shfmt "-i" "4" "-ci"))
+					   ))
+     )
+#+end_src
+
+Apheleia seems easier to work with for now
+#+begin_src elisp
+  (use-package apheleia
+    :hook (prog-mode . apheleia-mode)
+    :config
+    ;; Python formatting
+    (setf (alist-get 'ruff apheleia-formatters)
+      '("ruff" "format"
+       (apheleia-formatters-fill-column "--line-length")
+       "--stdin-filename" filepath "-"))
+    (push '(ruff-imports . ("ruff" "--select" "I" "--select" "F401" "--fix"
+       (apheleia-formatters-fill-column "--line-length")
+       "--stdin-filename" filepath "-")) apheleia-formatters)
+    (setf (alist-get 'python-mode apheleia-mode-alist)
+      '(ruff ruff-imports))
+    (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+      '(ruff ruff-imports))
+    )
+#+end_src
+
+* LSP Stuff
+** Eglot
+#+begin_src elisp
+  (defun my/eglot-capf ()
+    (setq-local completion-at-point-functions
+		(list (cape-super-capf
+		       #'eglot-completion-at-point
+		       #'yasnippet-capf
+		       #'cape-dabbrev
+		       ))))
+
+  (use-package eglot
+    :hook
+    ((eglot-managed-mode . my/eglot-capf)
+     (after-save . eglot-format))
+    :bind
+    (:prefix-map eglot-map
+		 :prefix-docstring "Eglot map"
+		 :prefix "C-c e"
+		 ("a" . eglot-code-actions)
+		 ("f" . eglot-format)
+		 ("r" . eglot-rename)
+		 ("s" . eglot)
+		 ("k" . eglot-shutdown)
+		 ("d" . eglot-find-declaration)
+		 ("i" . eglot-find-implementation)
+		 )
+    :config
+    (setq flymake-timer 1) ; Seems to speeds things up a lot since I do too much linting
+    (setq-default eglot-workspace-configuration
+		  '(:pylsp
+		    (:plugins
+		     (:jedi_completion
+		      (:fuzzy t)
+		      :jedi_definition
+		      (:enabled t ; boolean: true (default) or false
+				:follow_builtin_definitions t ; boolean: true (default) or false
+				:follow_builtin_imports t ; boolean: true (default) or false
+				:follow_imports t) ; boolean: true (default) or false
+		      :rope_completion (:enabled t)
+		      :rope_autoimport (:enabled t
+						 :code_actions (:enabled t)
+						 :completions (:enabled t)
+						 :memory t)
+		      :ruff (:enabled t
+				      :select [ "ALL" ]
+				      :ignore [ "D211" "D213" "S101" "ANN101" ]
+				      :format [ "I" ]
+				      :targetVersion "py311")
+		      :pycodestyle (:enabled :json-false)
+		      :pyflakes (:enabled :json-false)
+		      :mccabe (:enabled :json-false)
+		      :pyls_isort (:enabled :json-false)
+		      )
+		     )
+		    )
+		  )
+    (setq eglot-events-buffer-size 0)
+    )
+#+end_src
+
+* YASnippets
+Because I want to lazily add stuff
+#+begin_src elisp
+(use-package yasnippet
+  :init
+  (yas-global-mode)
+  )
+#+end_src
+
+Easy autocompletion yasnippets
+#+begin_src elisp
+  (use-package yasnippet-capf
+    :config
+    :after (yasnippet cape)
+    (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+
+  (use-package consult-yasnippet
+    :after yasnippet
+    :bind
+    (:map search-map
+	  ("y" . consult-yasnippet)))
+#+end_src
+
+** Language snippets
+#+begin_src elisp
+  (use-package yasnippet-snippets
+    :after yasnippet
+    )
+#+end_src
+
+** Personal snippets
+:mkdirp yes to create the file
+#+begin_src elisp :tangle ~/.emacs.d/snippets/org-mode/elisp :mkdirp yes
+# -*- mode: snippet -*-
+# name: elisp
+# key: elisp
+# uuid: elisp
+# --
+#+begin_src elisp
+$0
+,#+end_src
+#+end_src
+
+*** Org image width snippet
+#+begin_src elisp :tangle ~/.emacs.d/snippets/org-mode/orgimagewidth :mkdirp yes
+# -*- mode: snippet -*-
+# name: orgimagewidth
+# key: orgimw
+# uuid: orgimagewidth
+# --
+#+attr_org: :width $0
+#+end_src
+*** Making documentation snippet
+
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/documentation :mkdirp yes
+# -*- mode: snippet -*-
+# name: docu
+# key: docu
+# uuid: docu
+# expand-env: ((yas/indent-line 'fixed))
+# --
+#+options: num:nil
+#+setupfile: ./documentation/setup.conf
+#+export_file_name: ./documentation/documentation.html
+
+#+begin_src emacs-lisp :tangle ./documentation/setup.conf :mkdirp yes
+# -*- mode: org; -*-
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+#+HTML_HEAD: <style type="text/css">
+#+HTML_HEAD: pre.src:hover:before { display: none; }
+#+HTML_HEAD: </style>
+,#+end_src
+#+end_src
+*** Org Beamer snippets
+**** Theme snippets :noexport:
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/beamertheme_orga1-short :mkdirp yes
+# -*- mode: snippet -*-
+# name: themeorga1-short
+# key: themeorga1-short
+# uuid: themeorga1-short
+# expand-env: ((yas/indent-line 'fixed))
+# --
+#+title: Machine learning analysis for cyber-attack detection and classification on ships
+#+author: Name1
+#+date: $1
+#+language: en
+#+options: H:2 num:t ^:{} toc:nil
+#+exclude_tags: noexport
+#+latex_class: clean_beamer
+#+latex_class_options: [presentation,10pt]
+#+columns: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
+#+beamer_theme: orga1-short
+#+beamer_header: \usepackage[utf8]{inputenc}
+#+beamer_header: \usepackage{hyperref}
+#+beamer_header: \usepackage{graphics}
+#+beamer_header: \usepackage[export]{adjustbox}
+#+beamer_header: \def \fondtitre {images/fond-carte}
+#+beamer_header: \def \fondtransition {images/fond-carte}
+#+beamer_header: \def \logopagetitre {images/logo-arrondi}
+#+beamer_header: \def \logopartenaires {images/logos-partenaires}
+#+beamer_header: \definecolor{couleurboite}{RGB}{14,45,89}
+#+beamer_header: \definecolor{couleurprogresslide}{RGB}{241,80,38}
+#+beamer_header: \definecolor{couleurprogrestransition}{RGB}{241,80,38}
+#+beamer_header: \setbeamercolor{partenaires}{bg=white}
+#+beamer_header: \setbeamertemplate{itemize item}[circle]
+#+beamer_header: \setbeamertemplate{bibliography item}{\insertbiblabel}
+#+beamer_header: \institute{Supervisors : Jane Doe,\\\\John Doe, Bob Doe}
+
+,* Code to copy file templates :noexport:
+#+begin_src python :results silent
+#!/usr/bin/env python3
+import shutil
+import os
+# The top argument for walk
+home = os.path.expanduser("~")
+topdir = home+'/Templates/beamer_templates/orga1-short/'
+save_dir = './'
+def copy_template():
+    to_copy = []
+    for path, dirnames, files in os.walk(topdir):
+        for f in files:
+            to_copy.append([path, f])
+    return to_copy
+def copy(to_copy):
+    for f in to_copy:
+        path_dest = f[0].replace(topdir, save_dir)
+        print(path_dest)
+        if not os.path.isdir(path_dest):
+            os.makedirs(path_dest)
+        src = os.path.join(f[0], f[1])
+        dest = os.path.join(path_dest, f[1])
+        shutil.copyfile(src, dest)
+to_copy = []
+to_copy += copy_template()
+copy(to_copy)
+,#+end_src
+#+end_src
+
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/beamertheme_simpleorga1-short :mkdirp yes
+# -*- mode: snippet -*-
+# name: themesimpleorga1-short
+# key: themesimpleorga1-short
+# uuid: themesimpleorga1-short
+# expand-env: ((yas/indent-line 'fixed))
+# --
+#+author: Name1
+#+date: $1
+#+language: en
+#+options: H:2 num:t ^:{} toc:nil
+#+exclude_tags: noexport
+#+latex_class: clean_beamer
+#+latex_class_options: [presentation,10pt]
+#+columns: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
+#+beamer_theme: Simpleorga1-short
+#+beamer_header: \usepackage[utf8]{inputenc}
+#+beamer_header: \usepackage{hyperref}
+#+beamer_header: \usepackage{graphics}
+#+beamer_header: \usepackage[export]{adjustbox}
+#+beamer_header: \def \fondtitre {images/fond-carte}
+#+beamer_header: \def \fondtransition {images/fond-carte}
+#+beamer_header: \definecolor{couleurboite}{RGB}{14,45,89}
+#+beamer_header: \definecolor{couleurprogresslide}{RGB}{241,80,38}
+#+beamer_header: \definecolor{couleurprogrestransition}{RGB}{241,80,38}
+#+beamer_header: \setbeamercolor{partenaires}{bg=white}
+#+beamer_header: \setbeamertemplate{itemize item}[circle]
+
+,* Code to copy file templates :noexport:
+,#+begin_src python :results silent
+#!/usr/bin/env python3
+import shutil
+import os
+# The top argument for walk
+home = os.path.expanduser("~")
+topdir = home+'/Templates/beamer_templates/Simpleorga1-short/'
+save_dir = './'
+def copy_template():
+    to_copy = []
+    for path, dirnames, files in os.walk(topdir):
+        for f in files:
+            to_copy.append([path, f])
+    return to_copy
+def copy(to_copy):
+    for f in to_copy:
+        path_dest = f[0].replace(topdir, save_dir)
+        print(path_dest)
+        if not os.path.isdir(path_dest):
+            os.makedirs(path_dest)
+        src = os.path.join(f[0], f[1])
+        dest = os.path.join(path_dest, f[1])
+        shutil.copyfile(src, dest)
+to_copy = []
+to_copy += copy_template()
+copy(to_copy)
+,#+end_src
+
+#+end_src
+
+**** vspace snippet
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/vspace :mkdirp yes
+# -*- mode: snippet -*-
+# name: vspace
+# key: vspace
+# uuid: vspace
+# expand-env: ((yas/indent-line 'fixed))
+# --
+#+begin_export LaTeX
+\vspace{-$0em}
+#+end_export
+#+end_src
+**** New slide snippet
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/newslide :mkdirp yes
+# -*- mode: snippet -*-
+# name: newslide
+# key: newslide
+# uuid: newslide
+# expand-env: ((yas/indent-line 'fixed))
+# --
+,** ${1:Title}
+#+end_src
+**** New slide with image snippet
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/newslideimage :mkdirp yes
+# -*- mode: snippet -*-
+# name: newslideimage
+# key: newslideimage
+# uuid: newslideimage
+# expand-env: ((yas/indent-line 'fixed))
+# --
+,** ${1:Title}
+#+begin_export LaTeX
+\vspace{-1em}
+#+end_export
+
+#+caption: \centering ${2:caption}
+$0
+#+end_src
+**** New slide with 2 columns
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/newslide2col :mkdirp yes
+# -*- mode: snippet -*-
+# name: newslide2col
+# key: newslide2col
+# uuid: newslide2col
+# expand-env: ((yas/indent-line 'fixed))
+# --
+,** ${1:Title}
+#+begin_export LaTeX
+\vspace{1em}
+#+end_export
+,**** Columns :B_columns:
+:PROPERTIES:
+:BEAMER_env: columns
+:END:
+#+begin_export latex
+\hspace{1em}
+#+end_export
+,***** col1 :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.45
+:END:
+$0
+,***** col1 :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.45
+:END:
+#+end_src
+**** New slide with block snippet
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/newslideblock :mkdirp yes
+# -*- mode: snippet -*-
+# name: newslideblock
+# key: newslideblock
+# uuid: newslideblock
+# expand-env: ((yas/indent-line 'fixed))
+# --
+,** ${1:Title}
+,*** ${0:Block title}
+#+end_src
+**** New slide with image in block snippet
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/newslideblockimage :mkdirp yes
+# -*- mode: snippet -*-
+# name: newslideblockimage
+# key: newslideblockimage
+# uuid: newslideblockimage
+# expand-env: ((yas/indent-line 'fixed))
+# --
+,** ${1:Title}
+#+begin_export LaTeX
+\vspace{-2em}
+#+end_export
+
+,*** ${2:Block title}
+#+caption: \centering ${3:caption}
+$0
+#+end_src
+**** New slide with 2 columns
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/newslideblock2col :mkdirp yes
+# -*- mode: snippet -*-
+# name: newslideblock2col
+# key: newslideblock2col
+# uuid: newslideblock2col
+# expand-env: ((yas/indent-line 'fixed))
+# --
+,** ${1:Title}
+,*** ${2:Block title}
+#+begin_export LaTeX
+\vspace{1em}
+#+end_export
+,**** Columns :B_columns:
+:PROPERTIES:
+:BEAMER_env: columns
+:END:
+#+begin_export latex
+\hspace{1em}
+#+end_export
+,***** col1 :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.45
+:END:
+$0
+,***** col1 :BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.45
+:END:
+#+end_src
+**** Ref slide
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/refslide :mkdirp yes
+# -*- mode: snippet -*-
+# name: refslide
+# key: refslide
+# uuid: refslide
+# expand-env: ((yas/indent-line 'fixed))
+# --
+,** References
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks, fragile, label=
+:END:
+bibliographystyle:ieeetr
+bibliography:~/notes/bibliography/phd.bib
+#+end_src
+*** Article snippets :noexport:
+**** IEEE transactions
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/articletheme_ieeetran :mkdirp yes
+# -*- mode: snippet -*-
+# name: ieeetran
+# key: ieeetran
+# uuid: ieeetran
+# expand-env: ((yas/indent-line 'fixed))
+# --
+#+TITLE: $1
+#+language: en
+#+options: num:t ^:{} toc:nil author:nil date:nil setup:nul
+#+exclude_tags: noexport
+#+latex_class: IEEEtran
+#+latex_class_options: [journal]
+#+latex_header: \newcolumntype{?}[1]{!{\vrule width #1}}
+#+latex_header: \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash} m{#1}}
+
+#+begin_export latex
+\author{Name1%,~\IEEEmembership{TBD,~IEEE,}
+        % <-this % stops a space
+\thanks{TBD}% <-this % stops a space
+\thanks{TBD}}
+#+end_export
+
+#+begin_abstract
+TODO
+#+end_abstract
+
+#+begin_export latex
+\begin{IEEEkeywords}
+TODO
+\end{IEEEkeywords}
+#+end_export
+
+
+,* Intro
+
+,* Related work
+
+,* Research contributions
+
+,* Method / Setup
+
+,* Proposed approach
+
+,* Results
+
+,* Conclusion
+
+,* Future Work
+
+,* Acknowledgement
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+bibliographystyle:ieeetr
+bibliography:~/notes/bibliography/phd.bib
+
+,* Code to copy file templates :noexport:
+#+begin_src python :results silent
+#!/usr/bin/env python3
+import shutil
+import os
+# The top argument for walk
+
+home = os.path.expanduser("~")
+topdir = home+'/Templates/'
+save_dir = './'
+to_copy = [[topdir + "article_templates/IEEEtran/", "IEEEtran.cls"]]
+to_copy += [[topdir + "latex_sty/algorithms/", "algorithm.sty"]]
+to_copy += [[topdir + "latex_sty/algorithms/", "algorithmic.sty"]]
+
+
+def copy(to_copy):
+    for f in to_copy:
+        src = os.path.join(f[0], f[1])
+        dest = os.path.join(".", f[1])
+        shutil.copyfile(src, dest)
+copy(to_copy)
+,#+end_src
+
+#+end_src
+**** Report
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/report_snippet :mkdirp yes
+# -*- mode: snippet -*-
+# name: report
+# key: report
+# uuid: report
+# expand-env: ((yas/indent-line 'fixed))
+# --
+#+TITLE: $1
+#+language: en
+#+options: num:t ^:{} toc:nil author:nil date:nil setup:nul
+#+exclude_tags: noexport
+#+latex_class: report
+#+latex_class_options: [12pt,twoside]
+#+latex_header: \newcolumntype{?}[1]{!{\vrule width #1}}
+#+latex_header: \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash} m{#1}}
+
+
+,* $2
+
+bibliographystyle:plain
+bibliography:~/notes/bibliography/phd.bib
+
+,* Code to copy file templates :noexport:
+#+begin_src python :results silent
+#!/usr/bin/env python3
+import shutil
+import os
+# The top argument for walk
+
+home = os.path.expanduser("~")
+topdir = home+'/Templates/'
+save_dir = './'
+to_copy = [[topdir + "latex_sty/algorithms/", "algorithm.sty"]]
+to_copy += [[topdir + "latex_sty/algorithms/", "algorithmic.sty"]]
+
+
+def copy(to_copy):
+    for f in to_copy:
+        src = os.path.join(f[0], f[1])
+        dest = os.path.join(".", f[1])
+        shutil.copyfile(src, dest)
+copy(to_copy)
+,#+end_src
+
+#+end_src
+* TODO Debugging
+Look at DAP mode
+* Magit
+#+begin_src elisp
+  (use-package magit
+    :bind
+    (("C-c v" . magit-file-dispatch)
+     (:map magit-mode-map
+	   ("*" . magit-section-up)))
+      ;;; Old way
+    ;; (:prefix-map magit-map
+    ;; 		 :prefix-docstring "Magit map"
+    ;; 		 :prefix "C-c v"
+    ;;  ("g" . magit-status)
+    ;;  ("d" . magit-file-dispatch)
+    ;;  )
+    :init
+    (setq magit-repository-directories '(("~/.dotfiles/" . 0)
+					 ("~/notes/" . 0))
+	  magit-repolist-columns '(("Name" 25 magit-repolist-column-ident nil)
+				   ("uNtracked/Unstaged/Staged" 25 magit-repolist-column-flag)
+				   ("B<U" 5 magit-repolist-column-unpulled-from-upstream
+				    ((:right-align t)
+				     (:sort <)))
+				   ("B>U" 5 magit-repolist-column-unpushed-to-upstream
+				    ((:right-align t)
+				     (:sort <)))
+				   ("Path" 99 magit-repolist-column-path nil))
+	  magit-repolist-column-flag-alist
+	  '((magit-staged-files . "S")
+	    (magit-unstaged-files . "U")
+	    (magit-untracked-files . "N"))
+	  )
+    )
+#+end_src
+
+* PDFs
+#+begin_src elisp
+  (use-package pdf-tools
+    :magic ("%PDF" . pdf-view-mode)
+    :hook ((pdf-view-mode . (lambda () (display-line-numbers-mode -1)))
+	   (pdf-view-mode . pdf-annot-minor-mode))
+    )
+#+end_src
+
+* TODO RSS
+* Various stuff
+** Emacs-everywhere
+Only works on X11, unfortunate
+#+begin_src elisp
+  (use-package emacs-everywhere)
+#+end_src
+
+* Mu4e
+#+begin_src elisp
+  (use-package mu4e
+    :commands mu4e
+    :load-path "/run/current-system/sw/share/emacs/site-lisp/elpa/mu4e-1.10.8"
+    :bind (:map meow-motion-state-keymap
+		("o" . #'+mu4e-view-open-attachment))
+    :config
+    (add-to-list 'meow-mode-state-list '(mu4e-view-mode . motion))
+
+    (setq mu4e-get-mail-command "mbsync -c ~/.mu4e/.mbsyncrc -a"
+	  mu4e-index-cleanup t
+	  mu4e-index-lazy-check nil
+	  mu4e-update-interval 300
+	  mu4e-view-prefer-html t
+	  mu4e-html2text-command 'mu4e-shr2text
+	  mu4e-main-hide-personal-addresses t
+	  mu4e-completing-read-function #'completing-read
+	  message-send-mail-function #'smtpmail-send-it
+	  message-kill-buffer-on-exit t
+	  smtpmail-stream-type 'starttls
+	  message-mail-user-agent 'mu4e-user-agent
+	  mail-personal-alias-file "~/.mu4e/.mail_aliases"
+	  org-msg-options "html-postamble:nil H:5 num:nil \\n:t ^:{} toc:nil author:nil email:nil tex:dvipng d:nil"
+	  message-cite-prefix-regexp "\\([ 	]*\\(\\w\\|[.]\\)+>+\\|[ 	]*[>|]\\)+"
+	  gnus-message-cite-prefix-regexp "^\\(?:\\([ 	]*\\(\\w\\|[.]\\)+>+\\|[ 	]*[>|]\\)+\\)"
+	  shr-color-visible-luminance-min 80
+	  shr-color-visible-distance-min 5
+	  shr-use-colors nil
+	  mu4e-headers-thread-single-orphan-prefix '("─>" . "─▶")
+	  mu4e-headers-thread-orphan-prefix        '("┬>" . "┬▶ ")
+	  mu4e-headers-thread-connection-prefix    '("│ " . "│ ")
+	  mu4e-headers-thread-first-child-prefix   '("├>" . "├▶")
+	  mu4e-headers-thread-child-prefix         '("├>" . "├▶")
+	  mu4e-headers-thread-last-child-prefix    '("└>" . "╰▶")
+	  mu4e-headers-fields '((:maildir . 5)
+			       (:human-date . 12)
+			       (:flags . 10)
+			       (:from-or-to . 25)
+			       (:subject))
+	  )
+    (setq mu4e-bookmarks
+	  '((:name "Unread messages"
+	     :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/en/Corbeille"
+	     :key ?u)
+	    (:name "Today's messages"
+	     :query "date:today..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/orga1-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+	     :key ?t)
+	    (:name "Last 7 days"
+	     :query "date:7d..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga1-short/Trash AND NOT maildir:/orga1-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+	     :key ?w)
+	    (:name "PhD supervisor messages"
+	     :query "from:jane doe OR from:john doe OR from:bob doe"
+	     :key ?p)
+	    (:name "Flagged messages"
+	     :query "flag:flagged"
+	     :key ?f)))
+#+end_src
+
+** Mu4e contexts
+*** Orga2 context
+#+begin_src elisp
+ (setq mu4e-contexts
+	(list
+	 (make-mu4e-context
+	  :name "orga2-short"
+	  :enter-func (lambda () (mu4e-message "Entering context orga2-short"))
+	  :leave-func (lambda () (mu4e-message "Leaving context orga2-short"))
+	  :match-func (lambda (msg)
+			(when msg
+			  (string-match-p "^/orga2-short" (mu4e-message-field msg :maildir))))
+	  :vars '((user-mail-address . "Username2@orga2.fr")
+		  (user-full-name . "Name1")
+		  (mu4e-sent-folder . "/orga2-short/Sent")
+		  (mu4e-drafts-folder . "/orga2-short/Drafts")
+		  (mu4e-trash-folder . "/orga2-short/Trash")
+		  (org-msg-signature . "\n--\nName1\nDoctorant\nOrga1\nOrga2 / Orga3")
+		  (mu4e-compose-format-flowed . t)
+		  (smtpmail-queue-dir . "~/.mail/orga2-short/queue/cur")
+		  (smtpmail-smtp-user . "Username2@orga2.fr")
+		  (smtpmail-default-smtp-server . "z.orga2-short.fr")
+		  (smtpmail-smtp-server . "z.orga2-short.fr")
+		  (smtpmail-smtp-service . 587)
+		  (smtpmail-debug-info . t)
+		  (mu4e-maildir-shortcuts . ( ("/orga2-short/INBOX"     . ?i)
+					      ("/orga2-short/Sent"      . ?s)
+					      ("/orga2-short/Trash"     . ?t)
+					      ("/orga2-short/Drafts"    . ?d)))))
+#+end_src
+*** Orga3 context
+#+begin_src elisp
+  (make-mu4e-context
+   :name "Orga3"
+   :enter-func (lambda () (mu4e-message "Entering context Orga3"))
+   :leave-func (lambda () (mu4e-message "Leaving context Orga3"))
+   :match-func (lambda (msg)
+		 (when msg
+		   (string-match-p "^/en" (mu4e-message-field msg :maildir))))
+   :vars '((user-mail-address . "Username2@orga3.fr")
+	   (user-full-name . "Name1")
+	   (mu4e-sent-folder . "/en/Envois")
+	   (mu4e-drafts-folder . "/en/Brouillons")
+	   (mu4e-trash-folder . "/en/Corbeille")
+	   (org-msg-signature . "\n--\nName1\nPhD Student\nOrga1\nOrga3 / Orga2")
+	   (mu4e-compose-format-flowed . t)
+	   (smtpmail-queue-dir . "~/.mail/en/queue/cur")
+	   (smtpmail-smtp-user . "Username2")
+	   (smtpmail-default-smtp-server . "smtp.orga3.fr")
+	   (smtpmail-smtp-server . "smtp.orga3.fr")
+	   (smtpmail-smtp-service . 587)
+	   (smtpmail-debug-info . t)
+	   (smtpmail-debug-verbose . t)
+	   (mu4e-maildir-shortcuts . ( ("/en/INBOX"      . ?i)
+				       ("/en/Envois"     . ?s)
+				       ("/en/Corbeille"  . ?t)
+				       ("/en/Pub"        . ?p)
+				       ("/en/Brouillons" . ?d)))))
+#+end_src
+*** Orga4 context
+#+begin_src elisp
+  (make-mu4e-context
+   :name "orga4"
+   :enter-func (lambda () (mu4e-message "Entering context orga4"))
+   :leave-func (lambda () (mu4e-message "Leaving context orga4"))
+   :match-func (lambda (msg)
+		 (when msg
+		   (string-match-p "^/orga4" (mu4e-message-field msg :maildir))))
+   :vars '((user-mail-address . "Username@orga4.net")
+	   (user-full-name . "Name2")
+	   (mu4e-sent-folder . "/orga4/Sent")
+	   (mu4e-drafts-folder . "/orga4/drafts")
+	   (mu4e-trash-folder . "/orga4/Trash")
+	   (mu4e-compose-signature . "Name2")
+	   (org-msg-signature . "\n--\nName2")
+	   (mu4e-compose-format-flowed . t)
+	   (smtpmail-queue-dir . "~/.mail/orga4/queue/cur")
+	   (smtpmail-smtp-user . "Username")
+	   (smtpmail-default-smtp-server . "mail.orga4.net")
+	   (smtpmail-smtp-server . "mail.orga4.net")
+	   (smtpmail-smtp-service . 587)
+	   (smtpmail-debug-info . t)
+	   (smtpmail-debug-verbose . t)
+	   (mu4e-maildir-shortcuts . ( ("/orga4/INBOX"      . ?i)
+				       ("/orga4/Sent"     . ?s)
+				       ("/orga4/Trash"  . ?t)
+				       ("/orga4/Spam"     . ?p)
+				       ("/orga4/GameGmails" . ?g)
+				       ("/orga4/drafts" . ?d)))))
+#+end_src
+*** Hotmail context
+#+begin_src elisp
+  (make-mu4e-context
+   :name "hotmail"
+   :enter-func (lambda () (mu4e-message "Entering context hotmail"))
+   :leave-func (lambda () (mu4e-message "Leaving context hotmail"))
+   :match-func (lambda (msg)
+		 (when msg
+		   (string-match-p "^/hotmail" (mu4e-message-field msg :maildir))))
+   :vars '((user-mail-address . "Username2@hotmail.fr")
+	   (user-full-name . "Name1")
+	   (mu4e-sent-folder . "/hotmail/Sent")
+	   (mu4e-drafts-folder . "/hotmail/Drafts")
+	   (mu4e-trash-folder . "/hotmail/Deleted")
+	   (mu4e-compose-signature . "Name1")
+	   (mu4e-compose-format-flowed . t)
+	   (smtpmail-queue-dir . "~/.mail/hotmail/queue/cur")
+	   (smtpmail-smtp-user . "Username2@hotmail.fr")
+	   (smtpmail-default-smtp-server . "smtp.office365.com")
+	   (smtpmail-smtp-server . "smtp.office365.com")
+	   (smtpmail-smtp-service . 587)
+	   (smtpmail-debug-info . t)
+	   (mu4e-maildir-shortcuts . ( ("/hotmail/INBOX"            . ?i)
+				       ("/hotmail/Sent" . ?s)
+				       ("/hotmail/Deleted"     . ?t)
+				       ("/hotmail/Archive"   . ?a)
+				       ("/hotmail/Drafts"    . ?d))))))))
+#+end_src
+** OrgMsg
+#+begin_src elisp
+  (use-package org-msg
+    :after mu4e
+    :init
+    (setq mail-user-agent 'mu4e-user-agent)
+    :config
+    (setq org-msg-default-alternatives '((new		. (text html))
+					 (reply-to-html	. (text html))
+					 (reply-to-text	. (text)))
+	  org-msg-convert-citation t)
+    (org-msg-mode)
+    )
+#+end_src
+
+** Mu4e alert settings
+#+begin_src elisp
+(use-package mu4e-alert
+  :after mu4e
+  :hook
+  (after-init . #'mu4e-alert-enable-notifications)
+  :config
+  (setq mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed"))
+#+end_src
+
+** Mbsync tangles 
+:PROPERTIES:
+:header-args: :tangle ~/.mu4e/.mbsyncrc :mkdirp yes
+:END:
+
+*** Global options
+#+begin_src bash
+BufferLimit 50mb
+Sync All
+Create Both
+Expunge Both
+CopyArrivalDate yes
+#+end_src
+*** Deprecated gmail account (because security over imap)
+#+begin_src bash :tangle no
+# mbsyncrc based on
+# ACCOUNT INFORMATION
+IMAPAccount work-gmail
+# Address to connect to
+Host imap.gmail.com
+User Username2@gmail.com
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/google.com/Username2.gpg"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.3
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+# THEN WE SPECIFY THE LOCAL AND REMOTE STORAGE
+# - THE REMOTE STORAGE IS WHERE WE GET THE MAIL FROM (E.G., THE
+#   SPECIFICATION OF AN IMAP ACCOUNT)
+# - THE LOCAL STORAGE IS WHERE WE STORE THE EMAIL ON OUR COMPUTER
+
+# REMOTE STORAGE (USE THE IMAP ACCOUNT SPECIFIED ABOVE)
+IMAPStore work-gmail-remote
+Account work-gmail
+
+# LOCAL STORAGE (CREATE DIRECTORIES with mkdir -p ~/.mail/work-gmail)
+MaildirStore work-gmail-local
+Path ~/.mail/work-gmail/
+Inbox ~/.mail/work-gmail/INBOX
+# REQUIRED ONLY IF YOU WANT TO DOWNLOAD ALL SUBFOLDERS; SYNCING SLOWS DOWN
+# SubFolders Verbatim
+
+# CONNECTIONS SPECIFY LINKS BETWEEN REMOTE AND LOCAL FOLDERS
+#
+# CONNECTIONS ARE SPECIFIED USING PATTERNS, WHICH MATCH REMOTE MAIl
+# FOLDERS. SOME COMMONLY USED PATTERS INCLUDE:
+#
+# 1 "*" TO MATCH EVERYTHING
+# 2 "!DIR" TO EXCLUDE "DIR"
+# 3 "DIR" TO MATCH DIR
+
+Channel work-gmail-inbox
+Far :work-gmail-remote:
+Near :work-gmail-local:
+Patterns "INBOX"
+SyncState *
+
+Channel work-gmail-trash
+Far :work-gmail-remote:"[Gmail]/Trash"
+Near :work-gmail-local:"Trash"
+SyncState *
+
+Channel work-gmail-sent
+Far :work-gmail-remote:"[Gmail]/Sent Mail"
+Near :work-gmail-local:"Sent"
+SyncState *
+
+Channel work-gmail-draft
+Far :work-gmail-remote:"[Gmail]/Drafts"
+Near :work-gmail-local:"drafts"
+SyncState *
+
+Channel work-gmail-spam
+Far :work-gmail-remote:"[Gmail]/Spam"
+Near :work-gmail-local:"Spam"
+SyncState *
+
+Channel work-gmail-tokeep
+Far :work-gmail-remote:"ToKeep"
+Near :work-gmail-local:"ToKeep"
+SyncState *
+
+# GROUPS PUT TOGETHER CHANNELS, SO THAT WE CAN INVOKE
+# MBSYNC ON A GROUP TO SYNC ALL CHANNELS
+#
+# FOR INSTANCE: "mbsync gmail" GETS MAIL FROM
+# "gmail-inbox", "gmail-sent", and "gmail-trash"
+#
+Group work-gmail
+Channel work-gmail-inbox
+Channel work-gmail-sent
+Channel work-gmail-trash
+Channel work-gmail-draft
+Channel work-gmail-spam
+Channel work-gmail-tokeep
+#+end_src
+
+
+*** Hotmail normal account
+#+begin_src bash
+# ==========================================================================================
+
+IMAPAccount hotmail
+Host outlook.office365.com
+User Username2@hotmail.fr
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/login.live.com/pers.gpg"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore hotmail-remote
+Account hotmail
+
+MaildirStore hotmail-local
+Path ~/.mail/hotmail/
+Inbox ~/.mail/hotmail/INBOX
+SubFolders Verbatim
+
+Channel hotmail
+Far :hotmail-remote:
+Near :hotmail-local:
+Patterns "*"
+SyncState *
+#+end_src
+
+*** Orga2 account
+#+begin_src bash
+# ==========================================================================================
+
+IMAPAccount orga2-short
+Host z.orga2-short.fr
+User Username2@orga2.fr
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/z.orga2-short.fr.gpg"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore orga2-short-remote
+Account orga2-short
+
+MaildirStore orga2-short-local
+Path ~/.mail/orga2-short/
+Inbox ~/.mail/orga2-short/INBOX
+SubFolders Verbatim
+
+Channel orga2-short
+Far :orga2-short-remote:
+Near :orga2-short-local:
+Patterns "*"
+SyncState *
+#+end_src
+
+*** EN account
+#+begin_src bash
+# ==========================================================================================
+
+IMAPAccount en
+Host imap.orga3.fr
+User Username2
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/orga3.fr.gpg"
+AuthMechs LOGIN
+SSLType STARTTLS
+SSLVersions TLSv1.2
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore en-remote
+Account en
+
+MaildirStore en-local
+Path ~/.mail/en/
+Inbox ~/.mail/en/INBOX
+SubFolders Verbatim
+
+Channel en
+Far :en-remote:
+Near :en-local:
+Patterns "*"
+SyncState *
+#+end_src
+
+*** Orga4 with game gmails forwarding account
+#+begin_src bash
+# ==========================================================================================
+
+IMAPAccount orga4
+Host mail.orga4.net
+User Username@orga4.net
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/orga4.net.gpg"
+AuthMechs LOGIN
+SSLType IMAPS
+SSLVersions TLSv1.3
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore orga4-remote
+Account orga4
+
+MaildirStore orga4-local
+Path ~/.mail/orga4/
+Inbox ~/.mail/orga4/INBOX
+SubFolders Verbatim
+
+Channel orga4
+Far :orga4-remote:
+Near :orga4-local:
+Patterns "*"
+SyncState *
+#+end_src
+
+* End of init
+#+begin_src elisp
+(provide 'init)
+;;; init.el ends here
+#+end_src
