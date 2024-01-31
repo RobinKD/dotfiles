@@ -74,6 +74,7 @@ in with lib; {
           clean = replace-secrets secrets secrets-replacement;
           smudge = replace-secrets secrets-replacement secrets;
         };
+        submodule = { recurse = true; };
       };
       aliases = {
         # TODO
