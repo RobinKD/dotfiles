@@ -38,6 +38,7 @@ in {
     shellcheck
     nodePackages.bash-language-server # Bash LSP
   ];
+
   packaged-emacs = emacsWithPackages (epkgs:
     with epkgs;
     [

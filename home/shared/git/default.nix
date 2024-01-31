@@ -5,7 +5,7 @@ let
   secrets = [
     "Name1"
     "Name2"
-    "Username"
+    "Username1"
     "Username2"
     "example@email.com"
     "Username2@orga2.fr"
@@ -32,7 +32,7 @@ let
   secrets-replacement = [
     "Name1"
     "Name2"
-    "Username"
+    "Username1"
     "Username2"
     "example@email.com"
     "example2@email.com"
