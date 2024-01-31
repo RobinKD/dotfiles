@@ -1,2 +1,2 @@
-* filter=secrets
-!expunged*
+*.nix filter=secrets
+*.org filter=secrets

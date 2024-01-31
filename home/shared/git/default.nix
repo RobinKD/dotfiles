@@ -3,7 +3,7 @@
 let
   cfg = config.hm-modules.git;
   secrets = (import ./secrets.nix).secrets;
-  replacement = (import ./expunged_replacement.nix).replacement;
+  replacement = (import ./replacements.nix.expunged).replacement;
   replace-secrets = (secrets: replacements:
     "sed -e " + (builtins.concatStringsSep " -e "
       (lib.lists.zipListsWith (s: r: ''"s/'' + s + "/" + r + ''/g"'') secrets
