@@ -33,4 +33,10 @@
 
   programs.nix-index = { enable = true; };
   services.flameshot = { enable = true; };
+
+  # Make sure enchant picks up correct aspell dir
+  home.file.".aspell.conf" = {
+    enable = true;
+    text = "dict-dir /run/current-system/sw/lib/aspell/";
+  };
 }
