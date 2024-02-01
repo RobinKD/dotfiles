@@ -1,5 +1,7 @@
-{
-  replacement = [
+{ lib, ... }:
+with lib;
+let
+  r = [
     "Name1"
     "Name2"
     "Username1"
@@ -9,16 +11,17 @@
     "example@hotmail.com"
     "example@gmail.com"
     "Username2"
+    "Username3"
     "Jane Doe"
     "John Doe"
     "Bob Doe"
     "jane doe"
     "john doe"
     "bob doe"
-    "orga1-short"
+    "short-orga1"
     "Orga2"
     "orga2"
-    "orga2-short"
+    "short-orga2"
     "orga3"
     "Orga3"
     "Orga1"
@@ -26,4 +29,10 @@
     "orga4"
     "404-repo"
   ];
+  # Check that no word is a prefix of another and might replace it...
+in assert (foldr (c: p: if (hasPrefix c p) || p == "true" then "true" else c) ""
+  (naturalSort r)) != "true";
+
+{
+  replacement = r;
 }
