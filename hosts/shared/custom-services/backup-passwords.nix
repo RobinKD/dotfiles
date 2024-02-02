@@ -4,6 +4,7 @@ let
   username = hm.home.username;
   homeDir = hm.home.homeDirectory;
   hostname = config.networking.hostName;
+  bkp_file = "${homeDir}/.dotfiles/secrets/pass_bkp";
 in {
   systemd.timers."backup-passwords" = {
     wantedBy = [ "timers.target" ];
@@ -17,10 +18,10 @@ in {
   systemd.services."backup-passwords" = {
     path = [ pkgs.gnutar pkgs.gzip pkgs.gnupg pkgs.sops ];
     script = ''
-      bkp_file="${homeDir}/.dotfiles/secrets/pass_bkp.tar.gz"
-      if [ ! -f $bkp_file ] || [ $(find ${homeDir}/.password-store/ -type f -newer $bkp_file | wc -l) -gt 0 ] || [ $(stat --format "%Z" ${homeDir}/.password-store) -gt $(stat --format "%Z" $bkp_file) ]; then
-         tar czf ${homeDir}/.dotfiles/secrets/pass_bkp.tar.gz ${homeDir}/.password-store/
-         sops --config ${homeDir}/.dotfiles/.sops.yaml -e $bkp_file > $bkp_file
+      if [ ! -f ${bkp_file}.tar.gz ] || [ $(find ${homeDir}/.password-store/ -type f -newer ${bkp_file}.tar.gz | wc -l) -gt 0 ] || [ $(stat --format "%Z" ${homeDir}/.password-store) -gt $(stat --format "%Z" ${bkp_file}.tar.gz) ]; then
+         tar czf ${bkp_file}2.tar.gz ${homeDir}/.password-store/
+         sops --config ${homeDir}/.dotfiles/.sops.yaml -e ${bkp_file}2.tar.gz > ${bkp_file}.tar.gz
+         rm ${bkp_file}2.tar.gz
       fi
     '';
     serviceConfig = {

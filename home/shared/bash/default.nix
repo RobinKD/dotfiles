@@ -75,14 +75,18 @@ in with lib; {
         }
 
         update_passwords() {
-          sops --config ${homeDir}/.dotfiles/.sops.yaml -d ${homeDir}/.dotfiles/secrets/pass.tar.gz > ${homeDir}/.dotfiles/pass.tar.gz
-          mkdir ${homeDir}/.dotfiles/passwords
-          tar -xf ${homeDir}/.dotfiles/pass.tar.gz -C ${homeDir}/.dotfiles/passwords
-          rsync -aP ${homeDir}/.dotfiles/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/
-          rm ${homeDir}/.dotfiles/pass.tar.gz
-          rm -rf ${homeDir}/.dotfiles/passwords
+          if [ $(stat --format "%Z" ${homeDir}/.password-store) -gt $(stat --format "%Z" ${dotDir}/secrets/pass_bkp.tar.gz) ]; then
+            echo "Archive is older, nothing to do..."
+          else
+            echo "Archive is newer, update and delete removed files!"
+            sops --config ${dotDir}/.sops.yaml -d ${dotDir}/secrets/pass_bkp.tar.gz > ${dotDir}/pass.tar.gz
+            mkdir ${dotDir}/passwords
+            tar -xf ${dotDir}/pass.tar.gz -C ${dotDir}/passwords
+            rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete --dry-run
+            rm -rf ${dotDir}/passwords
+          fi
+          rm ${dotDir}/pass.tar.gz
         }
-
       '';
     };
   };
