@@ -83,6 +83,12 @@ in with lib; {
             mkdir ${dotDir}/passwords
             tar -xf ${dotDir}/pass.tar.gz -C ${dotDir}/passwords
             rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete --dry-run
+            echo "\n\n"
+            read -p "Update? (y/N) " confirm
+            if [ $confirm == "y" ]; then
+               echo "Performing update..."
+               rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete
+            fi
             rm -rf ${dotDir}/passwords
           fi
           rm ${dotDir}/pass.tar.gz
