@@ -13,6 +13,7 @@ in {
     ../shared
     ../shared/nvidia.nix
     ../shared/custom-services/auto-build.nix
+    ../shared/custom-services/backup-passwords.nix
     ../shared/specialisations/no-nvidia.nix
   ];
 
