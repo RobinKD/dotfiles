@@ -2,6 +2,7 @@
 let
   cfg = config.hm-modules.bash;
   homeDir = config.home.homeDirectory;
+  dotDir = "${homeDir}/.dotfiles";
 in with lib; {
   options.hm-modules.bash = { enable = mkEnableOption "bash"; };
 
@@ -43,13 +44,13 @@ in with lib; {
         emacs-debug = "emacs --debug-init";
 
         # Alias nixos;
-        nrb = "nfu; sudo nixos-rebuild boot --flake ${homeDir}/.dotfiles";
+        nrb = "nfu; sudo nixos-rebuild boot --flake ${dotDir}";
         nrbwc =
-          "nfu; sudo nixos-rebuild boot -p WorkingConfig --flake ${homeDir}/.dotfiles";
-        nrt = "nfu; sudo nixos-rebuild test --flake ${homeDir}/.dotfiles";
-        nrs = "nfu; sudo nixos-rebuild switch --flake ${homeDir}/.dotfiles";
-        nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${homeDir}/.dotfiles";
-        nfu = "sudo nix flake update ${homeDir}/.dotfiles";
+          "nfu; sudo nixos-rebuild boot -p WorkingConfig --flake ${dotDir}";
+        nrt = "nfu; sudo nixos-rebuild test --flake ${dotDir}";
+        nrs = "nfu; sudo nixos-rebuild switch --flake ${dotDir}";
+        nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${dotDir}";
+        nfu = "sudo nix flake update ${dotDir}";
         ncg = "nix-collect-garbage";
 
         pass-open = "sudo swapoff -a; pass open; sudo swapon";
@@ -66,7 +67,7 @@ in with lib; {
 
         show_updates() {
           echo "Updated packages:"
-          nix store diff-closures /run/current-system ${homeDir}/.dotfiles/build_updates
+          nix store diff-closures /run/current-system ${dotDir}/build_updates
         }
 
         show_booted_updates() {
