@@ -23,6 +23,7 @@ in with lib; {
             ]))
 
           python3Packages.pytest
+          ruff
         ] ++ [
           # YAML LSP server
           yaml-language-server
