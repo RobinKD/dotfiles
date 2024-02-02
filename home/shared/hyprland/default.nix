@@ -33,11 +33,8 @@ in with lib; {
       }
     ];
 
-    services.network-manager-applet.enable = true;
-
     home.packages = (with pkgs; [
       conky
-      networkmanagerapplet
       check-uptime
       qt5ct
       webcord

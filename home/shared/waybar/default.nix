@@ -23,6 +23,7 @@ in with lib; {
           modules-right = [
             "custom/nixos-updates"
             "tray"
+            "network"
             "pulseaudio"
             "backlight"
             "battery"
@@ -99,12 +100,21 @@ in with lib; {
           };
 
           network = {
-            interface = "wlo1";
             format = "{ifname}";
-            format-wifi = "<span color='#b4befe'> </span>{essid}";
-            format-ethernet = "{ipaddr}/{cidr} ";
-            format-disconnected = "<span color='#b4befe'>󰖪 </span>No Network";
-            tooltip = false;
+            format-wifi = "";
+            format-ethernet = "";
+            format-disconnected = "󰖪";
+            tooltip-format-wifi = ''
+              {essid} ({signalStrength}%)
+              Connected with IP: {ipaddr}
+              Upspeed: {bandwidthUpBits}
+              Downspeed: {bandwidthDownBits}'';
+            tooltip-format-ethernet = ''
+              Connected with IP: {ipaddr}
+              Upspeed: {bandwidthUpBits}
+              Downspeed: {bandwidthDownBits}'';
+            tooltip-format-disconnected = "Disconnected";
+            on-click = "networkmanager_dmenu";
           };
 
           battery = {

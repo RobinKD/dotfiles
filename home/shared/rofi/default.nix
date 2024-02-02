@@ -8,18 +8,19 @@ let
   rofi-color-theme = ./style/colors + "/${cfg.color-theme}.rasi";
   launcher-style = cfg.launcher-style;
   launcher-type = cfg.launcher-type;
-  launcher-rasi = builtins.toFile "launcher.rasi"
+  launcher-rasi = type: style:
+    builtins.toFile "launcher.rasi"
     (builtins.replaceStrings [ "shared/colors.rasi" "real" ] [
       "${rofi-color-theme}"
       "background"
-    ] (builtins.readFile
-      (./style/launchers + "/${launcher-type}/${launcher-style}.rasi")));
+    ] (builtins.readFile (./style/launchers + "/${type}/${style}.rasi")));
   launcher-rofi = pkgs.writeTextFile {
     name = "rofi-launcher";
     destination = "/bin/rofi-launcher";
     executable = true;
-    text =
-      "rofi -show drun -theme ${launcher-rasi} -show-icons -icon-theme ${gtk-icon-theme}";
+    text = "rofi -show drun -theme ${
+        launcher-rasi launcher-type launcher-style
+      } -show-icons -icon-theme ${gtk-icon-theme}";
   };
 in with lib; {
   options.hm-modules.rofi = {
@@ -42,12 +43,28 @@ in with lib; {
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ launcher-rofi ];
     # TODO Config to work with both leftwm and hyprland
+    home.packages = with pkgs; [ launcher-rofi ];
     programs.rofi = {
       enable = true;
       package = pkgs.rofi;
       font = "Iosevka Nerd Font 10";
     };
+
+    # Rofi network manager dmenu config and style
+    home.file.".config/networkmanager-dmenu/config.ini".text = ''
+      [dmenu]
+      dmenu_command = rofi -dmenu -width 30 -i -password -theme ${
+        launcher-rasi "type-4" "style-2"
+      }
+      rofi_highlight = true
+      pinentry = pinentry-gtk-2
+      wifi_icons = 󰤯󰤟󰤢󰤥󰤨
+      format = {name}  {sec}  {icon}
+
+      [editor]
+      terminal = emacsclient
+      gui_if_available = True
+    '';
   };
 }

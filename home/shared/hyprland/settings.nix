@@ -11,7 +11,6 @@ in {
   wayland.windowManager.hyprland.settings = {
     exec-once = [
       "sleep 1; waybar"
-      "nb-applet --indicator"
       "swww init"
       "sleep 1; swww-set-background"
       "configure-gtk"
