@@ -48,6 +48,7 @@ in {
       "$mod SHIFT, C, exec, pkill conky"
       "$mod, Q, killactive,"
       "$mod, E, exec, emacsclient -c -a emacs"
+      "$mod, W, exec, networkmanager_dmenu"
 
       # screenshot
       # stop animations while screenshotting; makes black border go away
