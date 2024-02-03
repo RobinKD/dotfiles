@@ -63,10 +63,17 @@ in with lib; {
         search = {
           force = true;
           engines = {
-            "Nix Packages" = {
+            "Bing".metaData.hidden = true;
+            "Amazon.co.uk".metaData.hidden = true;
+            "eBay".metaData.hidden = true;
+            "NixOS Packages" = {
               urls = [{
                 template = "https://search.nixos.org/packages";
                 params = [
+                  {
+                    name = "channel";
+                    value = "unstable";
+                  }
                   {
                     name = "type";
                     value = "packages";
@@ -80,7 +87,30 @@ in with lib; {
 
               icon =
                 "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-              definedAliases = [ "@np" ];
+              definedAliases = [ "@nop" ];
+            };
+            "NixOS options" = {
+              urls = [{
+                template = "https://search.nixos.org/options";
+                params = [
+                  {
+                    name = "channel";
+                    value = "unstable";
+                  }
+                  {
+                    name = "type";
+                    value = "packages";
+                  }
+                  {
+                    name = "query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }];
+
+              icon =
+                "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              definedAliases = [ "@noo" ];
             };
 
             "NixOS Wiki" = {
@@ -89,7 +119,42 @@ in with lib; {
               }];
               iconUpdateURL = "https://nixos.wiki/favicon.png";
               updateInterval = 24 * 60 * 60 * 1000; # every day
-              definedAliases = [ "@nw" ];
+              definedAliases = [ "@now" ];
+            };
+
+            "Home Manager options" = {
+              urls = [{
+                template =
+                  "https://mipmip.github.io/home-manager-option-search/?query={searchTerms}";
+              }];
+              iconUpdateURL = "https://nixos.wiki/favicon.png";
+              definedAliases = [ "@hmo" ];
+            };
+            "GitLab" = {
+              urls = [{
+                template = "https://gitlab.com/search?search={searchTerms}";
+              }];
+              iconUpdateURL =
+                "https://images.ctfassets.net/xz1dnu24egyd/3JZABhkTjUT76LCIclV7sH/17a92be9bce78c2adcc43e23aabb7ca1/gitlab-logo-500.svg";
+              definedAliases = [ "@gitl" ];
+            };
+            "GitHub" = {
+              urls = [{
+                template =
+                  "https://github.com/search?q={searchTerms}&type=repositories";
+              }];
+              iconUpdateURL =
+                "https://cdn-icons-png.flaticon.com/512/25/25231.png";
+              definedAliases = [ "@gith" ];
+            };
+            "Youtube" = {
+              urls = [{
+                template =
+                  "https://www.youtube.com/results?search_query={searchTerms}";
+              }];
+              iconUpdateURL =
+                "https://fr.m.wikipedia.org/wiki/Fichier:YouTube_full-color_icon_%282017%29.svg";
+              definedAliases = [ "@yt" ];
             };
           };
         };
