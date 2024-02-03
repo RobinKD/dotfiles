@@ -14,19 +14,39 @@ in with lib; {
         extensions = with addons; [ ublock-origin browserpass org-capture ];
         bookmarks = { };
         settings = {
-          # TODO Settings to investigate
+          # General settings
           "browser.startup.couldRestoreSession.count" = 1;
           "browser.startup.page" = 3;
+          "layout.spellcheckDefault" = 0;
           "browser.download.useDownloadDir" = false;
           "browser.download.always_ask_before_handling_new_types" = true;
+          # Home settings
+          "browser.newtabpage.activity-stream.feeds.topsites" = false;
+
+          # Search settings
+          "browser.urlbar.placeholderName" = "DuckDuckGo";
+          "browser.urlbar.placeholderName.private" = "DuckDuckGo";
+
           "browser.download.panel.shown" = true;
           "browser.search.region" = "GB";
           "distribution.searchplugins.defaultLocale" = "en-GB";
           "general.useragent.locale" = "en-GB";
+          "browser.translations.panelShown" = false;
 
           # To make org-protocol captures work with extension
           "dom.no_unknown_protocol_error.enabled" = false;
           "security.external_protocol_requies_permission" = false;
+
+          # Some security settings
+          "privacy.globalprivacycontrol.enabled" = true;
+          "privacy.donottrackheader.enabled" = true;
+          "signon.rememberSignons" = false;
+          "extensions.formautofill.creditCards.enabled" = false;
+          "datareporting.healthreport.uploadEnabled" = false;
+          "app.shield.optoutstudies.enabled" = false;
+          "datareporting.policy.dataSubmissionEnabled" = false;
+          "dom.forms.autocomplete.formautofill" = false;
+          "toolkit.telemetry.pioneer-new-studies-available" = false;
 
           # "browser.disableResetPrompt" = true;
           # "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
