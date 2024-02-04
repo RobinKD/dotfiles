@@ -72,7 +72,7 @@ in with lib; {
               "firefox (.*) — Mozilla Firefox" = " $1";
               "emacs (.*)" = " $1";
               "Alacritty (.*)" = " [$1]";
-              ".*dolphin (.*) — Dolphin" = " $1";
+              ".*nemo (.*)" = " $1";
               ".*WebCord - (.*)" = "󰙯 $1";
               ".*Element.*" = " Element";
             };
