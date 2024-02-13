@@ -1343,13 +1343,17 @@ Apheleia seems easier to work with for now
 	  '("ruff" "format"
 	    (apheleia-formatters-fill-column "--line-length")
 	    "--stdin-filename" filepath "-"))
-    (push '(ruff-imports . ("ruff" "--select" "I" "--select" "F401" "--fix"
-			    (apheleia-formatters-fill-column "--line-length")
-			    "--stdin-filename" filepath "-")) apheleia-formatters)
+    ;; (push '(ruff-imports . ("ruff" "--select" "I" "--select" "F401" "--fix"
+    ;; 			  (apheleia-formatters-fill-column "--line-length")
+    ;; 			  "--stdin-filename" filepath "-")) apheleia-formatters)
+    ;; (setf (alist-get 'python-mode apheleia-mode-alist)
+    ;; 	'(ruff ruff-imports))
+    ;; (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+    ;; 	'(ruff ruff-imports))
     (setf (alist-get 'python-mode apheleia-mode-alist)
-	  '(ruff ruff-imports))
+	  '(ruff))
     (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-	  '(ruff ruff-imports))
+	  '(ruff))
     )
 #+end_src
 
