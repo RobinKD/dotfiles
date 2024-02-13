@@ -31,6 +31,10 @@ if [ -x "$(command -v nm-applet)" ]; then
 	nm-applet &
 fi
 
+# Screenshots with Flameshot
+if [ -x "$(command -v flameshot)" ]; then
+	flameshot &
+fi
 # [ WALLPAPERS ] #############################################################
 # - Comment/uncomment the option you prefer
 

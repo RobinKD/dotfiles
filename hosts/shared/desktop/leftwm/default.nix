@@ -31,6 +31,7 @@ in with lib; {
       feh
       betterlockscreen
       arandr
+      flameshot
     ];
 
     services.xserver.windowManager.leftwm.enable = true;
