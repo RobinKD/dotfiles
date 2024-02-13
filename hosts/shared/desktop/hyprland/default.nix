@@ -29,7 +29,11 @@ in with lib; {
       assertion = hmm.hyprland.enable;
       message = "Hyprland home-manager module not enabled";
     }];
-    environment.systemPackages = [ pkgs.glib configure-gtk ];
+    environment.systemPackages = with pkgs; [
+      glib
+      configure-gtk
+      networkmanager_dmenu
+    ];
     programs.hyprland = {
       enable = true;
       xwayland = { enable = true; };
