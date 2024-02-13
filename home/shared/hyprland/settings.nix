@@ -36,13 +36,14 @@ in {
 
     monitor = lib.mkDefault [
       # See https://wiki.hyprland.org/Configuring/Monitors/
-      # ",preferred,auto,auto"
-      "DP-1,1920x1080,-1920x0,1"
-      "eDP-1,2560x1440@240,0x0,1.6"
-      "eDP-2,2560x1440@165,0x0,1.6"
-      "HDMI-A-1,1920x1080,1599x0,1"
-      "DP-3,1920x1080@60,1599x0,1"
+      ",preferred,auto,auto"
+      # "DP-1,1920x1080,-1920x0,1"
+      # "eDP-1,2560x1440@240,0x0,1.6"
+      # "eDP-2,2560x1440@165,0x0,1.6"
+      # "HDMI-A-1,1920x1080,1599x0,1"
+      # "DP-3,1920x1080@60,1599x0,1"
     ];
+
     general = {
       # See https://wiki.hyprland.org/Configuring/Variables/ for more
       gaps_in = 5;
