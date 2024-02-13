@@ -4,15 +4,15 @@ in with lib; {
   options.hm-modules.gpg = { enable = mkEnableOption "gpg"; };
 
   config = mkIf cfg.enable {
-    programs = { gpg = { enable = true; }; };
+    programs.gpg = { enable = true; };
 
-    home.packages = with pkgs; [ pinentry-gtk2 ];
+    home.packages = with pkgs; [ pinentry-qt ];
     services.gpg-agent = {
       enable = true;
       enableBashIntegration = true;
       defaultCacheTtl = 25200; # 7h
       maxCacheTtl = 86400; # 24h
-      pinentryFlavor = "gtk2";
+      pinentryFlavor = "qt";
     };
   };
 }
