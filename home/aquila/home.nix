@@ -3,7 +3,7 @@
 
 { inputs, outputs, config, lib, pkgs, ... }:
 
-{
+rec {
   # You can import other home-manager modules here
   imports = [
     # Custom modules
@@ -52,4 +52,12 @@
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
+
+  wayland.windowManager.hyprland.settings.monitor =
+    lib.mkIf hm-modules.hyprland.enable [
+      "DP-1,1920x1080,-1920x0,1"
+      "eDP-2,2560x1440@165,0x0,1.6"
+      "HDMI-A-1,1920x1080,1599x0,1"
+      "DP-3,1920x1080@60,1599x0,1"
+    ];
 }
