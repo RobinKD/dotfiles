@@ -1364,7 +1364,6 @@ Apheleia seems easier to work with for now
     (setq-local completion-at-point-functions
 		(list (cape-super-capf
 		       #'eglot-completion-at-point
-		       #'yasnippet-capf
 		       #'cape-dabbrev
 		       ))))
 
