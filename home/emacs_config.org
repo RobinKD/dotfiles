@@ -773,7 +773,7 @@ TODO keywords do not have correct font in super-agenda
 					   :headline "Regular advancement meetings"
 					   :template ("* Regular advancement meeting"
 						      "SCHEDULED: %^{Date:}T"
-						      "https://orga2.webex.com/meet/Username2"))
+						      "https://orga2-lower.webex.com/meet/Username2"))
 					  ))
 			      ("Formations" :keys "f"
 			       :headline "Formations / Conferences"
@@ -1493,11 +1493,11 @@ $0
 #+end_src
 *** Org Beamer snippets
 **** Theme snippets :noexport:
-#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/beamertheme_short-orga1 :mkdirp yes
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/beamertheme_orga1-short :mkdirp yes
 # -*- mode: snippet -*-
-# name: themeshort-orga1
-# key: themeshort-orga1
-# uuid: themeshort-orga1
+# name: themeorga1-short
+# key: themeorga1-short
+# uuid: themeorga1-short
 # expand-env: ((yas/indent-line 'fixed))
 # --
 #+title: Machine learning analysis for cyber-attack detection and classification on ships
@@ -1509,7 +1509,7 @@ $0
 #+latex_class: clean_beamer
 #+latex_class_options: [presentation,10pt]
 #+columns: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
-#+beamer_theme: short-orga1
+#+beamer_theme: orga1-short
 #+beamer_header: \usepackage[utf8]{inputenc}
 #+beamer_header: \usepackage{hyperref}
 #+beamer_header: \usepackage{graphics}
@@ -1533,7 +1533,7 @@ import shutil
 import os
 # The top argument for walk
 home = os.path.expanduser("~")
-topdir = home+'/Templates/beamer_templates/short-orga1/'
+topdir = home+'/Templates/beamer_templates/orga1-short/'
 save_dir = './'
 def copy_template():
     to_copy = []
@@ -1556,11 +1556,11 @@ copy(to_copy)
 ,#+end_src
 #+end_src
 
-#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/beamertheme_simpleshort-orga1 :mkdirp yes
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/beamertheme_simpleorga1-short :mkdirp yes
 # -*- mode: snippet -*-
-# name: themesimpleshort-orga1
-# key: themesimpleshort-orga1
-# uuid: themesimpleshort-orga1
+# name: themesimpleorga1-short
+# key: themesimpleorga1-short
+# uuid: themesimpleorga1-short
 # expand-env: ((yas/indent-line 'fixed))
 # --
 #+author: Name1
@@ -1571,7 +1571,7 @@ copy(to_copy)
 #+latex_class: clean_beamer
 #+latex_class_options: [presentation,10pt]
 #+columns: %45ITEM %10BEAMER_env(Env) %10BEAMER_act(Act) %4BEAMER_col(Col) %8BEAMER_opt(Opt)
-#+beamer_theme: Simpleshort-orga1
+#+beamer_theme: Simpleorga1-short
 #+beamer_header: \usepackage[utf8]{inputenc}
 #+beamer_header: \usepackage{hyperref}
 #+beamer_header: \usepackage{graphics}
@@ -1591,7 +1591,7 @@ import shutil
 import os
 # The top argument for walk
 home = os.path.expanduser("~")
-topdir = home+'/Templates/beamer_templates/Simpleshort-orga1/'
+topdir = home+'/Templates/beamer_templates/Simpleorga1-short/'
 save_dir = './'
 def copy_template():
     to_copy = []
@@ -1981,13 +1981,13 @@ Only works on X11, unfortunate
 	  )
     (setq mu4e-bookmarks
 	  '((:name "Unread messages"
-		   :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/short-orga2/Trash AND NOT maildir:/en/Corbeille"
+		   :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/en/Corbeille"
 		   :key ?u)
 	    (:name "Today's messages"
-		   :query "date:today..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/short-orga2/Trash AND NOT maildir:/short-orga2/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+		   :query "date:today..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/orga2-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
 		   :key ?t)
 	    (:name "Last 7 days"
-		   :query "date:7d..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/short-orga2/Trash AND NOT maildir:/short-orga2/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+		   :query "date:7d..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/orga2-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
 		   :key ?w)
 	    (:name "PhD supervisor messages"
 		   :query "from:jane doe OR from:john doe OR from:bob doe"
@@ -1998,41 +1998,41 @@ Only works on X11, unfortunate
 #+end_src
 
 ** Mu4e contexts
-*** Orga2 context
+*** orga2-upper context
 #+begin_src elisp
   (setq mu4e-contexts
 	(list
 	 (make-mu4e-context
-	  :name "short-orga2"
-	  :enter-func (lambda () (mu4e-message "Entering context short-orga2"))
-	  :leave-func (lambda () (mu4e-message "Leaving context short-orga2"))
+	  :name "orga2-short"
+	  :enter-func (lambda () (mu4e-message "Entering context orga2-short"))
+	  :leave-func (lambda () (mu4e-message "Leaving context orga2-short"))
 	  :match-func (lambda (msg)
 			(when msg
-			  (string-match-p "^/short-orga2" (mu4e-message-field msg :maildir))))
+			  (string-match-p "^/orga2-short" (mu4e-message-field msg :maildir))))
 	  :vars '((user-mail-address . "example2@email.com")
 		  (user-full-name . "Name1")
-		  (mu4e-sent-folder . "/short-orga2/Sent")
-		  (mu4e-drafts-folder . "/short-orga2/Drafts")
-		  (mu4e-trash-folder . "/short-orga2/Trash")
-		  (org-msg-signature . "\n--\nName1\nDoctorant\nOrga1\nOrga2 / Orga3")
+		  (mu4e-sent-folder . "/orga2-short/Sent")
+		  (mu4e-drafts-folder . "/orga2-short/Drafts")
+		  (mu4e-trash-folder . "/orga2-short/Trash")
+		  (org-msg-signature . "\n--\nName1\nDoctorant\norga1-full\norga2-upper / orga3-upper")
 		  (mu4e-compose-format-flowed . t)
-		  (smtpmail-queue-dir . "~/.mail/short-orga2/queue/cur")
+		  (smtpmail-queue-dir . "~/.mail/orga2-short/queue/cur")
 		  (smtpmail-smtp-user . "example2@email.com")
-		  (smtpmail-default-smtp-server . "z.short-orga2.fr")
-		  (smtpmail-smtp-server . "z.short-orga2.fr")
+		  (smtpmail-default-smtp-server . "z.orga2-short.fr")
+		  (smtpmail-smtp-server . "z.orga2-short.fr")
 		  (smtpmail-smtp-service . 587)
 		  (smtpmail-debug-info . t)
-		  (mu4e-maildir-shortcuts . ( ("/short-orga2/INBOX"     . ?i)
-					      ("/short-orga2/Sent"      . ?s)
-					      ("/short-orga2/Trash"     . ?t)
-					      ("/short-orga2/Drafts"    . ?d)))))
+		  (mu4e-maildir-shortcuts . ( ("/orga2-short/INBOX"     . ?i)
+					      ("/orga2-short/Sent"      . ?s)
+					      ("/orga2-short/Trash"     . ?t)
+					      ("/orga2-short/Drafts"    . ?d)))))
 #+end_src
-*** Orga3 context
+*** orga3-upper context
 #+begin_src elisp
   (make-mu4e-context
-   :name "Orga3"
-   :enter-func (lambda () (mu4e-message "Entering context Orga3"))
-   :leave-func (lambda () (mu4e-message "Leaving context Orga3"))
+   :name "orga3-upper"
+   :enter-func (lambda () (mu4e-message "Entering context orga3-upper"))
+   :leave-func (lambda () (mu4e-message "Leaving context orga3-upper"))
    :match-func (lambda (msg)
 		 (when msg
 		   (string-match-p "^/en" (mu4e-message-field msg :maildir))))
@@ -2041,12 +2041,12 @@ Only works on X11, unfortunate
 	   (mu4e-sent-folder . "/en/Envois")
 	   (mu4e-drafts-folder . "/en/Brouillons")
 	   (mu4e-trash-folder . "/en/Corbeille")
-	   (org-msg-signature . "\n--\nName1\nPhD Student\nOrga1\nOrga3 / Orga2")
+	   (org-msg-signature . "\n--\nName1\nPhD Student\norga1-full\norga3-upper / orga2-upper")
 	   (mu4e-compose-format-flowed . t)
 	   (smtpmail-queue-dir . "~/.mail/en/queue/cur")
 	   (smtpmail-smtp-user . "Username2")
-	   (smtpmail-default-smtp-server . "smtp.orga3.fr")
-	   (smtpmail-smtp-server . "smtp.orga3.fr")
+	   (smtpmail-default-smtp-server . "smtp.orga3-lower.fr")
+	   (smtpmail-smtp-server . "smtp.orga3-lower.fr")
 	   (smtpmail-smtp-service . 587)
 	   (smtpmail-debug-info . t)
 	   (smtpmail-debug-verbose . t)
@@ -2056,36 +2056,36 @@ Only works on X11, unfortunate
 				       ("/en/Pub"        . ?p)
 				       ("/en/Brouillons" . ?d)))))
 #+end_src
-*** Orga4 context
+*** orga4-upper context
 #+begin_src elisp
   (make-mu4e-context
-   :name "orga4"
-   :enter-func (lambda () (mu4e-message "Entering context orga4"))
-   :leave-func (lambda () (mu4e-message "Leaving context orga4"))
+   :name "orga4-lower"
+   :enter-func (lambda () (mu4e-message "Entering context orga4-lower"))
+   :leave-func (lambda () (mu4e-message "Leaving context orga4-lower"))
    :match-func (lambda (msg)
 		 (when msg
-		   (string-match-p "^/orga4" (mu4e-message-field msg :maildir))))
-   :vars '((user-mail-address . "Username1@orga4.net")
+		   (string-match-p "^/orga4-lower" (mu4e-message-field msg :maildir))))
+   :vars '((user-mail-address . "Username1@orga4-lower.net")
 	   (user-full-name . "Name2")
-	   (mu4e-sent-folder . "/orga4/Sent")
-	   (mu4e-drafts-folder . "/orga4/drafts")
-	   (mu4e-trash-folder . "/orga4/Trash")
+	   (mu4e-sent-folder . "/orga4-lower/Sent")
+	   (mu4e-drafts-folder . "/orga4-lower/drafts")
+	   (mu4e-trash-folder . "/orga4-lower/Trash")
 	   (mu4e-compose-signature . "Name2")
 	   (org-msg-signature . "\n--\nName2")
 	   (mu4e-compose-format-flowed . t)
-	   (smtpmail-queue-dir . "~/.mail/orga4/queue/cur")
+	   (smtpmail-queue-dir . "~/.mail/orga4-lower/queue/cur")
 	   (smtpmail-smtp-user . "Username1")
-	   (smtpmail-default-smtp-server . "mail.orga4.net")
-	   (smtpmail-smtp-server . "mail.orga4.net")
+	   (smtpmail-default-smtp-server . "mail.orga4-lower.net")
+	   (smtpmail-smtp-server . "mail.orga4-lower.net")
 	   (smtpmail-smtp-service . 587)
 	   (smtpmail-debug-info . t)
 	   (smtpmail-debug-verbose . t)
-	   (mu4e-maildir-shortcuts . ( ("/orga4/INBOX"      . ?i)
-				       ("/orga4/Sent"     . ?s)
-				       ("/orga4/Trash"  . ?t)
-				       ("/orga4/Spam"     . ?p)
-				       ("/orga4/GameGmails" . ?g)
-				       ("/orga4/drafts" . ?d)))))
+	   (mu4e-maildir-shortcuts . ( ("/orga4-lower/INBOX"      . ?i)
+				       ("/orga4-lower/Sent"     . ?s)
+				       ("/orga4-lower/Trash"  . ?t)
+				       ("/orga4-lower/Spam"     . ?p)
+				       ("/orga4-lower/GameGmails" . ?g)
+				       ("/orga4-lower/drafts" . ?d)))))
 #+end_src
 *** Hotmail context
 #+begin_src elisp
@@ -2267,30 +2267,30 @@ Patterns "*"
 SyncState *
 #+end_src
 
-*** Orga2 account
+*** orga2-upper account
 #+begin_src bash
 # ==========================================================================================
 
-IMAPAccount short-orga2
-Host z.short-orga2.fr
+IMAPAccount orga2-short
+Host z.orga2-short.fr
 User example2@email.com
-PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/z.short-orga2.fr.gpg"
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/z.orga2-short.fr.gpg"
 AuthMechs LOGIN
 SSLType IMAPS
 SSLVersions TLSv1.2
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore short-orga2-remote
-Account short-orga2
+IMAPStore orga2-short-remote
+Account orga2-short
 
-MaildirStore short-orga2-local
-Path ~/.mail/short-orga2/
-Inbox ~/.mail/short-orga2/INBOX
+MaildirStore orga2-short-local
+Path ~/.mail/orga2-short/
+Inbox ~/.mail/orga2-short/INBOX
 SubFolders Verbatim
 
-Channel short-orga2
-Far :short-orga2-remote:
-Near :short-orga2-local:
+Channel orga2-short
+Far :orga2-short-remote:
+Near :orga2-short-local:
 Patterns "*"
 SyncState *
 #+end_src
@@ -2300,9 +2300,9 @@ SyncState *
 # ==========================================================================================
 
 IMAPAccount en
-Host imap.orga3.fr
+Host imap.orga3-lower.fr
 User Username2
-PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Work/orga3.fr.gpg"
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Work/orga3-lower.fr.gpg"
 AuthMechs LOGIN
 SSLType STARTTLS
 SSLVersions TLSv1.2
@@ -2323,30 +2323,30 @@ Patterns "*"
 SyncState *
 #+end_src
 
-*** Orga4 with game gmails forwarding account
+*** orga4-upper with game gmails forwarding account
 #+begin_src bash
 # ==========================================================================================
 
-IMAPAccount orga4
-Host mail.orga4.net
-User Username1@orga4.net
-PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/orga4.net.gpg"
+IMAPAccount orga4-lower
+Host mail.orga4-lower.net
+User Username1@orga4-lower.net
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.password-store/Mail/orga4-lower.net.gpg"
 AuthMechs LOGIN
 SSLType IMAPS
 SSLVersions TLSv1.3
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore orga4-remote
-Account orga4
+IMAPStore orga4-lower-remote
+Account orga4-lower
 
-MaildirStore orga4-local
-Path ~/.mail/orga4/
-Inbox ~/.mail/orga4/INBOX
+MaildirStore orga4-lower-local
+Path ~/.mail/orga4-lower/
+Inbox ~/.mail/orga4-lower/INBOX
 SubFolders Verbatim
 
-Channel orga4
-Far :orga4-remote:
-Near :orga4-local:
+Channel orga4-lower
+Far :orga4-lower-remote:
+Near :orga4-lower-local:
 Patterns "*"
 SyncState *
 #+end_src
