@@ -1,5 +1,12 @@
-{ config, lib, pkgs, ... }:
-let cfg = config.hm-modules.dev-languages;
+{ config, lib, pkgs, nixosConfig, ... }:
+let
+  cfg = config.hm-modules.dev-languages;
+  nvidiaPrimeCfg = nixosConfig.hardware.nvidia.prime;
+  nvidia-enabled = if (nvidiaPrimeCfg.sync.enable
+    || nvidiaPrimeCfg.offload.enable || nvidiaPrimeCfg.reverseSync.enable) then
+    true
+  else
+    false;
 in with lib; {
   options.hm-modules.dev-languages = {
     python.enable = mkEnableOption "python";
@@ -31,6 +38,9 @@ in with lib; {
           nodePackages.prettier
         ];
     })
+    # (mkIf (cfg.python.enable && nvidia-enabled) {
+    #   home.packages = with pkgs; [ cudaPackages.cudatoolkit ];
+    # })
     (mkIf cfg.latex.enable {
       home.packages = with pkgs;
         [
