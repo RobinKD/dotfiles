@@ -1384,7 +1384,9 @@ Apheleia seems easier to work with for now
     (setq-default eglot-workspace-configuration
 		  '(:pylsp
 		    (:plugins
-		     (:jedi_completion
+		     (:jedi
+		      (:auto_import_modules [ "numpy" "torch" "pandas" "pytorch_lightning" "matplotlib" ])
+		      :jedi_completion
 		      (:fuzzy t)
 		      :jedi_definition
 		      (:enabled t ; boolean: true (default) or false
