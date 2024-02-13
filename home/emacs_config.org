@@ -1411,7 +1411,7 @@ Apheleia seems easier to work with for now
 		     )
 		    )
 		  )
-    (setq eglot-events-buffer-size 0)
+    ;; (setq eglot-events-buffer-size 0)
     )
 #+end_src
 
