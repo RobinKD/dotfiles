@@ -34,7 +34,6 @@ in with lib; {
     ];
 
     services.xserver.windowManager.leftwm.enable = true;
-    programs.nm-applet.enable = true;
 
     # Prevent screen blanking out
     environment.extraInit = ''
