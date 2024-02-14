@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 # Sorry Copilot or whatever, you won't have anything except my username...
 let
   cfg = config.hm-modules.git;
@@ -24,6 +24,7 @@ in with lib; {
           smudge = replace-secrets replacement secrets;
         };
         submodule = { recurse = true; };
+        credential.helper = "!pass-git-helper $@";
       };
       aliases = {
         # TODO
@@ -33,5 +34,13 @@ in with lib; {
         signByDefault = true;
       };
     };
+
+    home.packages = with pkgs; [ pass-git-helper ];
+
+    # pass-git-helper mappings
+    home.file.".config/pass-git-helper/git-pass-mapping.ini".text = ''
+      [git.overleaf.com*]
+      target=overleaf.com/git_token_pro
+    '';
   };
 }
