@@ -24,9 +24,8 @@ let
 in {
   system_packages = with pkgs; [
     # Emacs
-    mu
     org-capture-desktop
-    emacs.pkgs.mu4e
+    emacsPackages.mu4e
     isync
     sqlite
     (aspellWithDicts (ps: with ps; [ en fr ]))
