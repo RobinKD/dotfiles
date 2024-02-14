@@ -46,9 +46,9 @@ in with lib; {
         [
           (texlive.combine {
             inherit (texlive)
-              scheme-medium sttools datetime2 datetime ninecolors multirow
-              fmtcount pgfplots adjustbox appendixnumberbeamer tabularray
-              wrapfig capt-of doublestroke animate media9 zref ocgx2;
+              biblatex scheme-medium sttools datetime2 datetime ninecolors
+              multirow fmtcount pgfplots adjustbox appendixnumberbeamer
+              tabularray wrapfig capt-of doublestroke animate media9 zref ocgx2;
             #  animate media9 zref ocgx2 are for animated tikz
           })
         ] ++ [
