@@ -49,6 +49,8 @@ in with lib; {
           "nfu; sudo nixos-rebuild boot -p WorkingConfig --flake ${dotDir}";
         nrt = "nfu; sudo nixos-rebuild test --flake ${dotDir}";
         nrs = "nfu; sudo nixos-rebuild switch --flake ${dotDir}";
+        nrtnu = "sudo nixos-rebuild test --flake ${dotDir}";
+        nrsnu = "sudo nixos-rebuild switch --flake ${dotDir}";
         nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${dotDir}";
         nfu = "sudo nix flake update ${dotDir}";
         ncg = "nix-collect-garbage";
