@@ -1220,57 +1220,55 @@ Now onto the hard stuff
     (add-to-list 'org-latex-classes
 		 '("clean_beamer"
 		   "\\documentclass[presentation]{beamer}
-		    [NO-DEFAULT-PACKAGES]
-		    [NO-PACKAGES]
-		    [NO-EXTRA]"
+			   [NO-DEFAULT-PACKAGES]
+			   [NO-PACKAGES]
+			   [NO-EXTRA]"
 		   ("\\section{%s}" . "\\section*{%s}")
 		   ("\\subsection{%s}" . "\\subsection*{%s}")
 		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))
     (add-to-list 'org-latex-classes
-		 '("report"
-		   "\\documentclass{report}
-    \\usepackage{amsmath,amsfonts, amssymb}
-    \\usepackage{algorithmic}
-    \\usepackage{algorithm}
-    \\usepackage[utf8]{inputenc}
-    \\usepackage{array}
-    \\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-    \\usepackage{textcomp}
-    \\usepackage{stfloats}
-    \\usepackage{url}
-    \\usepackage{verbatim}
-    \\usepackage{graphicx}
-    \\usepackage{xcolor}
-    \\usepackage{cite}
-    \\usepackage{multirow}
-    \\usepackage{hyperref}
-    [No-DEFAULT-PACKAGES]
-		    "
-		   ("\\chapter{%s}" . "\\chapter*{%s}")
+		 '("IEEEtran" "\\documentclass{IEEEtran}
+   [DEFAULT-PACKAGES]
+   \\usepackage{amsfonts}
+   \\usepackage{algorithmic}
+   \\usepackage{algorithm}
+   \\usepackage{array}
+   \\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+   \\usepackage{textcomp}
+   \\usepackage{stfloats}
+   \\usepackage{url}
+   \\usepackage{verbatim}
+   \\usepackage{xcolor}
+   \\usepackage{cite}
+   \\usepackage{multirow}
+   \\usepackage{pgfplotstable}
+   \\usepackage{pgfplots}
+  "
 		   ("\\section{%s}" . "\\section*{%s}")
 		   ("\\subsection{%s}" . "\\subsection*{%s}")
 		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
 		   ("\\paragraph{%s}" . "\\paragraph*{%s}")
 		   ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
     (add-to-list 'org-latex-classes
-		 '("IEEEtran"
-		   "\\documentclass{IEEEtran}
-    \\usepackage{amsmath,amsfonts, amssymb}
-    \\usepackage{algorithmic}
-    \\usepackage{algorithm}
-    \\usepackage{array}
-    \\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-    \\usepackage{textcomp}
-    \\usepackage{stfloats}
-    \\usepackage{url}
-    \\usepackage{verbatim}
-    \\usepackage{graphicx}
-    \\usepackage{xcolor}
-    \\usepackage{cite}
-    \\usepackage{multirow}
-    \\usepackage{hyperref}
-    [No-DEFAULT-PACKAGES]
-		    "
+		 '("acmart" "\\documentclass{acmart}
+   [DEFAULT-PACKAGES]
+   \\usepackage{booktabs}
+   \\usepackage{amsfonts}
+   \\usepackage[ruled]{algorithm2e}
+   \\usepackage{array}
+   \\usepackage{textcomp}
+   \\usepackage{stfloats}
+   \\usepackage{url}
+   \\usepackage{verbatim}
+   \\usepackage{xcolor}
+   \\usepackage{cite}
+   \\usepackage{multirow}
+   \\usepackage{orcidlink}
+   \\usepackage{caption, subcaption}
+   \\usepackage{pgfplotstable}
+   \\usepackage{pgfplots}
+   \\usepackage{tabularray}
+  "
 		   ("\\section{%s}" . "\\section*{%s}")
 		   ("\\subsection{%s}" . "\\subsection*{%s}")
 		   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
