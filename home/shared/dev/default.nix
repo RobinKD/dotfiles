@@ -50,7 +50,7 @@ in with lib; {
               multirow fmtcount pgfplots adjustbox appendixnumberbeamer acmart
               tabularray wrapfig capt-of doublestroke animate media9 zref ocgx2
               xstring totpages environ hyperxmp ifmtarg ncctools comment
-              ifoddpage relsize orcidlink preprint;
+              ifoddpage relsize orcidlink preprint enumitem;
             #  animate media9 zref ocgx2 are for animated tikz
           })
         ] ++ [
