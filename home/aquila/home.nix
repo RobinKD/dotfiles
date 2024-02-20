@@ -16,6 +16,7 @@ rec {
   hm-modules = {
     # Basically always true, but who knows...
     git.enable = true;
+    ssh.enable = true;
     gpg.enable = true;
     firefox.enable = true;
     bash.enable = true;

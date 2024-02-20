@@ -18,6 +18,7 @@
     ./git
     ./gpg
     ./bash
+    ./ssh
 
     # Useful
     ./pass
