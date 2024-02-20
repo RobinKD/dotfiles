@@ -1,4 +1,4 @@
-{ config, lib, nixosConfig, ... }:
+{ config, lib, ... }:
 let
   cfg = config.hm-modules.bash;
   homeDir = config.home.homeDirectory;
