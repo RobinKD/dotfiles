@@ -35,6 +35,7 @@ rec {
     # dev
     dev-languages = {
       python.enable = true;
+      python_gpu.enable = true;
       latex.enable = true;
       # web.enable = true;
     };
