@@ -54,6 +54,8 @@ in with lib; {
         nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${dotDir}";
         nfu = "sudo nix flake update ${dotDir}";
         ncg = "nix-collect-garbage";
+        fh-init = ''
+          nix run "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz" -- init'';
 
         pass-open = "sudo swapoff -a; pass open; sudo swapon";
       };
