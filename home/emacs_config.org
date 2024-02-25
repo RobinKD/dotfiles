@@ -2141,6 +2141,17 @@ Only works on X11, unfortunate
     (setq mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed"))
 #+end_src
 
+** Mu4e icalendar
+#+begin_src elisp
+  (use-package mu4e-icalendar
+    :after mu4e
+    :config
+    (mu4e-icalendar-setup)
+    (setq mu4e-icalendar-trash-after-reply t)
+    )
+#+end_src
+
+
 ** Mbsync tangles 
 :PROPERTIES:
 :header-args: :tangle ~/.mu4e/.mbsyncrc :mkdirp yes
