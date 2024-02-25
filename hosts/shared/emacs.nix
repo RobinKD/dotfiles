@@ -45,13 +45,13 @@ in {
       # Treesit highlighting
       treesit-grammars.with-all-grammars
     ] ++ (with epkgs.melpaStablePackages; [
-      magit # ; Integrate git <C-x g>
       rg # Ripgrep with emacs
       yasnippet # My lazy bones are happy
     ])
     # Two packages (undo-tree and zoom-frm) are taken from MELPA.
     ++ (with epkgs.melpaPackages; [
       meow # My personal keybinds
+      magit # ; Integrate git <C-x g>
 
       which-key
 
