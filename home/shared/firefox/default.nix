@@ -20,6 +20,8 @@ in with lib; {
           "layout.spellcheckDefault" = 0;
           "browser.download.useDownloadDir" = false;
           "browser.download.always_ask_before_handling_new_types" = true;
+          # Do not share geoloc ip
+          "geo.enabled" = false;
           # Home settings
           "browser.newtabpage.activity-stream.feeds.topsites" = false;
 
