@@ -40,6 +40,7 @@ in with lib; {
       webcord
       slurp
       libsForQt5.qtwayland
+      inputs.hyprlock.packages.${pkgs.system}.hyprlock
       hyprcontrib.grimblast
       # hyprcontrib.try_swap_workspace # pgrep -x not working
       hyprcontrib.scratchpad
