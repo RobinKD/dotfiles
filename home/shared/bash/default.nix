@@ -33,9 +33,9 @@ in with lib; {
       };
       shellAliases = {
         # some more ls aliases
-        ll = "ls -alF";
-        la = "ls -A";
-        l = "ls -CF";
+        ll = "eza --icons  -a --group-directories-first -1 --no-user --longF";
+        l = "eza --icons  -a --group-directories-first -1";
+        tree = "eza --icons --tree --group-directories-first";
 
         # Alias for doom emacs;
         doom = "${homeDir}/.config/emacs/bin/doom";
