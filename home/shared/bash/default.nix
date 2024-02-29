@@ -56,8 +56,6 @@ in with lib; {
         ncg = "nix-collect-garbage";
         fh-init = ''
           nix run "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz" -- init'';
-
-        pass-open = "sudo swapoff -a; pass open; sudo swapon";
       };
       bashrcExtra = ''
         flakify() {
