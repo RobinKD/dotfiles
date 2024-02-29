@@ -94,8 +94,9 @@ in {
       "$mod, egrave, workspace, 3"
       "$mod, underscore, workspace, 4"
       "$mod, ccedilla, workspace, 5"
+      "$mod, agrave, workspace, previous"
 
-      # Move active window to a workspace with mm + SHIFT + [0-9]
+      # Move active window to a workspace with mm + SHIFT + [1-9]
       "$mod SHIFT, ampersand, movetoworkspace, name:Main"
       "$mod SHIFT, eacute, movetoworkspace, name:Web"
       "$mod SHIFT, quotedbl, movetoworkspace, name:Mail"
@@ -106,7 +107,6 @@ in {
       "$mod SHIFT, underscore, movetoworkspace, 4"
       "$mod SHIFT, ccedilla, movetoworkspace, 5"
       "$mod SHIFT, N, movetoworkspace, empty"
-
     ];
 
     binde = [
