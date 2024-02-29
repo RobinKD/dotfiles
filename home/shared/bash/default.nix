@@ -33,7 +33,7 @@ in with lib; {
       };
       shellAliases = {
         # some more ls aliases
-        ll = "eza --icons  -a --group-directories-first -1 --no-user --longF";
+        ll = "eza --icons  -a --group-directories-first -1 --no-user --long";
         l = "eza --icons  -a --group-directories-first -1";
         tree = "eza --icons --tree --group-directories-first";
 
