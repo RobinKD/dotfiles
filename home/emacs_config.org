@@ -2015,7 +2015,7 @@ Only works on X11, unfortunate
 		  (mu4e-sent-folder . "/orga2-short/Sent")
 		  (mu4e-drafts-folder . "/orga2-short/Drafts")
 		  (mu4e-trash-folder . "/orga2-short/Trash")
-		  (org-msg-signature . "\n--\nName1\nDoctorant\norga1-full\norga2-upper / orga3-upper")
+		  (message-signature . "Name1\nDoctorant\norga1-full\norga2-upper / orga3-upper")
 		  (mu4e-compose-format-flowed . t)
 		  (smtpmail-queue-dir . "~/.mail/orga2-short/queue/cur")
 		  (smtpmail-smtp-user . "example2@email.com")
@@ -2042,7 +2042,7 @@ Only works on X11, unfortunate
 	   (mu4e-sent-folder . "/en/Envois")
 	   (mu4e-drafts-folder . "/en/Brouillons")
 	   (mu4e-trash-folder . "/en/Corbeille")
-	   (org-msg-signature . "\n--\nName1\nPhD Student\norga1-full\norga3-upper / orga2-upper")
+	   (message-signature . "Name1\nPhD Student\norga1-full\norga3-upper / orga2-upper")
 	   (mu4e-compose-format-flowed . t)
 	   (smtpmail-queue-dir . "~/.mail/en/queue/cur")
 	   (smtpmail-smtp-user . "Username2")
@@ -2072,7 +2072,7 @@ Only works on X11, unfortunate
 	   (mu4e-drafts-folder . "/orga4-lower/drafts")
 	   (mu4e-trash-folder . "/orga4-lower/Trash")
 	   (mu4e-compose-signature . "Name2")
-	   (org-msg-signature . "\n--\nName2")
+	   (message-signature . "Name2")
 	   (mu4e-compose-format-flowed . t)
 	   (smtpmail-queue-dir . "~/.mail/orga4-lower/queue/cur")
 	   (smtpmail-smtp-user . "Username1")
@@ -2116,19 +2116,37 @@ Only works on X11, unfortunate
 				       ("/hotmail/Archive"   . ?a)
 				       ("/hotmail/Drafts"    . ?d))))))))
 #+end_src
-** OrgMsg
+** Org mime
 #+begin_src elisp
-  (use-package org-msg
+  (use-package org-mime
     :after mu4e
-    :init
-    (setq mail-user-agent 'mu4e-user-agent)
+    :hook
+    (
+     ;;(message-send . org-mime-htmlize)
+     ;; (message-send . org-mime-confirm-when-no-multipart) ;; this one or the one above
+     (org-mime-html . (lambda ()
+	    (org-mime-change-element-style
+	    "pre" (format "color: %s; background-color: %s; padding: 0.5em;"
+			  "#E6E1DC" "#232323")))))
     :config
-    (setq org-msg-default-alternatives '((new		. (text html))
-					 (reply-to-html	. (text html))
-					 (reply-to-text	. (text)))
-	  org-msg-convert-citation t)
-    (org-msg-mode)
-    )
+    (setq org-mime-export-options '(:section-numbers nil
+			    :with-author nil
+			    :with-toc nil)))
+  #+end_src
+** Org Msg
+Not used anymore
+  #+begin_src elisp :tangle no
+    (use-package org-msg
+      :after mu4e
+      :init
+      (setq mail-user-agent 'mu4e-user-agent)
+      :config
+	(setq org-msg-default-alternatives '((new		. (text html))
+					     (reply-to-html	. (text html))
+					     (reply-to-text	. (text)))
+	      org-msg-convert-citation t)
+	(org-msg-mode)
+	)
 #+end_src
 
 ** Mu4e alert settings

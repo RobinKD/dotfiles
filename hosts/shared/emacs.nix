@@ -82,6 +82,7 @@ in {
 
       # Org stuff
       org-modern
+      org-mime
       org-auto-tangle
       org-download
       org-super-agenda
