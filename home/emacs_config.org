@@ -1948,7 +1948,6 @@ Only works on X11, unfortunate
 		("o" . #'+mu4e-view-open-attachment))
     :config
     (add-to-list 'meow-mode-state-list '(mu4e-view-mode . motion))
-
     (setq mu4e-get-mail-command "mbsync -c ~/.mu4e/.mbsyncrc -a"
 	  mu4e-index-cleanup t
 	  mu4e-index-lazy-check nil
@@ -2120,6 +2119,10 @@ Only works on X11, unfortunate
 #+begin_src elisp
   (use-package org-mime
     :after mu4e
+    :bind
+    (:map mu4e-compose-mode-map
+	  ("C-c C-h" . org-mime-edit-mail-in-org-mode))
+
     :hook
     (
      ;;(message-send . org-mime-htmlize)
