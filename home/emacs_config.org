@@ -1941,6 +1941,11 @@ Only works on X11, unfortunate
 
 * Mu4e
 #+begin_src elisp
+  (use-package mm-decode
+    :config
+    (setq mm-discouraged-alternatives
+	  '("text/html" "multipart/*" "text/richtext")))
+
   (use-package mu4e
     :commands mu4e
     :load-path "/run/current-system/sw/share/emacs/site-lisp/elpa/mu4e-1.10.8"
