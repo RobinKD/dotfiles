@@ -32,7 +32,7 @@ in {
     enchant
     pandoc
     nixfmt # Format nix files
-    rnix-lsp # Nix LSP
+    nil # Nix LSP
     shfmt
     shellcheck
     nodePackages.bash-language-server # Bash LSP
