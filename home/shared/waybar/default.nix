@@ -70,6 +70,7 @@ in with lib; {
             format = "{class} {title}";
             rewrite = {
               "firefox (.*) — Mozilla Firefox" = " $1";
+              "librewolf (.*) — LibreWolf" = " $1";
               "emacs (.*)" = " $1";
               "Alacritty (.*)" = " [$1]";
               ".*nemo (.*)" = " $1";
