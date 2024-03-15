@@ -37,7 +37,7 @@ in with lib; {
 
           # To make org-protocol captures work with extension
           "dom.no_unknown_protocol_error.enabled" = false;
-          "security.external_protocol_requies_permission" = false;
+          "security.external_protocol_requires_permission" = false;
 
           # Some security settings
           "privacy.globalprivacycontrol.enabled" = true;
