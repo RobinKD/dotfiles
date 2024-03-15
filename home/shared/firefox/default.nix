@@ -127,7 +127,7 @@ in with lib; {
             "Home Manager options" = {
               urls = [{
                 template =
-                  "https://mipmip.github.io/home-manager-option-search/?query={searchTerms}";
+                  "https://home-manager-options.extranix.com/?query={searchTerms}";
               }];
               iconUpdateURL = "https://nixos.wiki/favicon.png";
               definedAliases = [ "@hmo" ];
