@@ -84,12 +84,12 @@ in with lib; {
             sops --config ${dotDir}/.sops.yaml -d ${dotDir}/secrets/pass_bkp.tar.gz > ${dotDir}/pass.tar.gz
             mkdir ${dotDir}/passwords
             tar -xf ${dotDir}/pass.tar.gz -C ${dotDir}/passwords
-            echo "Preview synchronisation:\n"
+            echo -e "Preview synchronisation:\n"
             rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete --dry-run
-            echo "\n\n"
+            echo -e "\n\n"
             read -p "Update? (y/N) " confirm
             if [ $confirm == "y" ]; then
-               echo "\nPerforming update...\n"
+               echo -e "\nPerforming update...\n"
                rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete
             fi
             rm -rf ${dotDir}/passwords
