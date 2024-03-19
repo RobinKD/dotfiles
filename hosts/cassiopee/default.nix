@@ -4,7 +4,10 @@
   # For Windows dual boot
   boot.loader.grub.useOSProber = true;
 
-  networking = { hostName = "cassiopee"; };
+  networking = {
+    networkmanager.enable = true;
+    hostName = "cassiopee";
+  };
   services.openssh.enable = true;
 
   users = {
