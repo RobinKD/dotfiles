@@ -1984,6 +1984,7 @@ Only works on X11, unfortunate
 				(:from-or-to . 25)
 				(:subject))
 	  )
+
     (setq mu4e-bookmarks
 	  '((:name "Unread messages"
 		   :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/en/Corbeille"
