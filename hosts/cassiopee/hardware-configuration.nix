@@ -20,4 +20,5 @@
       options = [ "noatime" ];
     };
   };
+  nixpkgs.hostPlatform = "aarch64-linux";
 }
