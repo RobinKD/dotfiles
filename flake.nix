@@ -133,6 +133,25 @@
             };
           }
         ];
+        # RPi config
+        cassiopee = mkNixos [
+          ./hosts/cassiopee
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useUserPackages = true;
+              useGlobalPkgs = true;
+              backupFileExtension = "hm-backup";
+
+              extraSpecialArgs = { inherit inputs outputs wallpapers; };
+              users = {
+                # Import your home-manager configuration
+                rpi = { imports = [ ./home/cassiopee/home.nix ]; };
+              };
+            };
+          }
+        ];
+
         # Built with nix build .#nixosConfigurations.live-iso.config.system.build.isoImage
         # As usual sudo dd if=./result/iso/nixos....iso of=/dev/<usb device> bs=1M status=progress
         live-iso = nixpkgs.lib.nixosSystem {
