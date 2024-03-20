@@ -10,7 +10,7 @@ in with lib; {
   config = mkIf cfg.enable {
     programs.waybar = {
       enable = true;
-      # package = nix-wayland-waybar;
+      package = pkgs.waybar.override { wireplumberSupport = false; };
       # TODO Config
       settings = {
         mainBar = {
