@@ -19,6 +19,7 @@ in with lib; {
           (python3.withPackages (ps:
             with ps; [
               numpy
+              scipy
               pandas
               matplotlib
               python-lsp-server
