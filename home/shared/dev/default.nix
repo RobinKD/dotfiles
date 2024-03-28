@@ -46,11 +46,13 @@ in with lib; {
         [
           (texlive.combine {
             inherit (texlive)
-              biblatex scheme-medium sttools datetime2 datetime ninecolors
+              scheme-medium biblatex sttools datetime2 datetime ninecolors
               multirow fmtcount pgfplots adjustbox appendixnumberbeamer acmart
               tabularray wrapfig capt-of doublestroke animate media9 zref ocgx2
               xstring totpages environ hyperxmp ifmtarg ncctools comment
-              ifoddpage relsize orcidlink preprint enumitem;
+              ifoddpage relsize orcidlink preprint enumitem titlesec sauerj
+              abstract sectsty shorttoc wallpaper epigraph nextpage framed
+              csquotes;
             #  animate media9 zref ocgx2 are for animated tikz
           })
         ] ++ [
