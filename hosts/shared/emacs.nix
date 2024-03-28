@@ -107,6 +107,8 @@ in {
       apheleia # Seems better than format-all
       # Spelling
       jinx
+      # LaTeX
+      auctex
 
       # Modes
       python-pytest
