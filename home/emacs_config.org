@@ -538,11 +538,11 @@ Because it is easier to switch projects and not be cluttered with all buffers
     :init
     (projectile-mode)
     :bind (("C-c p" . projectile-command-map)
-	   (:map projectile-command-map
+	   :map projectile-command-map
 		 ("b" . consult-project-buffer)
 		 ("f" . consult-find)
-		 ("s c" . consult-line-multi))
-	   )
+		 ("s c" . consult-line-multi)
+		 )
     )
 #+end_src
 
@@ -954,7 +954,8 @@ TODO keywords do not have correct font in super-agenda
 		       ("n" . citar-open-note)
 		       ("e" . citar-open-entry)
 		       ("f" . citar-open-files)
-		       ("l" . citar-open-links)))
+		       ("l" . citar-open-links))
+     )
     :custom
     (org-cite-global-bibliography  (directory-files
 				    (concat (getenv "HOME") "/notes/bibliography") t
@@ -1893,8 +1894,8 @@ Look at DAP mode
   (use-package magit
     :bind
     (("C-c v" . magit-file-dispatch)
-     (:map magit-mode-map
-	   ("*" . magit-section-up)))
+     :map magit-mode-map
+	   ("*" . magit-section-up))
       ;;; Old way
     ;; (:prefix-map magit-map
     ;; 		 :prefix-docstring "Magit map"
