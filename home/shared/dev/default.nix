@@ -58,6 +58,9 @@ in with lib; {
         ] ++ [
           # Latex LSP
           texlab
+
+          # Biblatex backend
+          biber
         ];
     })
     (mkIf cfg.web.enable { home.packages = with pkgs; [ nodejs ]; })
