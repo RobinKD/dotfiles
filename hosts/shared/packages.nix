@@ -32,6 +32,7 @@ in with pkgs; {
     sops
     age
     eza
+    fzf
   ] ++ myEmacs.system_packages;
 
   services.gvfs.enable = true; # For finding other devices & trash with FM

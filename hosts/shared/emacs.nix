@@ -120,6 +120,7 @@ in {
       nix-ts-mode
 
       # Varied
+      fzf
       pdf-tools
       mu4e-alert
       org-msg
