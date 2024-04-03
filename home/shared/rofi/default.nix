@@ -10,9 +10,9 @@ let
   launcher-type = cfg.launcher-type;
   launcher-rasi = type: style:
     builtins.toFile "launcher.rasi"
-    (builtins.replaceStrings [ "shared/colors.rasi" "real" ] [
+    (builtins.replaceStrings [ "shared/colors.rasi" "black / 10" ] [
       "${rofi-color-theme}"
-      "background"
+      "black / 75"
     ] (builtins.readFile (./style/launchers + "/${type}/${style}.rasi")));
   launcher-rofi = pkgs.writeTextFile {
     name = "rofi-launcher";
@@ -47,7 +47,7 @@ in with lib; {
     home.packages = with pkgs; [ launcher-rofi ];
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi;
+      package = pkgs.rofi-wayland;
       font = "Iosevka Nerd Font 10";
     };
 
