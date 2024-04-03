@@ -1419,10 +1419,10 @@ Apheleia seems easier to work with for now
 				:follow_builtin_imports t ; boolean: true (default) or false
 				:follow_imports t) ; boolean: true (default) or false
 		      :rope_completion (:enabled t)
-		      :rope_autoimport (:enabled t
-						 :code_actions (:enabled t)
-						 :completions (:enabled t)
-						 :memory t)
+		      ;; :rope_autoimport (:enabled t
+		      ;; 			       :code_actions (:enabled t)
+		      ;; 			       :completions (:enabled t)
+		      ;; 			       :memory t)
 		      :ruff (:enabled t
 				      :select [ "ALL" ]
 				      :ignore [ "D211" "D213" "S101" "ANN101" "PLR0913" ]
