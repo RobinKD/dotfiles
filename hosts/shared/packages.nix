@@ -36,7 +36,10 @@ with pkgs;
     eza
     fzf
     ripgrep-all
+    inputs.nix-alien.packages.${pkgs.system}.nix-alien
   ] ++ myEmacs.system_packages;
+
+  programs.nix-ld.enable = true;
 
   services.gvfs.enable = true; # For finding other devices & trash with FM
 }

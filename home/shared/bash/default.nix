@@ -63,6 +63,8 @@ with lib;
         ncg = "nix-collect-garbage";
         fh-init = ''nix run "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz" -- init'';
 
+        # Run external programs -> alien app -- args
+        alien = "nix-alien-ld";
       };
       bashrcExtra = ''
         flakify() {
