@@ -66,11 +66,11 @@ in
 
   # Hyprland stuff
   # allow wayland lockers to unlock the screen
-  security.pam.services.swaylock.text =
-    lib.mkIf hmm.hyprland.enable "auth include login";
+  security.pam.services.swaylock.text = lib.mkIf hmm.hyprland.enable "auth include login";
   # Add Hyprland to xsessions
-  services.xserver.displayManager.sessionPackages = lib.mkIf hmm.hyprland.enable
-    [ inputs.hyprland.packages.${pkgs.hostPlatform.system}.default ];
+  services.displayManager.sessionPackages = lib.mkIf hmm.hyprland.enable [
+    inputs.hyprland.packages.${pkgs.hostPlatform.system}.default
+  ];
 
   # Flipper zero udev rules
   hardware.flipperzero = {

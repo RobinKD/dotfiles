@@ -35,7 +35,7 @@ with lib;
         libsForQt5.qt5.qtgraphicaleffects
       ];
 
-      services.xserver.displayManager.sddm = {
+      services.displayManager.sddm = {
         enable = true;
         settings = {
           General = {
