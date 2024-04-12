@@ -1,10 +1,12 @@
-{ pkgs, ... }:
-let myEmacs = (import ./emacs.nix { inherit pkgs; });
-in with pkgs; {
+{ inputs, pkgs, ... }:
+let
+  myEmacs = (import ./emacs.nix { inherit pkgs; });
+in
+with pkgs;
+{
   services.emacs = {
     enable = true;
-    package =
-      myEmacs.packaged-emacs; # replace with emacs-gtk, or a version provided by the community overlay if desired.
+    package = myEmacs.packaged-emacs; # replace with emacs-gtk, or a version provided by the community overlay if desired.
   };
   environment.systemPackages = [
     # Basic

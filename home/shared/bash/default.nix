@@ -3,15 +3,23 @@ let
   cfg = config.hm-modules.bash;
   homeDir = config.home.homeDirectory;
   dotDir = "${homeDir}/.dotfiles";
-in with lib; {
-  options.hm-modules.bash = { enable = mkEnableOption "bash"; };
+in
+with lib;
+{
+  options.hm-modules.bash = {
+    enable = mkEnableOption "bash";
+  };
 
   config = mkIf cfg.enable {
     programs.bash = {
       enable = true;
       enableCompletion = true; # Already default
       historySize = 10000;
-      historyIgnore = [ "ls" "cd" "exit" ];
+      historyIgnore = [
+        "ls"
+        "cd"
+        "exit"
+      ];
       shellOptions = [
         # Append to history file rather than replacing it.
         "histappend"
@@ -45,8 +53,7 @@ in with lib; {
 
         # Alias nixos;
         nrb = "nfu; sudo nixos-rebuild boot --flake ${dotDir}";
-        nrbwc =
-          "nfu; sudo nixos-rebuild boot -p WorkingConfig --flake ${dotDir}";
+        nrbwc = "nfu; sudo nixos-rebuild boot -p WorkingConfig --flake ${dotDir}";
         nrt = "nfu; sudo nixos-rebuild test --flake ${dotDir}";
         nrs = "nfu; sudo nixos-rebuild switch --flake ${dotDir}";
         nrtnu = "sudo nixos-rebuild test --flake ${dotDir}";
@@ -54,8 +61,8 @@ in with lib; {
         nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${dotDir}";
         nfu = "sudo nix flake update ${dotDir}";
         ncg = "nix-collect-garbage";
-        fh-init = ''
-          nix run "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz" -- init'';
+        fh-init = ''nix run "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz" -- init'';
+
       };
       bashrcExtra = ''
         flakify() {

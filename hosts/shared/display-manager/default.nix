@@ -1,6 +1,14 @@
-{ config, lib, pkgs, ... }:
-let cfg = config.modules.display-manager;
-in with lib; {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.modules.display-manager;
+in
+with lib;
+{
   options.modules.display-manager = {
     sddm.enable = mkEnableOption "sddm";
     lightdm.enable = mkEnableOption "lightgdm";
@@ -9,10 +17,16 @@ in with lib; {
   config = mkIf (cfg.sddm.enable || cfg.lightdm.enable) (mkMerge [
     {
       services.xserver.enable = true;
-      assertions = [{
-        assertion = (count (x: x) [ cfg.sddm.enable cfg.lightdm.enable ]) == 1;
-        message = "Choose only one display manager";
-      }];
+      assertions = [
+        {
+          assertion =
+            (count (x: x) [
+              cfg.sddm.enable
+              cfg.lightdm.enable
+            ]) == 1;
+          message = "Choose only one display manager";
+        }
+      ];
     }
     (mkIf cfg.sddm.enable {
       environment.systemPackages = with pkgs; [
@@ -23,7 +37,11 @@ in with lib; {
 
       services.xserver.displayManager.sddm = {
         enable = true;
-        settings = { General = { InputMethod = ""; }; };
+        settings = {
+          General = {
+            InputMethod = "";
+          };
+        };
         theme = "sugar-candy";
       };
     })

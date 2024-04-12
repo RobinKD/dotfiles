@@ -66,7 +66,9 @@ in {
 
       follow_mouse = 1;
 
-      touchpad = { natural_scroll = "no"; };
+      touchpad = {
+        natural_scroll = "no";
+      };
 
       sensitivity = 0; # -1.0 - 1.0, 0 means no modification.
     };

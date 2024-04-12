@@ -21,30 +21,38 @@ let
     categories = [ "System" ];
     mimeTypes = [ "x-scheme-handler/org-protocol" ];
   };
-in {
+in
+{
   system_packages = with pkgs; [
     # Emacs
     org-capture-desktop
     emacsPackages.mu4e
     isync
     sqlite
-    (aspellWithDicts (ps: with ps; [ en fr ]))
+    (aspellWithDicts (
+      ps: with ps; [
+        en
+        fr
+      ]
+    ))
     enchant
     pandoc
-    nixfmt # Format nix files
+    nixfmt-rfc-style # Format nix files
     nil # Nix LSP
     shfmt
     shellcheck
     nodePackages.bash-language-server # Bash LSP
   ];
 
-  packaged-emacs = emacsWithPackages (epkgs:
+  packaged-emacs = emacsWithPackages (
+    epkgs:
     with epkgs;
     [
       vterm
       # Treesit highlighting
       treesit-grammars.with-all-grammars
-    ] ++ (with epkgs.melpaStablePackages; [
+    ]
+    ++ (with epkgs.melpaStablePackages; [
       rg # Ripgrep with emacs
       yasnippet # My lazy bones are happy
     ])

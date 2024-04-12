@@ -1,9 +1,16 @@
-{ pkgs, inputs, config, lib, ... }:
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  ...
+}:
 let
   hw = inputs.hardware.nixosModules;
   hm = config.home-manager.users.keanu;
   hmm = hm.hm-modules;
-in {
+in
+{
   imports = [
     hw.common-cpu-amd
     hw.common-gpu-nvidia
@@ -63,5 +70,7 @@ in {
   '';
 
   # Flipper zero udev rules
-  hardware.flipperzero = { enable = true; };
+  hardware.flipperzero = {
+    enable = true;
+  };
 }
