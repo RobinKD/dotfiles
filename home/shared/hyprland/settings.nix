@@ -6,12 +6,13 @@ let
     executable = true;
     text = "swww img `find ~/.dotfiles/wallpapers/ -type f | shuf -n 1`";
   };
-in {
+in
+{
   home.packages = [ set-background ];
   wayland.windowManager.hyprland.settings = {
     exec-once = [
       "sleep 1; waybar"
-      "swww init"
+      "swww-daemon"
       "sleep 1; swww-set-background"
       "configure-gtk"
       "hyprctl setcursor Catppuccin-Mocha-Sapphire-Cursors 32"
