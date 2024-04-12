@@ -309,15 +309,6 @@ For a mini-buffer showing completion candidates
 ** Consult
 Add all useful bindings
 #+begin_src elisp
-  (defun get-meow-selection ()
-    (if (symbol-value 'meow--selection)
-	(let* ((meow-selected (cdr (symbol-value 'meow--selection)))
-	       (argone (pop meow-selected))
-	       (argtwo (pop meow-selected)))
-	  (buffer-substring argone argtwo))
-      )
-    )
-
   (use-package consult
     :bind
     (:prefix-map search-map
@@ -337,7 +328,8 @@ Add all useful bindings
     (setq consult-narrow-key "<")
     (consult-customize
      consult-line
-     :initial (get-meow-selection))
+     :initial (buffer-substring (point) (mark))
+     )
     )
 #+end_src
 
