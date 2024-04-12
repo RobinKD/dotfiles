@@ -192,6 +192,7 @@ This is how I type and I like it!
      '("e" . eglot)
      ;; '("f" . "C-c f")
      ;; '("i" . "C-c i")
+     '("L" . "C-c l")
      '("M" . mu4e)
      '("n" . "C-c n")
      ;; '("o" . "C-c o")
@@ -1968,6 +1969,23 @@ Look at DAP mode
 Only works on X11, unfortunate
 #+begin_src elisp
   (use-package emacs-everywhere)
+#+end_src
+* LLMs
+Models from ollama need to be pulled before using in emacs
+#+begin_src elisp
+  (use-package gptel
+    :bind ("C-c l" . gptel-menu)
+    :init
+    (setq gptel-model "llama2-uncensored"
+	  gptel-backend (gptel-make-ollama "Ollama"
+					   :host "localhost:11434"
+					   :stream t
+					   :models '("llama2-uncensored"
+						     ;; Other models
+						     )))
+    :config
+    (add-to-list 'gptel-directives '(grammar . "Improve grammar and spelling"))
+    )
 #+end_src
 
 * Mu4e

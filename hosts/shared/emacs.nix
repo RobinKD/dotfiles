@@ -26,6 +26,7 @@ in
   system_packages = with pkgs; [
     # Emacs
     org-capture-desktop
+    (ollama.override { acceleration = "cuda"; }) # Doesn't seem to compile for now
     emacsPackages.mu4e
     isync
     sqlite
@@ -134,6 +135,7 @@ in
       org-msg
       envrc
       emacs-everywhere
+      gptel # Discuss with ai, blame me :/
       # undo-tree      # ; <C-x u> to show the undo tree
       # zoom-frm       # ; increase/decrease font size for all buffers %lt;C-x C-+>
     ])
