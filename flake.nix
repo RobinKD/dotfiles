@@ -42,6 +42,9 @@
       # optional, not necessary for the module
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Allows tu run external programs with dynamically linked libs found automatically
+    nix-alien.url = "github:thiagokokada/nix-alien";
   };
 
   outputs = { self, nixpkgs, home-manager, hyprland, sops-nix, ... }@inputs:
