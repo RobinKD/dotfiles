@@ -1,7 +1,14 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
-{ inputs, outputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 rec {
   # You can import other home-manager modules here
@@ -55,12 +62,17 @@ rec {
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
-  wayland.windowManager.hyprland.settings.monitor =
-    lib.mkIf hm-modules.hyprland.enable [
-      "DP-1,1920x1080,-1920x0,1"
-      "eDP-1,2560x1440@165,0x0,1.6"
-      "eDP-2,2560x1440@165,0x0,1.6"
-      "HDMI-A-1,1920x1080,1599x0,1"
-      "DP-2,1920x1080@60,1599x0,1"
-    ];
+  wayland.windowManager.hyprland.settings.monitor = lib.mkIf hm-modules.hyprland.enable [
+    "DP-1,1920x1080,-1920x0,1"
+    "eDP-1,2560x1440@165,0x0,1.6"
+    "eDP-2,2560x1440@165,0x0,1.6"
+    "HDMI-A-1,1920x1080,1599x0,1"
+    "DP-2,1920x1080@60,1599x0,1"
+  ];
+
+  # Don't forget to link files to their corresponding /dev/dri/by-path/xxx-card
+  # Useful after v0.39.0
+  # wayland.windowManager.hyprland.settings.env = [
+  #   "WLR_DRM_DEVICES, $HOME/.config/hypr/nvidia-card:$HOME/.config/hypr/amd-card"
+  # ];
 }
