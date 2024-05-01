@@ -2,14 +2,16 @@
 
 {
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
 
     loader = {
       systemd-boot = {
         enable = false;
         editor = false;
       };
-      efi = { canTouchEfiVariables = false; };
+      efi = {
+        canTouchEfiVariables = false;
+      };
       grub = {
         enable = true;
         default = "saved";
@@ -34,6 +36,5 @@
         # '';
       };
     };
-
   };
 }
