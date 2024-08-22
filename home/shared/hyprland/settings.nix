@@ -33,6 +33,7 @@ in
       "WLR_NO_HARDWARE_CURSORS,1"
       "__GL_GSYNC_ALLOWED,0"
       "__GL_VRR_ALLOWED,2"
+      "ELECTRON_OZONE_PLATFORM_HINT,auto"
     ];
 
     monitor = lib.mkDefault [
@@ -117,7 +118,7 @@ in
 
     master = {
       # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-      new_is_master = true;
+      new_status = "master";
     };
 
     gestures = {
