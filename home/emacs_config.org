@@ -1427,6 +1427,13 @@ Apheleia seems easier to work with for now
     		)
       ;; (setq eglot-events-buffer-size 0)
     )
+
+  ;; use native eglot booster
+  (use-package eglot-booster
+    :ensure t
+    :after eglot
+    :config
+    (eglot-booster-mode))
 #+end_src
 
 * YASnippets
@@ -1969,7 +1976,7 @@ Models from ollama need to be pulled before using in emacs
 					   :host "localhost:11434"
 					   :stream t
 					   :models '("llama2-uncensored"
-						     "llama3"
+						     "llama3.1"
 						     ;; Other models
 						     )))
     :config

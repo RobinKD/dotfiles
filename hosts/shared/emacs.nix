@@ -43,6 +43,7 @@ in
     shfmt
     shellcheck
     nodePackages.bash-language-server # Bash LSP
+    emacs-lsp-booster # Parses JsonRPC into elisp to make LSP faster
   ];
 
   packaged-emacs = emacsWithPackages (
