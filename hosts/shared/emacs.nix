@@ -5,7 +5,7 @@ let
   # current stable version of Emacs. This binding is here to separate
   # the choice of the Emacs binary from the specification of the
   # required packages.
-  myEmacs = pkgs.emacs29-pgtk;
+  myEmacs = pkgs.emacs;
   # This generates an emacsWithPackages function. It takes a single
   # argument: a function from a package set to a list of packages
   # (the packages that will be available in Emacs).
