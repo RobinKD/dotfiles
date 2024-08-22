@@ -26,7 +26,7 @@ with pkgs;
     featherpad
     libreoffice
     nomacs
-    cinnamon.nemo
+    nemo
     libnotify
     cmake
     gnumake
