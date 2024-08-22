@@ -2,7 +2,7 @@
 
 {
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_latest;
 
     loader = {
       systemd-boot = {
@@ -15,7 +15,7 @@
       grub = {
         enable = true;
         default = "saved";
-        # configurationLimit = 5;
+        configurationLimit = 10;
         copyKernels = true;
         efiInstallAsRemovable = true;
         efiSupport = true;
