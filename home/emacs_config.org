@@ -1969,6 +1969,7 @@ Models from ollama need to be pulled before using in emacs
 					   :host "localhost:11434"
 					   :stream t
 					   :models '("llama2-uncensored"
+						     "llama3"
 						     ;; Other models
 						     )))
     :config
