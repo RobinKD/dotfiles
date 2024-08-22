@@ -1,11 +1,13 @@
 {
   hardware = {
-    opengl = { enable = true; };
+    graphics = {
+      enable = true;
+    };
     nvidia = {
       modesetting.enable = true;
 
       # Might cause sleep crashes
-      powerManagement.enable = false;
+      powerManagement.enable = true;
 
       # forceFullCompositionPipeline = true;
       prime = {

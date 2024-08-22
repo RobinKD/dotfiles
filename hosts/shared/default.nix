@@ -1,4 +1,10 @@
-{ pkgs, inputs, outputs, ... }: {
+{
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}:
+{
   imports = [
     ./nix.nix
     ./bootloader.nix
@@ -13,7 +19,9 @@
 
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays;
-    config = { allowUnfree = true; };
+    config = {
+      allowUnfree = true;
+    };
   };
 
   # TODO Check for autoUpgrade
@@ -27,8 +35,7 @@
   hardware.enableAllFirmware = true;
 
   networking = {
-    networkmanager.enable =
-      true; # Easiest to use and most distros use this by default.
+    networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
     # Configure network proxy if necessary
     # proxy.default = "http://user:password@proxy:port/";
@@ -41,11 +48,13 @@
   };
 
   # Sound
-  sound.enable = true;
+  # sound.enable = true;
   # hardware.pulseaudio.enable = true;
   # nixpkgs.config.pulseaudio = true;
 
-  services = { printing.enable = true; };
+  services = {
+    printing.enable = true;
+  };
 
   # PipeWire currently crashing
   # rtkit is optional but recommended

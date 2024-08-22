@@ -1,10 +1,13 @@
 { lib, ... }:
 # TODO Not working yet -> Goes to black screen
-with lib; {
+with lib;
+{
   specialisation = {
     no-nvidia.configuration = {
       hardware = {
-        opengl = { enable = mkForce false; };
+        graphics = {
+          enable = mkForce false;
+        };
         nvidiaOptimus.disable = true;
         nvidia = {
           modesetting.enable = mkForce false;
