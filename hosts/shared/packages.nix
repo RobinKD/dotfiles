@@ -20,7 +20,7 @@ with pkgs;
     brightnessctl
 
     # Always useful
-    librewolf
+    stable.librewolf
     gparted
     gpg-tui
     featherpad
