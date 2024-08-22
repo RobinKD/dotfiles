@@ -1373,59 +1373,59 @@ Apheleia seems easier to work with for now
 #+begin_src elisp
   (defun my/eglot-capf ()
     (setq-local completion-at-point-functions
-		(list (cape-capf-super
-		       #'eglot-completion-at-point
-		       #'cape-dabbrev
-		       ))))
+    	      (list (cape-capf-super
+    		     #'eglot-completion-at-point
+    		     #'cape-dabbrev
+    		     ))))
 
   (use-package eglot
     :hook
     ((eglot-managed-mode . my/eglot-capf))
     :bind
     (:prefix-map eglot-map
-		 :prefix-docstring "Eglot map"
-		 :prefix "C-c e"
-		 ("a" . eglot-code-actions)
-		 ("f" . eglot-format)
-		 ("r" . eglot-rename)
-		 ("s" . eglot)
-		 ("k" . eglot-shutdown)
-		 ("d" . eglot-find-declaration)
-		 ("i" . eglot-find-implementation)
-		 )
+    	       :prefix-docstring "Eglot map"
+    	       :prefix "C-c e"
+    	       ("a" . eglot-code-actions)
+    	       ("f" . eglot-format)
+    	       ("r" . eglot-rename)
+    	       ("s" . eglot)
+    	       ("k" . eglot-shutdown)
+    	       ("d" . eglot-find-declaration)
+    	       ("i" . eglot-find-implementation)
+    	       )
     :config
     (setq flymake-timer 1) ; Seems to speeds things up a lot since I do too much linting
     (setq-default eglot-workspace-configuration
-		  '(:pylsp
-		    (:plugins
-		     (:jedi
-		      (:auto_import_modules [ "numpy" "torch" "pandas" "pytorch_lightning" "matplotlib" ])
-		      :jedi_completion
-		      (:fuzzy t)
-		      :jedi_definition
-		      (:enabled t ; boolean: true (default) or false
-				:follow_builtin_definitions t ; boolean: true (default) or false
-				:follow_builtin_imports t ; boolean: true (default) or false
-				:follow_imports t) ; boolean: true (default) or false
-		      :rope_completion (:enabled t)
-		      ;; :rope_autoimport (:enabled t
-		      ;; 			       :code_actions (:enabled t)
-		      ;; 			       :completions (:enabled t)
-		      ;; 			       :memory t)
-		      :ruff (:enabled t
-				      :select [ "ALL" ]
-				      :ignore [ "D211" "D213" "S101" "ANN101" "PLR0913" ]
-				      :format [ "I" ]
-				      :targetVersion "py311")
-		      :pycodestyle (:enabled :json-false)
-		      :pyflakes (:enabled :json-false)
-		      :mccabe (:enabled :json-false)
-		      :pyls_isort (:enabled :json-false)
-		      )
-		     )
-		    )
-		  )
-    ;; (setq eglot-events-buffer-size 0)
+    		'(:pylsp
+    		  (:plugins
+    		   (:jedi
+    		    (:auto_import_modules [ "numpy" "torch" "pandas" "pytorch_lightning" "matplotlib" ])
+    		    :jedi_completion
+    		    (:fuzzy t)
+    		    :jedi_definition
+    		    (:enabled t ; boolean: true (default) or false
+    			      :follow_builtin_definitions t ; boolean: true (default) or false
+    			      :follow_builtin_imports t ; boolean: true (default) or false
+    			      :follow_imports t) ; boolean: true (default) or false
+    		    :rope_completion (:enabled t)
+    		    ;; :rope_autoimport (:enabled t
+    		    ;; 			       :code_actions (:enabled t)
+    		    ;; 			       :completions (:enabled t)
+    		    ;; 			       :memory t)
+    		    :ruff (:enabled t
+    				    :select [ "ALL" ]
+    				    :ignore [ "D211" "D213" "S101" "ANN101" "PLR0913" ]
+    				    :format [ "I" ]
+    				    :targetVersion "py311")
+    		    :pycodestyle (:enabled :json-false)
+    		    :pyflakes (:enabled :json-false)
+    		    :mccabe (:enabled :json-false)
+    		    :pyls_isort (:enabled :json-false)
+    		    )
+    		   )
+    		  )
+    		)
+      ;; (setq eglot-events-buffer-size 0)
     )
 #+end_src
 
