@@ -25,7 +25,7 @@ rec {
     hyprland.enable = true;
     dunst.enable = true;
     rofi.enable = true;
-    autorandr.enable = true;
+    # autorandr.enable = true;
     polybar.enable = true;
     waybar.enable = true;
     # eww.enable = true;
