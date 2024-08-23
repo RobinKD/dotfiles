@@ -1,3 +1,0 @@
-[submodule "secrets"]
-	path = secrets
-	url = git@gitlab.com:RobinKD/404-repo.git
