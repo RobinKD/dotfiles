@@ -12,7 +12,7 @@ in with lib; {
       enableBashIntegration = true;
       defaultCacheTtl = 25200; # 7h
       maxCacheTtl = 86400; # 24h
-      pinentryPackage = pkgs.pinentry-qt;
-    };
+      pinentryPackage = pkgs.pinentry-gtk2;
+     };
   };
 }
