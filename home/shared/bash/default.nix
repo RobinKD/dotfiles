@@ -65,6 +65,9 @@ with lib;
 
         # Run external programs -> alien app -- args
         alien = "nix-alien-ld";
+
+	# Win 10 VM with QEMU
+	win10 = "quickemu --vm vms/windows-10.conf";
       };
       bashrcExtra = ''
         flakify() {
