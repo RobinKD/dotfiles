@@ -18,6 +18,7 @@ with pkgs;
     alacritty
     pavucontrol
     brightnessctl
+    networkmanagerapplet
 
     # Always useful
     stable.librewolf
