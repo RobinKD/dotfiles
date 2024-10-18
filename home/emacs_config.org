@@ -1681,6 +1681,20 @@ copy(to_copy)
 #+caption: \centering ${2:caption}
 $0
 #+end_src
+**** Notes in slide
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/slidenote :mkdirp yes
+  # -*- mode: snippet -*-
+  # name: slidenote
+  # key: slidenote
+  # uuid: slidenote
+  # expand-env: ((yas/indent-line 'fixed))
+  # --
+  ,*** note :B_note:
+  :PROPERTIES:
+  :BEAMER_env: note
+  :END:
+  $0
+#+end_src
 **** New slide with 2 columns
 #+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/newslide2col :mkdirp yes
 # -*- mode: snippet -*-
@@ -2379,7 +2393,8 @@ SyncState *
 #+end_src
 
 *** EN account
-#+begin_src bash
+No longer online
+#+begin_src bash :tangle no
 # ==========================================================================================
 
 IMAPAccount en
