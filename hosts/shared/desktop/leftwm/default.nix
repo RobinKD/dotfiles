@@ -26,7 +26,7 @@ in with lib; {
       xclip
       scrot
       networkmanagerapplet
-      check-uptime
+      nagiosPlugins.check_uptime
       picom
       feh
       betterlockscreen

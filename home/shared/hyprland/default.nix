@@ -35,7 +35,7 @@ in with lib; {
 
     home.packages = (with pkgs; [
       conky
-      check-uptime
+      nagiosPlugins.check_uptime
       qt5ct
       webcord
       slurp
