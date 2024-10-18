@@ -104,6 +104,7 @@ with lib;
                 csquotes
                 glossaries
                 cleveref
+                standalone
                 ;
               #  animate media9 zref ocgx2 are for animated tikz
             })
