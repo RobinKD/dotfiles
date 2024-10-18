@@ -4,6 +4,7 @@
       enable = true;
     };
     nvidia = {
+      open = true;
       modesetting.enable = true;
 
       # Might cause sleep crashes
