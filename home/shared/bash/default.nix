@@ -59,7 +59,7 @@ with lib;
         nrtnu = "sudo nixos-rebuild test --flake ${dotDir}";
         nrsnu = "sudo nixos-rebuild switch --flake ${dotDir}";
         nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${dotDir}";
-        nfu = "sudo nix flake update ${dotDir}";
+        nfu = "sudo nix flake update --flake ${dotDir}";
         ncg = "nix-collect-garbage";
         fh-init = ''nix run "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz" -- init'';
 
