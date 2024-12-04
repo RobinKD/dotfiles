@@ -73,4 +73,8 @@ in
   hardware.flipperzero = {
     enable = true;
   };
+
+  environment.systemPackages = with pkgs; [
+  webex
+  ];
 }
