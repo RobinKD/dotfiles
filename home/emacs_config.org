@@ -1325,11 +1325,11 @@ Treesit is now included in Emacs 29, so doesn't need much
 ** Latex
 #+begin_src elisp
   (use-package auctex
-    :bind
-    (:map LaTeX-mode-map
-	  ("C-c M-i" . citar-insert-keys)
-	  ("C-c M-b" . citar-export-local-bib-file))
-  )
+  ;;   :bind
+  ;;   (:map LaTeX-mode-map
+  ;; 	  ("C-c M-i" . citar-insert-keys)
+  ;; 	  ("C-c M-b" . citar-export-local-bib-file))
+    )
 #+end_src
 * Code formatting
 #+begin_src elisp :tangle no
