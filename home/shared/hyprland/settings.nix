@@ -34,6 +34,7 @@ in
       "__GL_GSYNC_ALLOWED,0"
       "__GL_VRR_ALLOWED,2"
       "ELECTRON_OZONE_PLATFORM_HINT,auto"
+      "AQ_DRM_DEVICES,/dev/dri/card1:/dev/dri/card2"
     ];
 
     monitor = lib.mkDefault [
