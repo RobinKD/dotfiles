@@ -34,7 +34,7 @@ in
       "__GL_GSYNC_ALLOWED,0"
       "__GL_VRR_ALLOWED,2"
       "ELECTRON_OZONE_PLATFORM_HINT,auto"
-      "AQ_DRM_DEVICES,/dev/dri/card1:/dev/dri/card2"
+      # "AQ_DRM_DEVICES,/dev/dri/card1:/dev/dri/card2"
     ];
 
     monitor = lib.mkDefault [
@@ -86,10 +86,12 @@ in
         passes = 1;
         new_optimizations = true;
       };
-      drop_shadow = "yes";
-      shadow_range = 4;
-      shadow_render_power = 3;
-      "col.shadow" = "rgba(1a1a1aee)";
+      shadow = {
+	enabled = true;
+	range = 4;
+	render_power = 3;
+	color = "rgba(1a1a1aee)";
+      };
     };
 
     animations = {
