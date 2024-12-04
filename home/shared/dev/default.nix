@@ -105,6 +105,9 @@ with lib;
                 glossaries
                 cleveref
                 standalone
+                tikz-qtree
+                forest
+                tikzmark
                 ;
               #  animate media9 zref ocgx2 are for animated tikz
             })
