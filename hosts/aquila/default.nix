@@ -28,7 +28,7 @@ in
     # DE / WM
     desktop = {
       plasma.enable = true;
-      # leftwm.enable = true;
+      leftwm.enable = true;
       hyprland.enable = true;
       # sway.enable = true;
     };
