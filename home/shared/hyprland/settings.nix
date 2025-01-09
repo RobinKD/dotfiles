@@ -39,12 +39,13 @@ in
 
     monitor = lib.mkDefault [
       # See https://wiki.hyprland.org/Configuring/Monitors/
-      ",preferred,auto,auto"
+      # ",preferred,auto,auto"
       # "DP-1,1920x1080,-1920x0,1"
-      # "eDP-1,2560x1440@240,0x0,1.6"
+      "desc:BOE 0x0974,2560x1440@240,0x0,1.6"
       # "eDP-2,2560x1440@165,0x0,1.6"
-      # "HDMI-A-1,1920x1080,1599x0,1"
-      # "DP-3,1920x1080@60,1599x0,1"
+      "desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000,2560x1080,1600x0,1"
+      "desc:Samsung Electric Company C27F390 H4LR605458,1920x1080@60,0x1080,1"
+      "desc:Dell Inc. DELL S2425H FZM8M04,1920x1080@60,1920x1080,1"
     ];
 
     general = {
