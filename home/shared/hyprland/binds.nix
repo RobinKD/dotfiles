@@ -86,7 +86,7 @@ in
 
       # Switch workspaces with mm + [0-9]
       "$mod, ampersand, workspace, name:Action"
-      "$mod, eacute, workspace, name:Graphs"
+      "$mod, eacute, workspace, name:Charts"
       "$mod, quotedbl, workspace, name:Web"
       "$mod, apostrophe, workspace, name:Social"
       "$mod, parenleft, workspace, 1"
@@ -97,9 +97,9 @@ in
       "$mod, agrave, workspace, previous"
 
       # Move active window to a workspace with mm + SHIFT + [1-9]
-      "$mod SHIFT, ampersand, movetoworkspace, name:Main"
-      "$mod SHIFT, eacute, movetoworkspace, name:Web"
-      "$mod SHIFT, quotedbl, movetoworkspace, name:Mail"
+      "$mod SHIFT, ampersand, movetoworkspace, name:Action"
+      "$mod SHIFT, eacute, movetoworkspace, name:Charts"
+      "$mod SHIFT, quotedbl, movetoworkspace, name:Web"
       "$mod SHIFT, apostrophe, movetoworkspace, name:Social"
       "$mod SHIFT, parenleft, movetoworkspace, 1"
       "$mod SHIFT, minus, movetoworkspace, 2"
