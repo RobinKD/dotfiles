@@ -21,7 +21,7 @@ with pkgs;
     networkmanagerapplet
 
     # Always useful
-    stable.librewolf
+    librewolf
     gparted
     gpg-tui
     featherpad
@@ -38,9 +38,24 @@ with pkgs;
     fzf
     ripgrep-all
     inputs.nix-alien.packages.${pkgs.system}.nix-alien
+
+    # Trading
+    qemu
+    quickemu
+    tradingview
   ] ++ myEmacs.system_packages;
 
   programs.nix-ld.enable = true;
 
   services.gvfs.enable = true; # For finding other devices & trash with FM
+
+  # Virtualized Windows apps
+  programs.virt-manager.enable = true;
+  users.groups.libvirtd.members = [ "keanu" ];
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
+
+  # Or Dockerized
+  virtualisation.docker.enable = true;
+  users.users.keanu.extraGroups = [ "docker" ];
 }
