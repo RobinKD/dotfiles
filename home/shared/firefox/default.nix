@@ -11,7 +11,7 @@ in with lib; {
       enable = true;
       nativeMessagingHosts = [ pkgs.browserpass ];
       profiles.keanu = {
-        extensions = with addons; [ ublock-origin browserpass org-capture ];
+        extensions.packages = with addons; [ ublock-origin browserpass org-capture ];
         bookmarks = { };
         settings = {
           # General settings
@@ -65,9 +65,9 @@ in with lib; {
         search = {
           force = true;
           engines = {
-            "Bing".metaData.hidden = true;
+            "bing".metaData.hidden = true;
             "Amazon.co.uk".metaData.hidden = true;
-            "eBay".metaData.hidden = true;
+            "ebay".metaData.hidden = true;
             "NixOS Packages" = {
               urls = [{
                 template = "https://search.nixos.org/packages";
@@ -119,8 +119,7 @@ in with lib; {
               urls = [{
                 template = "https://nixos.wiki/index.php?search={searchTerms}";
               }];
-              iconUpdateURL = "https://nixos.wiki/favicon.png";
-              updateInterval = 24 * 60 * 60 * 1000; # every day
+              icon = "https://nixos.wiki/favicon.png";
               definedAliases = [ "@now" ];
             };
 
@@ -129,14 +128,14 @@ in with lib; {
                 template =
                   "https://home-manager-options.extranix.com/?query={searchTerms}";
               }];
-              iconUpdateURL = "https://nixos.wiki/favicon.png";
+              icon = "https://nixos.wiki/favicon.png";
               definedAliases = [ "@hmo" ];
             };
             "GitLab" = {
               urls = [{
                 template = "https://gitlab.com/search?search={searchTerms}";
               }];
-              iconUpdateURL =
+              icon =
                 "https://images.ctfassets.net/xz1dnu24egyd/3JZABhkTjUT76LCIclV7sH/17a92be9bce78c2adcc43e23aabb7ca1/gitlab-logo-500.svg";
               definedAliases = [ "@gitl" ];
             };
@@ -145,7 +144,7 @@ in with lib; {
                 template =
                   "https://github.com/search?q={searchTerms}&type=repositories";
               }];
-              iconUpdateURL =
+              icon =
                 "https://cdn-icons-png.flaticon.com/512/25/25231.png";
               definedAliases = [ "@gith" ];
             };
@@ -154,7 +153,7 @@ in with lib; {
                 template =
                   "https://www.youtube.com/results?search_query={searchTerms}";
               }];
-              iconUpdateURL =
+              icon =
                 "https://fr.m.wikipedia.org/wiki/Fichier:YouTube_full-color_icon_%282017%29.svg";
               definedAliases = [ "@yt" ];
             };
