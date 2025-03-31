@@ -37,15 +37,9 @@ in
       # "AQ_DRM_DEVICES,/dev/dri/card1:/dev/dri/card2"
     ];
 
-    monitor = lib.mkDefault [
+    monitor = [
       # See https://wiki.hyprland.org/Configuring/Monitors/
-      # ",preferred,auto,auto"
-      # "DP-1,1920x1080,-1920x0,1"
-      "desc:BOE 0x0974,2560x1440@240,0x0,1.6"
-      # "eDP-2,2560x1440@165,0x0,1.6"
-      "desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000,2560x1080,1600x0,1"
-      "desc:Samsung Electric Company C27F390 H4LR605458,1920x1080@60,0x1080,1"
-      "desc:Dell Inc. DELL S2425H FZM8M04,1920x1080@60,1920x1080,1"
+      ",preferred,auto,auto"
     ];
 
     general = {
@@ -88,10 +82,10 @@ in
         new_optimizations = true;
       };
       shadow = {
-	enabled = true;
-	range = 4;
-	render_power = 3;
-	color = "rgba(1a1a1aee)";
+        enabled = true;
+        range = 4;
+        render_power = 3;
+        color = "rgba(1a1a1aee)";
       };
     };
 

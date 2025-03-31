@@ -1,7 +1,14 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
-{ inputs, outputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 rec {
   # You can import other home-manager modules here
@@ -57,9 +64,10 @@ rec {
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 
-  wayland.windowManager.hyprland.settings.monitor =
-    lib.mkIf hm-modules.hyprland.enable [
-      "eDP-1,2560x1440@240,0x0,1.6"
-      "DP-3,1920x1080@60,1599x0,1"
-    ];
+  wayland.windowManager.hyprland.settings.monitor = lib.mkIf hm-modules.hyprland.enable [
+    "desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000,2560x1080,0x0,1"
+    "desc:Samsung Electric Company C27F390 H4LR605458,1920x1080@60,800x-1080,1"
+    "desc:Dell Inc. DELL S2425H FZM8M04,1920x1080@60,-1120x-1080,1"
+    "desc:ASUSTek COMPUTER INC ASUS VA24EQSB S9LMTF185712,1920x1080@60,-1080x0,1,transform,1"
+  ];
 }

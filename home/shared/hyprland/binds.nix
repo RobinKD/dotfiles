@@ -1,7 +1,6 @@
 { config, ... }:
 let
-  screenshotarea =
-    "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave area; hyprctl keyword animation 'fadeOut,1,4,default'";
+  screenshotarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave area; hyprctl keyword animation 'fadeOut,1,4,default'";
 
   swaylock-effects = config.hm-modules.hyprland.swaylock-effects;
   # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
@@ -12,7 +11,8 @@ let
   #     "$mod, ${ws}, workspace, ${toString (x + 1)}"
   #     "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
   #   ]) 10);
-in {
+in
+{
 
   wayland.windowManager.hyprland.settings = {
 
@@ -77,17 +77,17 @@ in {
       "$mod, mouse_up, workspace, e-1"
 
       # Multiple monitors
-      "$mod, L, focusmonitor, +1"
-      "$mod, H, focusmonitor, -1"
+      "$mod, L, focusmonitor, -1"
+      "$mod, H, focusmonitor, +1"
 
       # Move workspace to monitor
-      "$mod SHIFT, L, movecurrentworkspacetomonitor, r"
-      "$mod SHIFT, H, movecurrentworkspacetomonitor, l"
+      "$mod SHIFT, L, movecurrentworkspacetomonitor, +1"
+      "$mod SHIFT, H, movecurrentworkspacetomonitor, -1"
 
       # Switch workspaces with mm + [0-9]
-      "$mod, ampersand, workspace, name:Main"
-      "$mod, eacute, workspace, name:Web"
-      "$mod, quotedbl, workspace, name:Mail"
+      "$mod, ampersand, workspace, name:Action"
+      "$mod, eacute, workspace, name:Graphs"
+      "$mod, quotedbl, workspace, name:Web"
       "$mod, apostrophe, workspace, name:Social"
       "$mod, parenleft, workspace, 1"
       "$mod, minus, workspace, 2"
