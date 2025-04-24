@@ -38,6 +38,7 @@ with lib;
       sessionVariables = {
         EDITOR = "emacsclient";
         CUPS_GSSSERVICENAME = "ipp";
+        ELECTRON_OZONE_PLATFORM_HINT = "auto";
       };
       shellAliases = {
         # some more ls aliases
@@ -65,6 +66,7 @@ with lib;
 
         # Run external programs -> alien app -- args
         alien = "nix-alien-ld";
+        signal = "signal-desktop --use-tray-icon --no-sandbox %U";
 
         # Win 10 VM with QEMU
         win10 = "quickemu --vm vms/windows-10.conf";
