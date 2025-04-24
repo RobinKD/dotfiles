@@ -1,6 +1,6 @@
 {
   wayland.windowManager.hyprland.settings = {
-    # Example windowrule v1
+    # Example windowrule
     # windowrule = float, ^(kitty)$
 
     windowrule = [
@@ -18,15 +18,12 @@
       "workspace name:Web silent,class:^(firefox|librewolf)$"
       "workspace name:Mail silent,title:^(.*mu4e.*)"
       "workspace name:Scanners silent,title:^(.*Screener.*)"
-      "workspace name:Charts silent,title:^(.*Chart.*)"
+      "workspace name:Charts silent,title:^(.*Chart.*|.*chart.*)"
     ];
 
     # Workspace binding
     workspace = [
-      "name:Scanners, persistent:true, monitor:desc:Dell Inc. DELL S2425H FZM8M04,default:true"
-      "name:Charts, persistent:true"
-      "name:Action, persistent:true"
-      "name:Web, persistent:true"
+      "name:Scanners,monitor:desc:Dell Inc. DELL S2425H FZM8M04,default:true"
     ];
   };
 }
