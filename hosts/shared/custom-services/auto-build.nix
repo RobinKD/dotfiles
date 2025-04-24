@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   hm = config.home-manager.users.keanu;
   username = hm.home.username;
   homeDir = hm.home.homeDirectory;
   hostname = config.networking.hostName;
-in {
+in
+{
   systemd.timers."system-auto-build" = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
@@ -15,9 +21,12 @@ in {
   };
 
   systemd.services."system-auto-build" = {
-    path = [ pkgs.nix pkgs.git ];
+    path = [
+      pkgs.nix
+      pkgs.git
+    ];
     script = ''
-      nix flake update ${homeDir}/.dotfiles/
+      nix flake update --flake ${homeDir}/.dotfiles/
       nix build "${homeDir}/.dotfiles#nixosConfigurations.${hostname}.config.system.build.toplevel" -o ${homeDir}/.dotfiles/build_updates
     '';
     serviceConfig = {
