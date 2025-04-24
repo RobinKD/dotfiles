@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # Nixpkgs
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     # You can access packages and modules from different nixpkgs revs
     # at the same time. Here's an working example:
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -25,7 +25,7 @@
     };
 
     # Hyprland
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&ref=refs/tags/v0.48.0"; # v0.46.2
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=29e2e59fdbab8ed2cc23a20e3c6043d5decb5cdc"; # v0.48.1
     hyprwm-contrib.url = "github:hyprwm/contrib";
     hyprlock = {
       url = "github:hyprwm/hyprlock";
@@ -34,8 +34,10 @@
     };
 
     # Firefox addons
-    firefox-addons.url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-    # TODO: Add any other flake you might need
+    firefox-addons = {
+      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -45,6 +47,7 @@
 
     # Allows tu run external programs with dynamically linked libs found automatically
     nix-alien.url = "github:thiagokokada/nix-alien";
+
   };
 
   outputs =
