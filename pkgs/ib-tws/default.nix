@@ -5,13 +5,6 @@ with pkgs;
 # Credit to https://github.com/clefru/nur-packages/blob/master/pkgs/ib-tws/default.nix
 let
   version = "10.36.1c";
-  desktopFile = makeDesktopItem {
-    name = "IBKR Trade Workstation";
-    inherit version;
-    desktopName = "TWS";
-    terminal = false;
-    exec = "${startScript}";
-  };
 
   libPath = lib.makeLibraryPath ([
     alsa-lib
@@ -142,9 +135,23 @@ stdenv.mkDerivation {
     # instead of the unmutable version in $out.
     sed -i -e 's#read_vmoptions "$prg_dir/$progname.vmoptions"#read_vmoptions "$HOME/.tws/$progname.vmoptions"#' $out/tws
 
+    # Copy icon to share/icons
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    ln -s $out/.install4j/tws.png $out/share/icons/hicolor/128x128/apps/tws.png
 
-    # install -m 644 -D -t $out/share/applications $desktopItem/share/applications/*
+    # Install desktop item
+    install -m 644 -D -t $out/share/applications $desktopItem/share/applications/*
   '';
+
+  desktopItem = makeDesktopItem {
+    name = "ib-tws";
+    desktopName = "IBKR Trade Workstation";
+    terminal = false;
+    categories = [ "Application" ];
+    exec = "tws";
+    startupWMClass = "install4j-jclient-LoginFrame";
+    icon = "tws";
+  };
 
   meta = with lib; {
     description = "Trader Work Station of Interactive Brokers";
