@@ -108,8 +108,8 @@ with lib;
                rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete
             fi
             rm -rf ${dotDir}/passwords
+            rm ${dotDir}/pass.tar.gz
           fi
-          rm ${dotDir}/pass.tar.gz
         }
       '';
     };
