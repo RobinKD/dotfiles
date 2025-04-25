@@ -4,107 +4,152 @@
 with pkgs;
 # Credit to https://github.com/clefru/nur-packages/blob/master/pkgs/ib-tws/default.nix
 let
-  jdkWithJavaFX = (
-    pkgs.jdk21.override {
-      enableJavaFX = true;
-      openjfx17 = openjfx17.override { withWebKit = true; };
-    }
-  );
-  ibDerivation = stdenv.mkDerivation rec {
-    version = "10.36.1b";
-    pname = "ib-tws-native";
-
-    src = fetchurl {
-      url = "https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh";
-      sha256 = "0pw7cy28b0qc3figjkkhmphkfqa2p2zmam38cplxc13svxn918af";
-      executable = true;
-    };
-
-    # Only build locally for license reasons.
-    preferLocalBuild = true;
-
-    phases = [ "installPhase" ];
-
-    nativeBuildInputs = [ makeWrapper ];
-
-    installPhase = ''
-      # We use an installer FHS environment because the shell script unpacks
-      # a binary, and immediately calls that binary. There is little hope
-      # for us to patchelf ld-linux in between. An FHS env is easier.
-      ${
-        buildFHSEnvChroot {
-          name = "fhs";
-          targetPkgs = pkgs1: [
-            libz
-          ];
-        }
-      }/bin/fhs ${src} -q -dir $out/libexec
-
-      # The following disables the JRE compatability check inside the tws script
-      # so that we can use Oracle JRE pkgs of nixpkgs.
-      sed -i 's#test_jvm "$INSTALL4J_JAVA_HOME_OVERRIDE"#app_java_home="$INSTALL4J_JAVA_HOME_OVERRIDE"#' $out/libexec/tws
-
-      # Make the tws launcher script read $HOME/.tws/tws.vmoptions
-      # instead of the unmutable version in $out.
-      sed -i -e 's#read_vmoptions "$prg_dir/$progname.vmoptions"#read_vmoptions "$HOME/.tws/$progname.vmoptions"#' $out/libexec/tws
-
-      # We set a bunch of flags found in the Arch PKGBUILD. The flags
-      # related to AA fonts seem to make a positive difference.
-      # -Dawt.useSystemAAFontSettings=lcd or -Dawt.useSystemAAFontSettings=on
-      # -Dsun.java2d.xrender=True not applied. Results in WARNING: The version of libXrender.so cannot be detected.
-      # -Dsun.java2d.opengl=False not applied. Why would I disable that?
-      # -Dswing.aatext=true applied
-      mkdir $out/bin
-      sed -e s#__OUT__#$out# -e s#__JAVAHOME__#${jdkWithJavaFX.home}# -e s#__GTK__#${pkgs.gtk3}# -e s#__CCLIBS__#${pkgs.stdenv.cc.cc.lib}# ${./tws-wrap.sh} > $out/bin/ib-tws-native
-
-      chmod a+rx $out/bin/ib-tws-native
-
-      # FIXME Fixup .desktop starter.
-    '';
-
-    meta = with lib; {
-      description = "Trader Work Station of Interactive Brokers";
-      homepage = "https://www.interactivebrokers.com";
-      license = licenses.unfree;
-      platforms = platforms.linux;
-    };
+  version = "10.36.1c";
+  desktopFile = makeDesktopItem {
+    name = "IBKR Trade Workstation";
+    inherit version;
+    desktopName = "TWS";
+    terminal = false;
+    exec = "${startScript}";
   };
-  # IB TWS packages the JxBrowser component. It unpacks a pre-built
-  # Chromium binary (yikes!) that needs an FHS environment. For me, that
-  # doesn't yet work, and the chromium fails to launch with an error
-  # code.
-in
-buildFHSEnv {
-  name = "ib-tws";
-  targetPkgs = pkgs1: [
-    ibDerivation
 
-    # Chromium dependencies. This might be incomplete.
-    xorg.libXfixes
+  libPath = lib.makeLibraryPath ([
     alsa-lib
-    xorg.libXcomposite
-    cairo
-    xorg.libxcb
-    pango
-    glib
-    atk
-    at-spi2-core
     at-spi2-atk
-    xorg.libXext
-    libdrm
-    nspr
-    #xorg.libxkbcommon
-    nss
+    cairo
     cups
-    mesa
-    expat
     dbus
-    xorg.libXdamage
-    xorg.libXrandr
-    xorg.libX11
-    xorg.libxshmfence
+    expat
+    ffmpeg
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gtk2
+    gtk3
+    javaPackages.openjfx17
+    libdrm
+    libGL
     libxkbcommon
-    systemd # for libudev.so.1
+    libz
+    pango
+    nss
+    nspr
+    mesa
+    xorg.libXfixes
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXxf86vm
+    xorg.libxcb
+    xorg.libX11
+  ]);
+in
+stdenv.mkDerivation {
+  inherit version;
+  pname = "ib-tws-native";
+
+  src = fetchurl {
+    url = "https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh";
+    sha256 = "i3okIlc2HCRtrYBugxSxcDUqBhhdL7rLd3d95tyAyh0=";
+    executable = true;
+  };
+
+  # Only build locally for license reasons.
+  preferLocalBuild = true;
+
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    bash
   ];
-  runScript = "/usr/bin/ib-tws-native";
+
+  installPhase = ''
+    set +o pipefail
+    mkdir -p $out
+    mkdir -p $out/bin
+    mkdir -p $out/jre
+    mkdir install4j
+
+    sfx_archive_byte_count=`sed -nE 's/^tail -c ([0-9]+).*/\1/p' $src`
+    tws_byte_count=`wc -c $src | cut -d" " -f1`
+
+    # Extract the archive.
+    tail --bytes $sfx_archive_byte_count "$src" > sfx_archive.tar.gz
+
+    # Unpack the installer and JRE.
+    tar -xf sfx_archive.tar.gz -C install4j
+    tar -xf install4j/jre.tar.gz -C $out/jre
+    # Extract data file
+    data_byte_count=`sed -nE 's/^file\\.size\\.0=([0-9]+)/\\1/p' install4j/stats.properties`
+    installer_offset=$(expr $tws_byte_count - $sfx_archive_byte_count - $data_byte_count)
+    tail --bytes +$(expr $installer_offset + 1) "$src" 2> /dev/null | head --bytes $data_byte_count > install4j/0.dat
+    # Patch JRE binaries.
+    for file in $out/jre/bin/*
+    do
+      patchelf \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${lib.makeLibraryPath [ zlib ]}:$out/jre/lib" \
+      $file 2> /dev/null || true
+    done
+
+    # Unpack jars.
+    unpack () {
+    jar="`echo "$1" | awk '{ print substr($0,1,length($0)-5) }'`"
+    $out/jre/bin/unpack200 -r "$1" "$jar"
+    chmod a+r "$jar"
+    }
+    for jarpack in $out/jre/lib/*.jar.pack
+    do
+      unpack $jarpack
+    done
+    for jarpack in $out/jre/lib/ext/*.jar.pack
+    do
+      unpack $jarpack
+    done
+
+    # Run the bundled JRE, if this fails the build should also fail.
+    $out/jre/bin/java -version
+
+    installer="install4j.Installer"
+    installer_version=`sed -nE 's/.*Installer([0-9]+).*/\1/p' $src | head -n 1`
+    # Run the installer, storing artifacts in $out.
+    cd install4j && \
+    LD_LIBRARY_PATH="${libPath}:$LD_LIBRARY_PATH" \
+    INSTALL4J_JAVA_HOME="$out/jre" \
+    $out/jre/bin/java \
+    -DjtsConfigDir="/home/jts" \
+    -classpath "i4jruntime.jar:launcher0.jar:$out/jre/lib/ext/*:$out/jre/jre/lib/ext/*" \
+    install4j.Installer$installer_version "-q" "-dir" "$out"
+
+    makeWrapper $out/tws $out/bin/tws \
+    --argv0 "ib-tws" \
+    --run "mkdir -p \$HOME/.tws/" \
+    --prefix LD_LIBRARY_PATH : "${libPath}" \
+    --set INSTALL4J_JAVA_HOME "$out/jre" \
+    --add-flags "-J-DjtsConfigDir=\$HOME/.tws" \
+    --add-flags "-J-Dawt.useSystemAAFontSettings=lcd" \
+    --add-flags "-J-Dswing.aatext=true"
+
+    # Make the tws launcher script read $HOME/.tws/tws.vmoptions
+    # instead of the unmutable version in $out.
+    sed -i -e 's#read_vmoptions "$prg_dir/$progname.vmoptions"#read_vmoptions "$HOME/.tws/$progname.vmoptions"#' $out/tws
+
+
+    # install -m 644 -D -t $out/share/applications $desktopItem/share/applications/*
+  '';
+
+  meta = with lib; {
+    description = "Trader Work Station of Interactive Brokers";
+    homepage = "https://www.interactivebrokers.com";
+    license = licenses.unfree;
+    platforms = platforms.linux;
+  };
 }
