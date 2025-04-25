@@ -307,24 +307,24 @@ Add all useful bindings
   (use-package consult
     :bind
     (:prefix-map search-map
-		 :prefix-docstring "Searching map"
-		 :prefix "C-c s"
-		 ("s" . consult-line)
-		 ("S" . consult-line-multi)
-		 ("r" . consult-ripgrep)
-		 ("i" . consult-imenu)
-		 ("I" . consult-imenu-multi)
-		 ("m" . consult-mark)
-		 ("f" . consult-flymake)
-		 ("c d" . xref-find-definitions)
-		 ("c r" . xref-find-references)
-		 )
+  		 :prefix-docstring "Searching map"
+  		 :prefix "C-c s"
+  		 ("s" . consult-line)
+  		 ("S" . consult-line-multi)
+  		 ("r" . consult-ripgrep)
+  		 ("i" . consult-imenu)
+  		 ("I" . consult-imenu-multi)
+  		 ("m" . consult-mark)
+  		 ("f" . consult-flymake)
+  		 ("c d" . xref-find-definitions)
+  		 ("c r" . xref-find-references)
+  		 )
     :config
     (setq consult-narrow-key "<")
-    (consult-customize
-     consult-line
-     :initial (buffer-substring (point) (mark))
-     )
+    ;; (consult-customize
+    ;;  consult-line
+    ;;  :initial (buffer-substring (point) (mark))
+    ;;  )
     )
 #+end_src
 
