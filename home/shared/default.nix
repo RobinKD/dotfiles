@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   imports = [
     # GUI
     ./firefox
@@ -28,15 +29,23 @@
 
     # Other
     ./conky
+    ./nightshift
   ];
 
-  home.packages = with pkgs; [ font-manager discord element-desktop ];
+  home.packages = with pkgs; [
+    font-manager
+    discord
+    element-desktop
+  ];
 
-  programs.nix-index = { enable = true; };
+  programs.nix-index = {
+    enable = true;
+  };
 
   # Make sure enchant picks up correct aspell dir
   home.file.".aspell.conf" = {
     enable = true;
     text = "dict-dir /run/current-system/sw/lib/aspell/";
   };
+
 }

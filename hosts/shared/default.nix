@@ -12,6 +12,7 @@
     ./users.nix
     ./packages.nix
     ./fonts.nix
+    ./external-screen-brightness.nix
 
     ./desktop
     ./display-manager
@@ -68,5 +69,5 @@
     #jack.enable = true;
   };
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "24.05";
 }

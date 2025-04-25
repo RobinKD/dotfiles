@@ -50,6 +50,7 @@ rec {
 
     # Other
     conky.enable = true;
+    nightshift.enable = true;
 
   };
 
