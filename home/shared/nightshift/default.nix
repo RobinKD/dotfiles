@@ -25,6 +25,11 @@ with lib;
         day = 5500;
         night = 3500;
       };
+      settings = {
+        general = {
+          fade = 1;
+        };
+      };
     };
 
     home.packages = with pkgs; [
@@ -33,30 +38,29 @@ with lib;
     ];
 
     home.file.".config/gammastep/hooks/nightshift.sh".text = ''
-                  #!/bin/bash
-                  case $1 in
-                  period-changed)
-                      case $3 in
-                      night)
-            	  for 
-                          # 10=brightness, 12=contrast
-      		    ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
-                            ddcutil -d $nb setvcp 10 10
-      		    done
-                          ;;
-                      transition)
-      		    ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
-                            ddcutil -d $nb setvcp 10 20
-      		    done
-                          ;;
-                      daytime)
-      		    ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
-                            ddcutil -d $nb setvcp 10 40
-      		    done
-                          ;;
-                      esac
-                      ;;
-                  esac
+      #!/bin/bash
+      case $1 in
+        period-changed)
+        case $3 in
+          night)
+          # 10=brightness, 12=contrast
+          for ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
+            ddcutil -d $nb setvcp 10 10
+          done
+          ;;
+          transition)
+          for ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
+            ddcutil -d $nb setvcp 10 20
+          done
+          ;;
+          daytime)
+          for ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
+            ddcutil -d $nb setvcp 10 40
+          done
+          ;;
+        esac
+        ;;
+      esac
     '';
   };
 }
