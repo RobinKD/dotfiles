@@ -27,6 +27,7 @@ rec {
     firefox.enable = true;
     bash.enable = true;
     gtk-theme.enable = true;
+    ssh.enable = true;
 
     # Specific desktop modules
     hyprland.enable = true;
