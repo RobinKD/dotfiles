@@ -50,6 +50,9 @@ in
       quickemu
       tradingview
       ib-tws
+
+      # Chat
+      signal-desktop
     ]
     ++ myEmacs.system_packages;
 

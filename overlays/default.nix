@@ -14,6 +14,15 @@
     waybar = prev.waybar.overrideAttrs (oldAttrs: {
       mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
     });
+
+    signal-desktop = prev.signal-desktop.overrideAttrs (oldAttrs: {
+      desktopItems = map (
+        x:
+        x.override (p: {
+          exec = "${oldAttrs.meta.mainProgram} --use-tray-icon %U";
+        })
+      ) oldAttrs.desktopItems;
+    });
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
