@@ -44,17 +44,17 @@ with lib;
         case $3 in
           night)
           # 10=brightness, 12=contrast
-          for ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
+          ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
             ddcutil -d $nb setvcp 10 10
           done
           ;;
           transition)
-          for ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
+          ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
             ddcutil -d $nb setvcp 10 20
           done
           ;;
           daytime)
-          for ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
+          ddcutil detect | grep Display | cut -d" " -f2 | while read -r nb; do
             ddcutil -d $nb setvcp 10 40
           done
           ;;
