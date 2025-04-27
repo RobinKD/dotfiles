@@ -38,6 +38,7 @@ in
       "$mod, F, fullscreen, 0 # Fullscreen"
       "$mod, M, fullscreen, 1 # Maximize"
       "$mod SHIFT, F, togglefloating,"
+      # "$mod, A, hyprexpo:expo, toggle" # can be: toggle, off/disable or on/enable
       # Change split mode for dwindle layout
       "$mod, D, togglesplit,"
 
@@ -126,5 +127,14 @@ in
       "$mod, mouse:272, movewindow"
       "$mod, mouse:273, resizewindow"
     ];
+
+    # plugin = {
+    #   hyprexpo = {
+    #     columns = 3;
+    #     gap_size = 8;
+    #     bg_col = "rgba(111111aa)";
+    #     workspace_method = "center current";
+    #   };
+    # };
   };
 }
