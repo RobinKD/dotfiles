@@ -30,9 +30,14 @@ with lib;
     }
     (mkIf cfg.sddm.enable {
       environment.systemPackages = with pkgs; [
-        sddm-sugar-candy-theme
-        sddm-sugar-dark-theme
-        libsForQt5.qt5.qtgraphicaleffects
+        #Basically broken since qt update in nixpkgs
+        # sddm-sugar-candy-theme
+        # sddm-sugar-dark-theme
+        # libsForQt5.qt5.qtgraphicaleffects
+        (sddm-astronaut.override { embeddedTheme = "black_hole"; })
+        kdePackages.qtsvg
+        kdePackages.qtmultimedia
+        kdePackages.qtvirtualkeyboard
       ];
 
       services.displayManager.sddm = {
@@ -42,7 +47,7 @@ with lib;
             InputMethod = "";
           };
         };
-        theme = "sugar-candy";
+        theme = "sddm-astronaut-theme";
       };
     })
     (mkIf cfg.lightdm.enable {

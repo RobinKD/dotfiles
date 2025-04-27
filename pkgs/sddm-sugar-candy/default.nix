@@ -1,10 +1,18 @@
-{ stdenv, fetchgit }:
-# TODO Find a way to get custom Background
-let wallpaper = ../../wallpapers/background7.jpg;
-in stdenv.mkDerivation rec {
+{
+  stdenv,
+  fetchgit,
+  pkgs,
+}:
+let
+  wallpaper = ../../wallpapers/background7.jpg;
+in
+stdenv.mkDerivation rec {
   name = "sddm-sugar-candy-theme";
   version = "1.1";
-  dontBuild = true;
+
+  dontWrapQtApps = true;
+  buildInputs = with pkgs.libsForQt5.qt5; [ qtgraphicaleffects ];
+
   installPhase = ''
     mkdir -p $out/share/sddm/themes
     cp -aR $src $out/share/sddm/themes/sugar-candy

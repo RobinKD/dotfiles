@@ -1,17 +1,25 @@
-{ stdenv, fetchFromGitHub }:
-# TODO Find a way to get custom Background
-let wallpaper = ../../wallpapers/background7.jpg;
-in stdenv.mkDerivation rec {
+{
+  stdenv,
+  fetchFromGitHub,
+  pkgs,
+}:
+let
+  wallpaper = ../../wallpapers/background7.jpg;
+in
+stdenv.mkDerivation rec {
   name = "sddm-sugar-dark-theme";
   version = "1.2";
-  dontBuild = true;
-  installPhase = ''
-     mkdir -p $out/share/sddm/themes
-     cp -aR $src $out/share/sddm/themes/sugar-dark
 
-     chmod 755 $out/share/sddm/themes/sugar-dark/Background.jpg
-     cp -f ${wallpaper} $out/share/sddm/themes/sugar-dark/Background.jpg
-     chmod 555 $out/share/sddm/themes/sugar-dark/Background.jpg
+  dontWrapQtApps = true;
+  buildInputs = with pkgs.libsForQt5.qt5; [ qtgraphicaleffects ];
+
+  installPhase = ''
+    mkdir -p $out/share/sddm/themes
+    cp -aR $src $out/share/sddm/themes/sugar-dark
+
+    chmod 755 $out/share/sddm/themes/sugar-dark/Background.jpg
+    cp -f ${wallpaper} $out/share/sddm/themes/sugar-dark/Background.jpg
+    chmod 555 $out/share/sddm/themes/sugar-dark/Background.jpg
 
     runHook postInstall
   '';
