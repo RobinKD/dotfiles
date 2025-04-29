@@ -111,7 +111,6 @@ stdenv.mkDerivation {
     # Run the bundled JRE, if this fails the build should also fail.
     $out/jre/bin/java -version
 
-    installer="install4j.Installer"
     installer_version=`sed -nE 's/.*Installer([0-9]+).*/\1/p' $src | head -n 1`
     # Run the installer, storing artifacts in $out.
     cd install4j && \
@@ -131,16 +130,25 @@ stdenv.mkDerivation {
     --add-flags "-J-Dawt.useSystemAAFontSettings=lcd" \
     --add-flags "-J-Dswing.aatext=true"
 
-    # Make the tws launcher script read $HOME/.tws/tws.vmoptions
-    # instead of the unmutable version in $out.
-    sed -i -e 's#read_vmoptions "$prg_dir/$progname.vmoptions"#read_vmoptions "$HOME/.tws/$progname.vmoptions"#' $out/tws
-
     # Copy icon to share/icons
     mkdir -p $out/share/icons/hicolor/128x128/apps
     ln -s $out/.install4j/tws.png $out/share/icons/hicolor/128x128/apps/tws.png
 
     # Install desktop item
     install -m 644 -D -t $out/share/applications $desktopItem/share/applications/*
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    # Make the tws launcher script read $HOME/.tws/tws.vmoptions
+    # instead of the unmutable version in $out.
+    substituteInPlace $out/tws \
+      --replace-fail 'read_vmoptions "$prg_dir/$progname.vmoptions' 'read_vmoptions "$HOME/.tws/$progname.vmoptions'
+
+    # Fix javafx.web & com.sun.webkit exports
+    substituteInPlace $out/tws \
+      --replace-fail 'com.sun.javafx.webkit' 'com.sun.webkit'
   '';
 
   desktopItem = makeDesktopItem {
