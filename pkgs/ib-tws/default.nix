@@ -148,7 +148,7 @@ stdenv.mkDerivation {
 
     # Fix javafx.web & com.sun.webkit exports
     substituteInPlace $out/tws \
-      --replace-fail 'com.sun.javafx.webkit' 'com.sun.webkit'
+      --replace-fail '"--add-exports=javafx.web/com.sun.javafx.webkit=ALL-UNNAMED"' '"--add-exports=javafx.web/com.sun.javafx.webkit=ALL-UNNAMED" "--add-exports=javafx.web/com.sun.webkit=ALL-UNNAMED"'
   '';
 
   desktopItem = makeDesktopItem {
