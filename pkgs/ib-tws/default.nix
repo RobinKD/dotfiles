@@ -20,13 +20,13 @@ let
     glib
     gtk2
     gtk3
-    javaPackages.openjfx17
+    (javaPackages.openjfx17.override { withWebKit = true; })
     libdrm
     libGL
     libxkbcommon
     libz
     pango
-    nss
+    nss_latest
     nspr
     mesa
     xorg.libXfixes
