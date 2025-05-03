@@ -5,55 +5,52 @@
   ...
 }:
 {
-  environment.systemPackages =
-    with pkgs;
-    [
-      # Basic
-      git
-      ntfs3g
-      wget
-      ripgrep
-      gcc
-      alacritty
-      pavucontrol
-      brightnessctl
-      networkmanagerapplet
-      vlc
+  environment.systemPackages = with pkgs; [
+    # Basic
+    git
+    ntfs3g
+    wget
+    ripgrep
+    gcc
+    alacritty
+    pavucontrol
+    brightnessctl
+    networkmanagerapplet
+    vlc
 
-      # Always useful
-      librewolf
-      gparted
-      gpg-tui
-      featherpad
-      libreoffice
-      nomacs
-      nemo
-      libnotify
-      cmake
-      gnumake
-      libtool
-      sops
-      age
-      eza
-      fzf
-      ripgrep-all
-      inputs.nix-alien.packages.${pkgs.system}.nix-alien
+    # Always useful
+    librewolf
+    gparted
+    gpg-tui
+    featherpad
+    libreoffice
+    nomacs
+    nemo
+    libnotify
+    cmake
+    gnumake
+    libtool
+    sops
+    age
+    eza
+    fzf
+    ripgrep-all
+    inputs.nix-alien.packages.${pkgs.system}.nix-alien
 
-      # Trading
-      qemu
-      quickemu
-      tradingview
-      ib-tws
+    # Trading
+    qemu
+    quickemu
+    tradingview
+    ib-tws
 
-      # Chat
-      signal-desktop
-      telegram-desktop
+    # Chat
+    signal-desktop
+    telegram-desktop
 
-      # LLMs
-      (ollama.override { acceleration = "cuda"; })
+    # LLMs
+    (ollama.override { acceleration = "cuda"; })
 
-    ]
-    ++ myEmacs.system_packages;
+  ];
 
   programs.nix-ld.enable = true;
 
