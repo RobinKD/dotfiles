@@ -60,7 +60,6 @@ rec {
     username = lib.mkDefault "keanu";
     homeDirectory = lib.mkDefault "/home/${config.home.username}";
     stateVersion = "23.11";
-    packages = with pkgs; [ telegram-desktop ];
   };
 
   # Nicely reload system units when changing configs

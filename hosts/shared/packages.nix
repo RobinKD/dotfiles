@@ -18,6 +18,7 @@
       pavucontrol
       brightnessctl
       networkmanagerapplet
+      vlc
 
       # Always useful
       librewolf
@@ -46,6 +47,11 @@
 
       # Chat
       signal-desktop
+      telegram-desktop
+
+      # LLMs
+      (ollama.override { acceleration = "cuda"; })
+
     ]
     ++ myEmacs.system_packages;
 
