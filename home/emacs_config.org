@@ -595,56 +595,56 @@ Basic configuration stuff
   (use-package org
     :init
     (setq org-directory "~/notes/"
-	  org-agenda-files '("~/notes/tasks.org" "~/notes/PhD_whatever.org")
-	  org-use-property-inheritance t
-	  org-log-done 'time
-	  org-log-into-drawer t
-	  org-export-with-sub-superscripts '{}
-	  org-icalendar-include-body nil
-	  org-screenshot-image-directory "./screenshots/"
-	  org-capture-todo-file "~/notes/tasks.org"
-	  org-capture-phd-file "~/notes/PhD_whatever.org")
+  	  org-agenda-files '("~/notes/tasks.org" "~/notes/PhD_whatever.org")
+  	  org-use-property-inheritance t
+  	  org-log-done 'time
+  	  org-log-into-drawer t
+  	  org-export-with-sub-superscripts '{}
+  	  org-icalendar-include-body nil
+  	  org-screenshot-image-directory "./screenshots/"
+  	  org-capture-todo-file "~/notes/tasks.org"
+  	  org-capture-phd-file "~/notes/PhD_whatever.org")
 
     :bind
     ((:prefix-map org-map
-		  :prefix-docstring "Org map"
-		  :prefix "C-c n"
-		  ("c" . org-capture)
-		  )
+  		  :prefix-docstring "Org map"
+  		  :prefix "C-c n"
+  		  ("c" . org-capture)
+  		  )
      (:map org-mode-map
-	   ("M-<down>" . org-move-subtree-down)
-	   ("M-<up>" . org-move-subtree-up))
+  	   ("M-<down>" . org-move-subtree-down)
+  	   ("M-<up>" . org-move-subtree-up))
      (:map org-map
-	   (:prefix-map org-beamer-map
-			:prefix-docstring "Org Beamer map"
-			:prefix "b"
-			("p" . org-beamer-export-to-pdf)
-			("l" . org-beamer-export-to-latex)
-			("e" . org-beamer-select-environment)
-			)
-	   )
+  	   (:prefix-map org-beamer-map
+  			:prefix-docstring "Org Beamer map"
+  			:prefix "b"
+  			("p" . org-beamer-export-to-pdf)
+  			("l" . org-beamer-export-to-latex)
+  			("e" . org-beamer-select-environment)
+  			)
+  	   )
      (:map search-map
-	   ("h" . consult-org-heading)))
+  	   ("h" . consult-org-heading)))
 
     :config
     ;; Org Babel default headers args
     (setq org-babel-default-header-args
-	  '((:session . "none")
-	    (:results . "replace")
-	    (:exports . "code")
-	    (:cache . "no")
-	    (:noweb . "no")
-	    (:hlines . "no")
-	    (:tangle . "no")
-	    (:comments . "no")))
+  	  '((:session . "none")
+  	    (:results . "replace")
+  	    (:exports . "code")
+  	    (:cache . "no")
+  	    (:noweb . "no")
+  	    (:hlines . "no")
+  	    (:tangle . "no")
+  	    (:comments . "no")))
 
     ;; Org todo keywords
     (setq org-todo-keywords
-	  '((sequence "TODO(t)" "PROJ(p)" "STRT(s!)" "WAIT(w)" "NEXT(n)" "ONGOING(o!)" "REVIEW(r)" "FIXME(f)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
-	    (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")))
+  	  '((sequence "TODO(t)" "PROJ(p)" "STRT(s!)" "WAIT(w)" "NEXT(n)" "ONGOING(o!)" "REVIEW(r)" "FIXME(f)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+  	    (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")))
 
     (setq org-priority-highest ?A
-	  org-priority-lowest ?F)
+  	  org-priority-lowest ?F)
 
     ;; Latex to PDF stuff
     (setq org-latex-pdf-process '("latexmk -f -bibtex -pdf -%latex -synctex=1 -interaction=nonstopmode -output-directory=%o %f"))
@@ -729,82 +729,82 @@ TODO keywords do not have correct font in super-agenda
     :after org
     :config
     (setq org-capture-templates
-	  (doct '(("Tasks" :keys "t"
-		   :file org-capture-todo-file
-		   :prepend t
-		   :headline "General Tasks"
-		   :type entry
-		   :template ("* TODO %? %^G%{extra}"
-			      "%i %a")
-		   :children (("General Task" :keys "t"
-			       :extra "")
-			      ("Task with deadline" :keys "d"
-			       :extra "\nDEADLINE: %^{Deadline:}t")
-			      ("Scheduled Task" :keys "s"
-			       :extra "\nSCHEDULED: %^{Start time:}t")))
-		  ("Scheduled stuff" :keys "s"
-		   :file org-capture-todo-file
-		   :prepend t
-		   :headline "Scheduled"
-		   :type entry
-		   :template ("* %?"
-			      "SCHEDULED: %^{Date:}t"))
-		  ("PhD" :keys "d"
-		   :file org-capture-phd-file
-		   :type entry
-		   :headline "PhD Tasks"
-		   :children (("PhD Tasks" :keys "t"
-			       :prepend t
-			       :template ("* TODO %?"
-					  "%i %a")
-			       :children (("General task" :keys "k"
-					   :template ("* TODO %?"
-						      "%i %a"))
-					  ("Task with deadline" :keys "d"
-					   :template ("* TODO %?"
-						      "DEADLINE: %^{Deadline:}t"
-						      "%i %a"))
-					  ("Scheduled Task" :keys "s"
-					   :template ("* TODO %?"
-						      "SCHEDULED: %^{Start time:}t"))))
-			      ("Meetings" :keys "m"
-			       :headline "Meetings"
-			       :type entry
-			       :children (("Meeting" :keys "m"
-					   :template ("* %?"
-						      "SCHEDULED: %^{Date:}T"))
-					  ("Regular advancement meeting" :keys "r"
-					   :headline "Regular advancement meetings"
-					   :template ("* Regular advancement meeting"
-						      "SCHEDULED: %^{Date:}T"
-						      "https://orga2-lower.webex.com/meet/Username2"))
-					  ))
-			      ("Formations" :keys "f"
-			       :headline "Formations / Conferences"
-			       :type entry
-			       :template ("* %?"
-					  "SCHEDULED: %^{Date:}T"))
-			      ("Scheduled stuff" :keys "s"
-			       :headline "Scheduled"
-			       :template ("* %?"
-					  "SCHEDULED: %^{Date:}t"))
-			      ("Ideas" :keys "i"
-			       :headline "Ideas"
-			       :type entry
-			       :template ("* IDEA %?"))))
-		  ("Protocol with selection" :keys "p"
-		   :file my/generate-org-note-name
-		   :type plain
-		   :template ("#+TITLE: %:description\n"
-			      "Added on: %u"
-			      "Source: %:link\n\n %i %?"))
-		  ("Protocol without selection" :keys "L"
-		   :file my/generate-org-note-name
-		   :type plain
-		   :template ("#+TITLE: %:description\n"
-			      "Added on: %u"
-			      "Source: %:link\n\n %?"))
-		  )))
+  	  (doct '(("Tasks" :keys "t"
+  		   :file org-capture-todo-file
+  		   :prepend t
+  		   :headline "General Tasks"
+  		   :type entry
+  		   :template ("* TODO %? %^G%{extra}"
+  			      "%i %a")
+  		   :children (("General Task" :keys "t"
+  			       :extra "")
+  			      ("Task with deadline" :keys "d"
+  			       :extra "\nDEADLINE: %^{Deadline:}t")
+  			      ("Scheduled Task" :keys "s"
+  			       :extra "\nSCHEDULED: %^{Start time:}t")))
+  		  ("Scheduled stuff" :keys "s"
+  		   :file org-capture-todo-file
+  		   :prepend t
+  		   :headline "Scheduled"
+  		   :type entry
+  		   :template ("* %?"
+  			      "SCHEDULED: %^{Date:}t"))
+  		  ("PhD" :keys "d"
+  		   :file org-capture-phd-file
+  		   :type entry
+  		   :headline "PhD Tasks"
+  		   :children (("PhD Tasks" :keys "t"
+  			       :prepend t
+  			       :template ("* TODO %?"
+  					  "%i %a")
+  			       :children (("General task" :keys "k"
+  					   :template ("* TODO %?"
+  						      "%i %a"))
+  					  ("Task with deadline" :keys "d"
+  					   :template ("* TODO %?"
+  						      "DEADLINE: %^{Deadline:}t"
+  						      "%i %a"))
+  					  ("Scheduled Task" :keys "s"
+  					   :template ("* TODO %?"
+  						      "SCHEDULED: %^{Start time:}t"))))
+  			      ("Meetings" :keys "m"
+  			       :headline "Meetings"
+  			       :type entry
+  			       :children (("Meeting" :keys "m"
+  					   :template ("* %?"
+  						      "SCHEDULED: %^{Date:}T"))
+  					  ("Regular advancement meeting" :keys "r"
+  					   :headline "Regular advancement meetings"
+  					   :template ("* Regular advancement meeting"
+  						      "SCHEDULED: %^{Date:}T"
+  						      "https://orga2-lower.webex.com/meet/Username2"))
+  					  ))
+  			      ("Formations" :keys "f"
+  			       :headline "Formations / Conferences"
+  			       :type entry
+  			       :template ("* %?"
+  					  "SCHEDULED: %^{Date:}T"))
+  			      ("Scheduled stuff" :keys "s"
+  			       :headline "Scheduled"
+  			       :template ("* %?"
+  					  "SCHEDULED: %^{Date:}t"))
+  			      ("Ideas" :keys "i"
+  			       :headline "Ideas"
+  			       :type entry
+  			       :template ("* IDEA %?"))))
+  		  ("Protocol with selection" :keys "p"
+  		   :file my/generate-org-note-name
+  		   :type plain
+  		   :template ("#+TITLE: %:description\n"
+  			      "Added on: %u"
+  			      "Source: %:link\n\n %i %?"))
+  		  ("Protocol without selection" :keys "L"
+  		   :file my/generate-org-note-name
+  		   :type plain
+  		   :template ("#+TITLE: %:description\n"
+  			      "Added on: %u"
+  			      "Source: %:link\n\n %?"))
+  		  )))
     )
 #+end_src
 
