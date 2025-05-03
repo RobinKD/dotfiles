@@ -13,7 +13,7 @@ in
     exec-once = [
       "sleep 1; waybar"
       "swww-daemon"
-      "sleep 1; swww-set-background"
+      "sleep 5; swww-set-background"
       "configure-gtk"
       "hyprctl setcursor Catppuccin-Mocha-Sapphire-Cursors 32"
     ];

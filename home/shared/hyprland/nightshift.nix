@@ -129,17 +129,17 @@ in
         inf_0=$(${pkgs.sunwait}/bin/sunwait poll angle 0 ${latitude} ${longitude})
         if [ $inf_30 == DAY ]; then
           ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 80
+            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 80 || continue
           done
           ${pkgs.hyprshade}/bin/hyprshade on vibrance
         elif [ $inf_12 == DAY ]; then
           ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 60
+            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 60 || continue
           done
           ${pkgs.hyprshade}/bin/hyprshade on vibrance
         elif [ $inf_0 == NIGHT ]; then
           ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 20
+            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 20 || continue
           done
           ${pkgs.hyprshade}/bin/hyprshade on blue-light
         else
@@ -157,7 +157,7 @@ in
             b=20
           fi
           ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 $b
+            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 $b || continue
           done
         fi
       ''}";
