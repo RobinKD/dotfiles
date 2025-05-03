@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -48,7 +49,7 @@
   # Make sure enchant picks up correct aspell dir
   home.file.".aspell.conf" = {
     enable = true;
-    text = "dict-dir /run/current-system/sw/lib/aspell/";
+    text = "dict-dir /run/current-system/etc/profiles/per-user/${config.home.username}/lib/aspell/";
   };
 
 }
