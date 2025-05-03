@@ -54,6 +54,8 @@ in
       # screenshot
       # stop animations while screenshotting; makes black border go away
       ", Print, exec, ${screenshotarea}"
+      # Obs recording
+      "$mod SHIFT, KP_multiply, exec, obs-cmd recording toggle"
 
       # Move focus with mm + arrow keys
       "$mod, left, workspace, e-1"
