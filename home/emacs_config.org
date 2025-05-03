@@ -83,7 +83,7 @@ Basic things such as user vars, basic keyboard stuff or trashing and scrolling b
 #+end_src
 ** Catppuccin colors
 #+begin_src elisp
-(load-theme 'catppuccin :no-confirm)
+  (load-theme 'catppuccin :no-confirm)
 #+end_src
 
 ** Basic font
@@ -95,15 +95,13 @@ Basic things such as user vars, basic keyboard stuff or trashing and scrolling b
 ** Coding stuff
 *** Electric pair
 #+begin_src elisp
-  (use-package electric-pair
-    :hook ((text-mode prog-mode) . electric-pair-mode))
+  (add-hook 'text-mode-hook 'electric-pair-mode)
+  (add-hook 'prog-mode-hook 'electric-pair-mode)
 #+end_src
 
 *** Line numbers
 #+begin_src elisp
-(use-package display-line-numbers
-  :hook (prog-mode . global-display-line-numbers-mode)
-  )
+  (add-hook 'prog-mode-hook #'global-display-line-numbers-mode)
 #+end_src
 
 *** Highlight TODOs
@@ -279,14 +277,10 @@ This is how I type and I like it!
 * Tab mode
 Cause I really like to work in workspaces
 #+begin_src elisp
-  (use-package tab-bar
-    :config
-    (setq tab-bar-show nil
-	  tab-bar-history-mode t)
-    :bind
-    (("C-x t c" . tab-new)
-     ("C-x t C" . tab-close))
-    )
+  (setq tab-bar-show nil
+        tab-bar-history-mode t)
+  (bind-key "C-x t c" 'tab-new)
+  (bind-key "C-x t C" 'tab-close)
 #+end_src
 
 * Completion - because I'm lazy
@@ -805,7 +799,7 @@ TODO keywords do not have correct font in super-agenda
 		   :type plain
 		   :template ("#+TITLE: %:description\n"
 			      "Added on: %u"
-			      "Source: %:link\n\n %i %?"))
+			      "Source: %:link\n\n %?"))
 		  )))
     )
 #+end_src
@@ -817,31 +811,31 @@ TODO keywords do not have correct font in super-agenda
     :custom
     (org-roam-directory (file-truename org-directory))
     :bind (:map org-map
-		(:prefix-map org-roam-map
-			     :prefix-docstring "Org Roam map"
-			     :prefix "r"
-			     ("b" . org-roam-buffer-toggle)
-			     ("B" . org-roam-buffer-display-dedicated)
-			     ("f" . org-roam-node-find)
-			     ("r" . org-roam-ref-find)
-			     ("i" . org-roam-node-insert)
-			     ("c" . org-roam-capture)
-			     ;; Dailies
-			     ("j" . org-roam-dailies-capture-today))
-		(:map org-roam-map
-		      (:prefix-map org-roam-add-map
-				   :prefix-docstring "prefix for add functions"
-				   :prefix "a"
-				   ("a" . org-roam-alias-add)
-				   ("r" . org-roam-ref-add)
-				   ("t" . org-roam-tag-add))
-		      (:prefix-map org-roam-remove-map
-				   :prefix-docstring "prefix for remove functions"
-				   :prefix "A"
-				   ("a" . org-roam-alias-remove)
-				   ("r" . org-roam-ref-remove)
-				   ("t" . org-roam-tag-remove)))
-		)
+  		(:prefix-map org-roam-map
+  			     :prefix-docstring "Org Roam map"
+  			     :prefix "r"
+  			     ("b" . org-roam-buffer-toggle)
+  			     ("B" . org-roam-buffer-display-dedicated)
+  			     ("f" . org-roam-node-find)
+  			     ("r" . org-roam-ref-find)
+  			     ("i" . org-roam-node-insert)
+  			     ("c" . org-roam-capture)
+  			     ;; Dailies
+  			     ("j" . org-roam-dailies-capture-today))
+  		(:map org-roam-map
+  		      (:prefix-map org-roam-add-map
+  				   :prefix-docstring "prefix for add functions"
+  				   :prefix "a"
+  				   ("a" . org-roam-alias-add)
+  				   ("r" . org-roam-ref-add)
+  				   ("t" . org-roam-tag-add))
+  		      (:prefix-map org-roam-remove-map
+  				   :prefix-docstring "prefix for remove functions"
+  				   :prefix "A"
+  				   ("a" . org-roam-alias-remove)
+  				   ("r" . org-roam-ref-remove)
+  				   ("t" . org-roam-tag-remove)))
+  		)
     :config
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
@@ -850,24 +844,29 @@ TODO keywords do not have correct font in super-agenda
     ;; (require 'org-roam-protocol)
 
     (add-to-list 'org-roam-capture-templates
-		 '("r" "Bibliography reference" plain "\n- tags :: [[roam:Unreviewed papers]] %?"
-		   :target
-		   (file+head "${citar-citekey}.org" "#+title: ${citar-title}")
-		   :unnarrowed t))
+  		 '("r" "Bibliography reference" plain "\n- tags :: [[roam:Unreviewed papers]] %?"
+  		   :target
+  		   (file+head "${citar-citekey}.org" "#+title: ${citar-title}")
+  		   :unnarrowed t))
+    (add-to-list 'org-roam-capture-templates
+  	       '("p" "plain" plain "%?"
+  		 :target (file+head "${slug}.org"
+  				    "#+title: ${title}\n")
+  		 :unnarrowed t))
 
     (cl-defmethod org-roam-node-directories ((node org-roam-node))
       (if-let ((dirs (file-name-directory (file-relative-name     (org-roam-node-file node) org-roam-directory))))
-	  (format "(%s)" (car (f-split dirs)))
-	""))
+  	  (format "(%s)" (car (f-split dirs)))
+  	""))
 
     (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
       (let* ((count (caar (org-roam-db-query
-			   [:select (funcall count source)
-				    :from links
-				    :where (= dest $s1)
-				    :and (= type "id")]
-			   (org-roam-node-id node)))))
-	(format "[%d]" count)))
+  			   [:select (funcall count source)
+  				    :from links
+  				    :where (= dest $s1)
+  				    :and (= type "id")]
+  			   (org-roam-node-id node)))))
+  	(format "[%d]" count)))
 
     (setq org-roam-node-display-template "${tags:30} ${title:100} ${backlinkscount:6}")
     )
@@ -1052,13 +1051,6 @@ TODO keywords do not have correct font in super-agenda
     )
 #+end_src
 
-** Org protocol
-#+begin_src elisp
-  (use-package org-protocol
-    :after org
-    ;; Capture on firefox is done through org-protocol-extension
-    )
-#+end_src
 
 ** Org noter
 #+begin_src elisp
@@ -1094,8 +1086,6 @@ Some preparations for the hard stuff
     (interactive)
     (org-agenda nil "cf")) ; where ! is a a custom-agenda-command key
 
-  (use-package org-agenda
-    )
 #+end_src
 Now onto the hard stuff
 #+begin_src elisp
@@ -1331,6 +1321,12 @@ Treesit is now included in Emacs 29, so doesn't need much
   ;; 	  ("C-c M-b" . citar-export-local-bib-file))
     )
 #+end_src
+** Nix
+#+begin_src elisp
+  (use-package nix-ts-mode
+    :mode "\\.nix\\'")
+#+end_src
+
 * Code formatting
 #+begin_src elisp :tangle no
   (use-package format-all
@@ -1427,13 +1423,6 @@ Apheleia seems easier to work with for now
     		)
       ;; (setq eglot-events-buffer-size 0)
     )
-
-  ;; use native eglot booster
-  (use-package eglot-booster
-    :ensure t
-    :after eglot
-    :config
-    (eglot-booster-mode))
 #+end_src
 
 * YASnippets
@@ -2000,66 +1989,68 @@ Models from ollama need to be pulled before using in emacs
 
 * Mu4e
 #+begin_src elisp
-  (use-package mm-decode
-    :config
-    (setq mm-discouraged-alternatives
-	  '("text/html" "multipart/*" "text/richtext")))
+  (setq mm-discouraged-alternatives
+  	  '("text/html" "multipart/*" "text/richtext"))
 
   (use-package mu4e
     :commands mu4e
     :load-path "/run/current-system/sw/share/emacs/site-lisp/elpa/mu4e-1.10.8"
     :bind (:map meow-motion-state-keymap
-		("o" . #'+mu4e-view-open-attachment))
+  		("o" . #'+mu4e-view-open-attachment))
     :config
+    (require 'mu4e-icalendar)
+    (mu4e-icalendar-setup)
+    (setq mu4e-icalendar-trash-after-reply t)
+
     (add-to-list 'meow-mode-state-list '(mu4e-view-mode . motion))
     (setq mu4e-get-mail-command "mbsync -c ~/.mu4e/.mbsyncrc -a"
-	  mu4e-index-cleanup t
-	  mu4e-index-lazy-check nil
-	  mu4e-update-interval 300
-	  mu4e-view-prefer-html t
-	  mu4e-html2text-command 'mu4e-shr2text
-	  mu4e-main-hide-personal-addresses t
-	  mu4e-completing-read-function #'completing-read
-	  message-send-mail-function #'smtpmail-send-it
-	  message-kill-buffer-on-exit t
-	  smtpmail-stream-type 'starttls
-	  message-mail-user-agent 'mu4e-user-agent
-	  mail-personal-alias-file "~/.mu4e/.mail_aliases"
-	  org-msg-options "html-postamble:nil H:5 num:nil \\n:t ^:{} toc:nil author:nil email:nil tex:dvipng d:nil"
-	  message-cite-prefix-regexp "\\([ 	]*\\(\\w\\|[.]\\)+>+\\|[ 	]*[>|]\\)+"
-	  gnus-message-cite-prefix-regexp "^\\(?:\\([ 	]*\\(\\w\\|[.]\\)+>+\\|[ 	]*[>|]\\)+\\)"
-	  shr-color-visible-luminance-min 80
-	  shr-color-visible-distance-min 5
-	  shr-use-colors nil
-	  mu4e-headers-thread-single-orphan-prefix '("─>" . "─▶")
-	  mu4e-headers-thread-orphan-prefix        '("┬>" . "┬▶ ")
-	  mu4e-headers-thread-connection-prefix    '("│ " . "│ ")
-	  mu4e-headers-thread-first-child-prefix   '("├>" . "├▶")
-	  mu4e-headers-thread-child-prefix         '("├>" . "├▶")
-	  mu4e-headers-thread-last-child-prefix    '("└>" . "╰▶")
-	  mu4e-headers-fields '((:maildir . 5)
-				(:human-date . 12)
-				(:flags . 10)
-				(:from-or-to . 25)
-				(:subject))
-	  )
+  	  mu4e-index-cleanup t
+  	  mu4e-index-lazy-check nil
+  	  mu4e-update-interval 300
+  	  mu4e-view-prefer-html t
+  	  mu4e-html2text-command 'mu4e-shr2text
+  	  mu4e-main-hide-personal-addresses t
+  	  mu4e-completing-read-function #'completing-read
+  	  message-send-mail-function #'smtpmail-send-it
+  	  message-kill-buffer-on-exit t
+  	  smtpmail-stream-type 'starttls
+  	  message-mail-user-agent 'mu4e-user-agent
+  	  mail-personal-alias-file "~/.mu4e/.mail_aliases"
+  	  org-msg-options "html-postamble:nil H:5 num:nil \\n:t ^:{} toc:nil author:nil email:nil tex:dvipng d:nil"
+  	  message-cite-prefix-regexp "\\([ 	]*\\(\\w\\|[.]\\)+>+\\|[ 	]*[>|]\\)+"
+  	  gnus-message-cite-prefix-regexp "^\\(?:\\([ 	]*\\(\\w\\|[.]\\)+>+\\|[ 	]*[>|]\\)+\\)"
+  	  shr-color-visible-luminance-min 80
+  	  shr-color-visible-distance-min 5
+  	  shr-use-colors nil
+  	  mu4e-headers-thread-single-orphan-prefix '("─>" . "─▶")
+  	  mu4e-headers-thread-orphan-prefix        '("┬>" . "┬▶ ")
+  	  mu4e-headers-thread-connection-prefix    '("│ " . "│ ")
+  	  mu4e-headers-thread-first-child-prefix   '("├>" . "├▶")
+  	  mu4e-headers-thread-child-prefix         '("├>" . "├▶")
+  	  mu4e-headers-thread-last-child-prefix    '("└>" . "╰▶")
+  	  mu4e-headers-fields '((:maildir . 5)
+  				(:human-date . 12)
+  				(:flags . 10)
+  				(:from-or-to . 25)
+  				(:subject))
+  	  )
 
     (setq mu4e-bookmarks
-	  '((:name "Unread messages"
-		   :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/en/Corbeille"
-		   :key ?u)
-	    (:name "Today's messages"
-		   :query "date:today..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/orga2-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
-		   :key ?t)
-	    (:name "Last 7 days"
-		   :query "date:7d..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/orga2-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
-		   :key ?w)
-	    (:name "PhD supervisor messages"
-		   :query "from:jane doe OR from:john doe OR from:bob doe"
-		   :key ?p)
-	    (:name "Flagged messages"
-		   :query "flag:flagged"
-		   :key ?f)))
+  	  '((:name "Unread messages"
+  		   :query "flag:unread AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/en/Corbeille"
+  		   :key ?u)
+  	    (:name "Today's messages"
+  		   :query "date:today..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/orga2-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+  		   :key ?t)
+  	    (:name "Last 7 days"
+  		   :query "date:7d..now AND NOT maildir:/hotmail/Deleted AND NOT maildir:/orga2-short/Trash AND NOT maildir:/orga2-short/Sent AND NOT maildir:/en/Envois AND NOT maildir:/en/Corbeille AND NOT maildir:/hotmail/Sent"
+  		   :key ?w)
+  	    (:name "PhD supervisor messages"
+  		   :query "from:jane doe OR from:john doe OR from:bob doe"
+  		   :key ?p)
+  	    (:name "Flagged messages"
+  		   :query "flag:flagged"
+  		   :key ?f)))
 #+end_src
 
 ** Mu4e contexts
@@ -2224,16 +2215,6 @@ Not used anymore
     (mu4e-alert-set-default-style 'notifications)
     (mu4e-alert-enable-notifications)
     (setq mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed"))
-#+end_src
-
-** Mu4e icalendar
-#+begin_src elisp
-  (use-package mu4e-icalendar
-    :after mu4e
-    :config
-    (mu4e-icalendar-setup)
-    (setq mu4e-icalendar-trash-after-reply t)
-    )
 #+end_src
 
 

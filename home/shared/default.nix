@@ -1,8 +1,11 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 {
   imports = [
-    # GUI
     ./firefox
+    ./emacs
 
     ./hyprland
     ./dunst

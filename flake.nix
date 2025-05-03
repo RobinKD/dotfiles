@@ -18,6 +18,12 @@
     # Hardware configs
     hardware.url = "github:nixos/nixos-hardware";
 
+    # Emacs overlay
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Wayland overlays
     nixpkgs-wayland = {
       url = "github:nix-community/nixpkgs-wayland/master";

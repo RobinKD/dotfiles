@@ -4,14 +4,7 @@
   pkgs,
   ...
 }:
-let
-  myEmacs = (import ./emacs.nix { inherit pkgs; });
-in
 {
-  services.emacs = {
-    enable = true;
-    package = myEmacs.packaged-emacs; # replace with emacs-gtk, or a version provided by the community overlay if desired.
-  };
   environment.systemPackages =
     with pkgs;
     [
