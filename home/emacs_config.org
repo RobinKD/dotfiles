@@ -648,6 +648,10 @@ Basic configuration stuff
 
     ;; Latex to PDF stuff
     (setq org-latex-pdf-process '("latexmk -f -bibtex -pdf -%latex -synctex=1 -interaction=nonstopmode -output-directory=%o %f"))
+
+    ;; Org protocol
+    (require 'org-protocol)
+    (setq org-protocol-default-template-key "L")
     )
 #+end_src
 

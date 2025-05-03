@@ -24,7 +24,6 @@ with lib;
         extensions.packages = with addons; [
           ublock-origin
           browserpass
-          org-capture
         ];
         settings = {
           # General settings
@@ -62,6 +61,10 @@ with lib;
           "datareporting.policy.dataSubmissionEnabled" = false;
           "dom.forms.autocomplete.formautofill" = false;
           "toolkit.telemetry.pioneer-new-studies-available" = false;
+
+          # Authorize org-protocol
+          # Add bookmark with url : javascript:location.href='org-protocol://capture?'+new URLSearchParams({template: 'p', url: window.location.href, title: document.title, body: window.getSelection()});
+          "network.protocol-handler.expose.org-protocol" = false;
 
           # "browser.disableResetPrompt" = true;
           # "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;

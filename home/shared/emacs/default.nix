@@ -9,9 +9,10 @@ let
     name = "org-protocol";
     desktopName = "Org-Protocol Capture";
     icon = "emacs";
-    exec = "emacsclient %u";
+    exec = "emacsclient -- %u";
     type = "Application";
     terminal = false;
+    startupWMClass = "Emacs";
     categories = [ "System" ];
     mimeTypes = [ "x-scheme-handler/org-protocol" ];
   };
