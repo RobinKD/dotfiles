@@ -1,9 +1,19 @@
-{ inputs, config, pkgs, lib, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.hm-modules.firefox;
   addons = inputs.firefox-addons.packages.${pkgs.system};
-in with lib; {
-  options.hm-modules.firefox = { enable = mkEnableOption "firefox"; };
+in
+with lib;
+{
+  options.hm-modules.firefox = {
+    enable = mkEnableOption "firefox";
+  };
 
   config = mkIf cfg.enable {
 
@@ -11,8 +21,11 @@ in with lib; {
       enable = true;
       nativeMessagingHosts = [ pkgs.browserpass ];
       profiles.keanu = {
-        extensions.packages = with addons; [ ublock-origin browserpass org-capture ];
-        bookmarks = { };
+        extensions.packages = with addons; [
+          ublock-origin
+          browserpass
+          org-capture
+        ];
         settings = {
           # General settings
           "browser.startup.couldRestoreSession.count" = 1;
@@ -69,92 +82,98 @@ in with lib; {
             "Amazon.co.uk".metaData.hidden = true;
             "ebay".metaData.hidden = true;
             "NixOS Packages" = {
-              urls = [{
-                template = "https://search.nixos.org/packages";
-                params = [
-                  {
-                    name = "channel";
-                    value = "unstable";
-                  }
-                  {
-                    name = "type";
-                    value = "packages";
-                  }
-                  {
-                    name = "query";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }];
+              urls = [
+                {
+                  template = "https://search.nixos.org/packages";
+                  params = [
+                    {
+                      name = "channel";
+                      value = "unstable";
+                    }
+                    {
+                      name = "type";
+                      value = "packages";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
 
-              icon =
-                "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
               definedAliases = [ "@nop" ];
             };
             "NixOS options" = {
-              urls = [{
-                template = "https://search.nixos.org/options";
-                params = [
-                  {
-                    name = "channel";
-                    value = "unstable";
-                  }
-                  {
-                    name = "type";
-                    value = "packages";
-                  }
-                  {
-                    name = "query";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }];
+              urls = [
+                {
+                  template = "https://search.nixos.org/options";
+                  params = [
+                    {
+                      name = "channel";
+                      value = "unstable";
+                    }
+                    {
+                      name = "type";
+                      value = "packages";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
 
-              icon =
-                "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
               definedAliases = [ "@noo" ];
             };
 
             "NixOS Wiki" = {
-              urls = [{
-                template = "https://nixos.wiki/index.php?search={searchTerms}";
-              }];
+              urls = [
+                {
+                  template = "https://nixos.wiki/index.php?search={searchTerms}";
+                }
+              ];
               icon = "https://nixos.wiki/favicon.png";
               definedAliases = [ "@now" ];
             };
 
             "Home Manager options" = {
-              urls = [{
-                template =
-                  "https://home-manager-options.extranix.com/?query={searchTerms}";
-              }];
+              urls = [
+                {
+                  template = "https://home-manager-options.extranix.com/?query={searchTerms}";
+                }
+              ];
               icon = "https://nixos.wiki/favicon.png";
               definedAliases = [ "@hmo" ];
             };
             "GitLab" = {
-              urls = [{
-                template = "https://gitlab.com/search?search={searchTerms}";
-              }];
-              icon =
-                "https://images.ctfassets.net/xz1dnu24egyd/3JZABhkTjUT76LCIclV7sH/17a92be9bce78c2adcc43e23aabb7ca1/gitlab-logo-500.svg";
+              urls = [
+                {
+                  template = "https://gitlab.com/search?search={searchTerms}";
+                }
+              ];
+              icon = "https://images.ctfassets.net/xz1dnu24egyd/3JZABhkTjUT76LCIclV7sH/17a92be9bce78c2adcc43e23aabb7ca1/gitlab-logo-500.svg";
               definedAliases = [ "@gitl" ];
             };
             "GitHub" = {
-              urls = [{
-                template =
-                  "https://github.com/search?q={searchTerms}&type=repositories";
-              }];
-              icon =
-                "https://cdn-icons-png.flaticon.com/512/25/25231.png";
+              urls = [
+                {
+                  template = "https://github.com/search?q={searchTerms}&type=repositories";
+                }
+              ];
+              icon = "https://cdn-icons-png.flaticon.com/512/25/25231.png";
               definedAliases = [ "@gith" ];
             };
             "Youtube" = {
-              urls = [{
-                template =
-                  "https://www.youtube.com/results?search_query={searchTerms}";
-              }];
-              icon =
-                "https://fr.m.wikipedia.org/wiki/Fichier:YouTube_full-color_icon_%282017%29.svg";
+              urls = [
+                {
+                  template = "https://www.youtube.com/results?search_query={searchTerms}";
+                }
+              ];
+              icon = "https://fr.m.wikipedia.org/wiki/Fichier:YouTube_full-color_icon_%282017%29.svg";
               definedAliases = [ "@yt" ];
             };
           };
