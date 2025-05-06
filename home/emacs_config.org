@@ -606,7 +606,8 @@ Basic configuration stuff
   	  org-icalendar-include-body nil
   	  org-screenshot-image-directory "./screenshots/"
   	  org-capture-todo-file "~/notes/tasks.org"
-  	  org-capture-phd-file "~/notes/PhD_whatever.org")
+  	  org-capture-phd-file "~/notes/PhD_whatever.org"
+  	org-trading-journal-file "~/notes/trading_journal.org")
 
     :bind
     ((:prefix-map org-map
@@ -731,7 +732,7 @@ TODO keywords do not have correct font in super-agenda
     :after org
     :config
     (setq org-capture-templates
-  	  (doct '(("Tasks" :keys "t"
+  	  (doct '(("Tasks" :keys "T"
   		   :file org-capture-todo-file
   		   :prepend t
   		   :headline "General Tasks"
@@ -806,8 +807,18 @@ TODO keywords do not have correct font in super-agenda
   		   :template ("#+TITLE: %:description\n"
   			      "Added on: %u"
   			      "Source: %:link\n\n %?"))
-  		  )))
-    )
+  		  ("Trading" :keys "t"
+  		   :file org-trading-journal-file
+  		   :children (("Trade table" :keys "t"
+  			       :type plain
+  			       :template ("*** Trades"
+  					  "| Ticker | Trend | News | Lv.2 | Entry | Exit | P&L | High | More info |"
+  					  "| | | <7> | <10> | | | | | <15> |"
+  					  "| %^{Ticker} | %? | | | | | | | |"))
+  			      ("Ideas" :keys "i"
+  			       :headline "Ideas"
+  			       :type entry
+  			       :template ("* IDEA %?"))))))))
 #+end_src
 
 ** Roam
