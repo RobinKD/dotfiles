@@ -16,6 +16,7 @@
     pavucontrol
     brightnessctl
     networkmanagerapplet
+    mpv
     vlc
 
     # Always useful
