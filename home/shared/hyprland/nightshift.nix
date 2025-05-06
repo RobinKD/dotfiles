@@ -124,42 +124,47 @@ in
     Service = {
       Type = "simple";
       ExecStart = "${pkgs.writeShellScript "transition-shift" ''
-        inf_30=$(${pkgs.sunwait}/bin/sunwait poll angle 30 ${latitude} ${longitude})
-        inf_12=$(${pkgs.sunwait}/bin/sunwait poll angle 12 ${latitude} ${longitude})
-        inf_0=$(${pkgs.sunwait}/bin/sunwait poll angle 0 ${latitude} ${longitude})
-        if [ $inf_30 == DAY ]; then
-          ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 80 || continue
-          done
-          ${pkgs.hyprshade}/bin/hyprshade on vibrance
-        elif [ $inf_12 == DAY ]; then
-          ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 60 || continue
-          done
-          ${pkgs.hyprshade}/bin/hyprshade on vibrance
-        elif [ $inf_0 == NIGHT ]; then
-          ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 20 || continue
-          done
-          ${pkgs.hyprshade}/bin/hyprshade on blue-light
-        else
-          ${pkgs.hyprshade}/bin/hyprshade on blue-light-transition
-          inf_9=$(${pkgs.sunwait}/bin/sunwait poll angle 9 ${latitude} ${longitude})
-          inf_6=$(${pkgs.sunwait}/bin/sunwait poll angle 6 ${latitude} ${longitude})
-          inf_3=$(${pkgs.sunwait}/bin/sunwait poll angle 3 ${latitude} ${longitude})
-          if [ $inf_9 == DAY ]; then
-            b=50
-          elif [ $inf_6 == DAY ]; then
-            b=40
-          elif [ $inf_3 == DAY ]; then
-            b=30
-          else
-            b=20
-          fi
-          ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
-            ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 $b || continue
-          done
-        fi
+                inf_30=$(${pkgs.sunwait}/bin/sunwait poll angle 30 ${latitude} ${longitude})
+                inf_12=$(${pkgs.sunwait}/bin/sunwait poll angle 12 ${latitude} ${longitude})
+                inf_0=$(${pkgs.sunwait}/bin/sunwait poll angle 0 ${latitude} ${longitude})
+                echo "inf30: "$inf_30
+                echo "inf12: "$inf_12
+                echo "inf0: "$inf_0
+                b=0
+                if [ $inf_30 == DAY ]; then
+                    b=80
+                    ${pkgs.hyprshade}/bin/hyprshade on vibrance
+                elif [ $inf_12 == DAY ]; then
+                    b=60
+                    ${pkgs.hyprshade}/bin/hyprshade on vibrance
+                elif [ $inf_0 == NIGHT ]; then
+                    b=20
+                    ${pkgs.hyprshade}/bin/hyprshade on blue-light
+                else
+                    ${pkgs.hyprshade}/bin/hyprshade on blue-light-transition
+                    inf_9=$(${pkgs.sunwait}/bin/sunwait poll angle 9 ${latitude} ${longitude})
+                    inf_6=$(${pkgs.sunwait}/bin/sunwait poll angle 6 ${latitude} ${longitude})
+                    inf_3=$(${pkgs.sunwait}/bin/sunwait poll angle 3 ${latitude} ${longitude})
+                    echo "inf9: "$inf_9
+                    echo "inf6: "$inf_6
+                    echo "inf3: "$inf_3
+                    if [ $inf_9 == DAY ]; then
+                        b=50
+                    elif [ $inf_6 == DAY ]; then
+                        b=40
+                    elif [ $inf_3 == DAY ]; then
+                        b=30
+                    else
+                        b=20
+                    fi
+                fi
+        	if [ $(date +%H) -lt 14 ]; then
+        	  b=$((b - 20))
+                fi
+                echo "Used b: "$b
+                ${pkgs.ddcutil}/bin/ddcutil detect | grep I2C | cut -d"/" -f3 | cut -d"-" -f2 | while read -r nb; do
+                    ${pkgs.ddcutil}/bin/ddcutil -b $nb setvcp 10 $b || continue
+                done
       ''}";
     };
   };
