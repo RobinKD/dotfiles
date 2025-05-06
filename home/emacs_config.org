@@ -655,6 +655,9 @@ Basic configuration stuff
     ;; Org protocol
     (require 'org-protocol)
     (setq org-protocol-default-template-key "L")
+
+    ;; Open videos with mpv
+    (add-to-list 'org-file-apps '("\\.mkv\\'" . "mpv %s"))
     )
 #+end_src
 
