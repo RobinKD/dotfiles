@@ -708,11 +708,7 @@ TODO keywords do not have correct font in super-agenda
   (use-package org-download
     :after org
     :config
-    (setq org-download-screenshot-method
-	  (if (string= (getenv "DESKTOP_SESSION") "hyprland")
-	      "grimblast --freeze save area %s"
-	    "scrot -fs %s")
-	  )
+    (setq org-download-screenshot-method "grimblast --freeze save area %s")
     :bind
     (:map org-map
 	  ("d" . org-download-screenshot)
