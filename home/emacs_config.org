@@ -595,6 +595,7 @@ Cool to have emacs pick-up declared direnvs
 Basic configuration stuff
 #+begin_src elisp
   (use-package org
+    :demand t
     :init
     (setq org-directory "~/notes/"
   	  org-agenda-files '("~/notes/tasks.org" "~/notes/PhD_whatever.org")
