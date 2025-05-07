@@ -1,19 +1,21 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  wallpapers,
+  ...
+}:
 let
-  set-background = pkgs.writeTextFile {
-    name = "swww-set-background";
-    destination = "/bin/swww-set-background";
-    executable = true;
-    text = "swww img `find ~/.dotfiles/wallpapers/ -type f | shuf -n 1`";
-  };
+  set-background = pkgs.writeShellScriptBin "set-background" ''
+    WALLPAPER=$(${pkgs.findutils}/bin/find ${wallpapers} -type f | ${pkgs.coreutils}/bin/shuf -n 1)
+    hyprctl hyprpaper reload ,"$WALLPAPER"
+  '';
 in
 {
   home.packages = [ set-background ];
   wayland.windowManager.hyprland.settings = {
     exec-once = [
       "sleep 1; waybar"
-      "swww-daemon"
-      "sleep 5; swww-set-background"
+      "set-background"
       "configure-gtk"
       "hyprctl setcursor Catppuccin-Mocha-Sapphire-Cursors 32"
     ];

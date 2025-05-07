@@ -24,6 +24,7 @@ with lib;
     ./binds.nix
     ./nightshift.nix
     ./hyprlock.nix
+    ./hyprpaper.nix
   ];
 
   config = mkIf cfg.enable {
@@ -58,7 +59,6 @@ with lib;
         grim
         wl-clipboard
         swayidle
-        swww
         wf-recorder
       ]);
 
