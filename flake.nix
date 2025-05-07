@@ -38,10 +38,10 @@
       inputs.hyprlang.follows = "hyprland/hyprlang";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # hyprland-plugins = {
-    #   url = "github:hyprwm/hyprland-plugins";
-    #   inputs.hyprland.follows = "hyprland";
-    # };
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins?rev=3e51162d83b0cd9ee35acbd3b91e6d7ba856f5eb";
+      inputs.hyprland.follows = "hyprland";
+    };
 
     # Firefox addons
     firefox-addons = {

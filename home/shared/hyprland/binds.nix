@@ -2,7 +2,6 @@
 let
   screenshotarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave area; hyprctl keyword animation 'fadeOut,1,4,default'";
 
-  swaylock-effects = config.hm-modules.hyprland.swaylock-effects;
   # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
   # Would work with a QWERTY keyboard
   # workspaces = builtins.concatLists (builtins.genList (x:
