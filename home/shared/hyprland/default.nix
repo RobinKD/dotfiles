@@ -58,7 +58,6 @@ with lib;
       ++ (with nix-wayland; [
         grim
         wl-clipboard
-        swayidle
         wf-recorder
       ]);
 
@@ -72,31 +71,20 @@ with lib;
       # ];
     };
 
-    services.swayidle = {
+    services.hypridle = {
       enable = true;
-      package = nix-wayland.swayidle;
-      systemdTarget = "hyprland-session.target";
-      timeouts =
-        let
-          dpmsCommand = "hyprctl dispatch dpms";
-        in
-        [
+      settings = {
+        general = {
+          before_sleep_cmd = "hyprlock-random";
+          lock_cmd = "hyprlock-random";
+        };
+        listener = [
           {
             timeout = 300;
-            command = "${nix-wayland.swaylock-effects}/bin/swaylock ${cfg.swaylock-effects}";
+            on-timeout = "hyprlock-random";
           }
-          # {
-          #   timeout = 10;
-          #   command = "${dpmsCommand} off";
-          #   resumeCommand = "${dpmsCommand} on";
-          # }
         ];
-      events = [
-        {
-          event = "before-sleep";
-          command = "${nix-wayland.swaylock-effects}/bin/swaylock ${cfg.swaylock-effects}";
-        }
-      ];
+      };
     };
 
     # # Seems to make screen sharing impossible
