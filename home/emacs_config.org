@@ -598,7 +598,7 @@ Basic configuration stuff
     :demand t
     :init
     (setq org-directory "~/notes/"
-  	  org-agenda-files '("~/notes/tasks.org" "~/notes/PhD_whatever.org")
+  	  org-agenda-files '("~/notes/tasks.org" "~/notes/trading_journal.org" "~/notes/trade_ideas.org")
   	  org-use-property-inheritance t
   	  org-log-done 'time
   	  org-log-into-drawer t
@@ -607,7 +607,8 @@ Basic configuration stuff
   	  org-screenshot-image-directory "./screenshots/"
   	  org-capture-todo-file "~/notes/tasks.org"
   	  org-capture-phd-file "~/notes/PhD_whatever.org"
-  	org-trading-journal-file "~/notes/trading_journal.org")
+  	  org-trading-journal-file "~/notes/trading_journal.org"
+  	  org-trade-ideas-file "~/notes/trade_ideas.org")
 
     :bind
     ((:prefix-map org-map
@@ -812,13 +813,14 @@ TODO keywords do not have correct font in super-agenda
   		   :children (("Trade table" :keys "t"
   			       :type plain
   			       :template ("*** Trades"
-  					  "| Ticker | Trend | News | Lv.2 | Entry | Exit | P&L | High | More info |"
-  					  "| | | <7> | <10> | | | | | <15> |"
-  					  "| %^{Ticker} | %? | | | | | | | |"))
+  					  "| Ticker | Trend | News | Lv.2 | Entry | Exit | P&L | High | EoD | More info |"
+  					  "| | | <7> | <10> | | | | | | <15> |"
+  					  "| %^{Ticker} | %? | | | | | | | | |"))
   			      ("Ideas" :keys "i"
-  			       :headline "Ideas"
-  			       :type entry
-  			       :template ("* IDEA %?"))))))))
+  			       :file org-trade-ideas-file
+  			       :type plain
+  			       :template ("* IDEA %?"
+  					  "SCHEDULED: %^{Date:}t"))))))))
 #+end_src
 
 ** Roam
@@ -1091,9 +1093,9 @@ TODO keywords do not have correct font in super-agenda
 Super Agenda doesn't work well with org modern faces
 Some preparations for the hard stuff
 #+begin_src elisp
-  (defun org-super-agenda-phd-view ()
+  (defun org-super-agenda-trading-view ()
     (interactive)
-    (org-agenda nil "cp")) ; where ! is a a custom-agenda-command key
+    (org-agenda nil "ct")) ; where ! is a a custom-agenda-command key
 
   (defun org-super-agenda-normal-view ()
     (interactive)
@@ -1115,7 +1117,7 @@ Now onto the hard stuff
 	  (:prefix-map org-super-agenda-map
 		       :prefix-docstring "Map for Org Super Agenda"
 		       :prefix "a"
-		       ("p" . org-super-agenda-phd-view)
+		       ("t" . org-super-agenda-trading-view)
 		       ("n" . org-super-agenda-normal-view)
 		       ("f" . org-super-agenda-full-view)
 		       )
@@ -1133,13 +1135,13 @@ Now onto the hard stuff
 	  org-agenda-start-on-weekday nil)
     (setq org-agenda-custom-commands
 	  '(("c" . "Super view")
-	    ("cp" "PhD view"
+	    ("ct" "Trading view"
 	     (
 	      (agenda "Dated stuff" ((org-agenda-span 30)
 				     (org-super-agenda-groups
 				      '(
 					(:name "Today"
-					       :and (:date today :tag "PhD")
+					       :and (:date today :tag "Trading")
 					       :order 1)
 					;; (:name "Due next three days"
 					;;  :deadline (before ,(org-read-date nil nil "+3d"))
@@ -1148,10 +1150,10 @@ Now onto the hard stuff
 					;;  :deadline (before ,(org-read-date nil nil "+1w"))
 					;;  :order 3)
 					(:name "Something to do"
-					       :and (:deadline future :tag "PhD")
+					       :and (:deadline future :tag "Trading")
 					       :order 4)
 					(:name "Nothing to do"
-					       :and (:scheduled future :tag "PhD")
+					       :and (:scheduled future :tag "Trading")
 					       :order 5)
 					(:discard (:anything t))
 					))))
@@ -1159,31 +1161,31 @@ Now onto the hard stuff
 					(org-super-agenda-groups
 					 '(
 					   (:name "Important"
-						  :and (:priority>= "B" :tag "PhD")
+						  :and (:priority>= "B" :tag "Trading")
 						  :order 1)
 					   (:name "Ongoing tasks"
-						  :and (:todo "ONGOING" :tag "PhD")
+						  :and (:todo "ONGOING" :tag "Trading")
 						  :order 2)
 					   (:name "Next tasks"
-						  :and (:todo "NEXT" :tag "PhD")
+						  :and (:todo "NEXT" :tag "Trading")
 						  :order 3)
 					   (:name "Stuff to fix"
-						  :and (:todo "FIXME" :tag "PhD")
+						  :and (:todo "FIXME" :tag "Trading")
 						  :order 4)
 					   (:name "Past"
-						  :and (:tag "PhD" :deadline past :not(:todo "DONE"))
-						  :and (:tag "PhD" :scheduled past :not(:todo "DONE"))
+						  :and (:tag "Trading" :deadline past :not(:todo "DONE"))
+						  :and (:tag "Trading" :scheduled past :not(:todo "DONE"))
 						  :order 7)
-					   (:name "PhD todos"
-						  :and (:tag "PhD" :todo "TODO" :not (:deadline future) :not (:scheduled future))
+					   (:name "Trading todos"
+						  :and (:tag "Trading" :todo "TODO" :not (:deadline future) :not (:scheduled future))
 						  :order 5)
 					   (:name "Overdue"
-						  :and (:deadline past :tag "PhD" :todo t)
+						  :and (:deadline past :tag "Trading" :todo t)
 						  :order 7)
-					   (:name "PhD other"
-						  :tag "PhD"
+					   (:name "Trading other"
+						  :tag "Trading"
 						  :order 6)
-					   (:discard (:not (:todo t) :not (:tag "PhD")))
+					   (:discard (:not (:todo t) :not (:tag "Trading")))
 					   ))))))
 	    ("cn" "normal view"
 	     (
@@ -1191,24 +1193,24 @@ Now onto the hard stuff
 			   (org-super-agenda-groups
 			    '(
 			      (:name "Important"
-				     :and (:priority>= "B" :not (:tag "PhD"))
+				     :and (:priority>= "B" :not (:tag "Trading"))
 				     :order 1)
 			      (:name "Overdue tasks"
-				     :and (:deadline past :not (:tag "PhD"))
-				     :and (:scheduled past :not (:tag "PhD"))
+				     :and (:deadline past :not (:tag "Trading"))
+				     :and (:scheduled past :not (:tag "Trading"))
 				     :order 3)
 			      (:name "Today tasks"
-				     :and (:deadline today :not (:tag "PhD"))
-				     :and (:scheduled today :not (:tag "PhD"))
+				     :and (:deadline today :not (:tag "Trading"))
+				     :and (:scheduled today :not (:tag "Trading"))
 				     :order 2)
 			      (:name "Timed tasks"
-				     :and (:deadline future :not (:tag "PhD"))
-				     :and (:scheduled future :not (:tag "PhD"))
+				     :and (:deadline future :not (:tag "Trading"))
+				     :and (:scheduled future :not (:tag "Trading"))
 				     :order 5)
 			      (:name "Todos"
-				     :and (:todo "TODO" :not (:tag "PhD"))
+				     :and (:todo "TODO" :not (:tag "Trading"))
 				     :order 9)
-			      (:discard (:not (:todo t) :tag "PhD"))
+			      (:discard (:not (:todo t) :tag "Trading"))
 			      ))))
 	      ))
 	    ("cf" "Full agenda view"
