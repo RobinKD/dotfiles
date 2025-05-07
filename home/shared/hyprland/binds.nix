@@ -27,7 +27,7 @@ in
     bind = [
       # System
       "$mod ALT, X, exec, loginctl kill-session $XDG_SESSION_ID"
-      "$mod ALT, L, exec, swaylock ${swaylock-effects}"
+      "$mod ALT, L, exec, hyprlock-random"
       "$mod ALT, Z, exec, systemctl suspend"
       "$mod ALT, P, exec, shutdown now"
 

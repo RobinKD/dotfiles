@@ -16,11 +16,6 @@ with lib;
 {
   options.hm-modules.hyprland = {
     enable = mkEnableOption "hyprland";
-    swaylock-effects = mkOption {
-      type = types.str;
-      description = "My effects for swaylock-effects";
-      default = "-i `${pkgs.findutils}/bin/find ${wallpapers} -type f | ${pkgs.coreutils}/bin/shuf -n 1` --clock --indicator --indicator-radius 80 --indicator-thickness 3 --effect-blur 4x4 --effect-vignette 0.5:0.5 --ring-color 74bdf2 --key-hl-color bd2afc --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --fade-in 0.1 --inside-ver-color 00000088 --text-ver-color 74bdf2 --line-ver-color 74bdf2 --text-wrong-color ff0000 --inside-wrong-color 00000000 --line-wrong-color ff0000 --inside-clear-color 00000000 --line-clear-color 43f99e --text-clear-color 43f99e";
-    };
   };
 
   imports = [
@@ -28,6 +23,7 @@ with lib;
     ./rules.nix
     ./binds.nix
     ./nightshift.nix
+    ./hyprlock.nix
   ];
 
   config = mkIf cfg.enable {
@@ -54,7 +50,6 @@ with lib;
         webcord
         slurp
         libsForQt5.qtwayland
-        inputs.hyprlock.packages.${pkgs.system}.hyprlock
         hyprcontrib.grimblast
         # hyprcontrib.try_swap_workspace # pgrep -x not working
         hyprcontrib.scratchpad
@@ -63,7 +58,6 @@ with lib;
         grim
         wl-clipboard
         swayidle
-        swaylock-effects
         swww
         wf-recorder
       ]);

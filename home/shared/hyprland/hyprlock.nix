@@ -1,26 +1,21 @@
 {
   inputs,
   config,
-  lib,
   pkgs,
   wallpapers,
   ...
 }:
 let
-  hmm = config.hm-modules;
-  cfg = config.hm-modules.hyprland;
   hyprlock-random = pkgs.writeShellScriptBin "hyprlock-random" ''
-    ${pkgs.coreutils}/bin/cp `${pkgs.findutils}/bin/find ${wallpapers} -type f | ${pkgs.coreutils}/bin/shuf -n 1` /tmp/background.jpg
+    ${pkgs.coreutils}/bin/cp -f `${pkgs.findutils}/bin/find ${wallpapers} -type f | ${pkgs.coreutils}/bin/shuf -n 1` ${config.xdg.configHome}/hypr/background.jpg
     wait &&
     hyprlock
   '';
   hyprlock-package = inputs.hyprlock.packages.${pkgs.system}.hyprlock;
 in
 {
-  security.pam.services.hyprlock = { };
-
   home.packages = [
-    hyrplock-random
+    hyprlock-random
   ];
 
   programs.hyprlock = {
@@ -28,7 +23,6 @@ in
     package = hyprlock-package;
     settings = {
       general = {
-        disable_loading_bar = false;
         hide_cursor = false;
         grace = 0;
         ignore_empty_input = false;
@@ -41,7 +35,7 @@ in
       };
       background = [
         {
-          path = "/tmp/background.jpg";
+          path = "${config.xdg.configHome}/hypr/background.jpg";
           blur_passes = 1;
         }
       ];
