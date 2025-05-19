@@ -21,7 +21,7 @@ in
     settings = {
       exec-once = [
         "sleep 1; waybar"
-        "set-background"
+        "sleep 10; set-background"
         "configure-gtk"
         "hyprctl setcursor Catppuccin-Mocha-Sapphire-Cursors 32"
       ];
