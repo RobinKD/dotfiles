@@ -31,17 +31,25 @@
     };
 
     # Hyprland
-    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=29e2e59fdbab8ed2cc23a20e3c6043d5decb5cdc"; # v0.48.1
-    hyprwm-contrib.url = "github:hyprwm/contrib";
+    hyprland = {
+      url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=9958d297641b5c84dcff93f9039d80a5ad37ab00"; # v0.49.0
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hyprwm-contrib = {
+      url = "github:hyprwm/contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprlock = {
       url = "github:hyprwm/hyprlock";
       inputs.hyprlang.follows = "hyprland/hyprlang";
+      inputs.hyprgraphics.follows = "hyprland/hyprgraphics";
+      inputs.hyprutils.follows = "hyprland/hyprutils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins?rev=3e51162d83b0cd9ee35acbd3b91e6d7ba856f5eb";
-      inputs.hyprland.follows = "hyprland";
-    };
+    # hyprland-plugins = {
+    #   url = "github:hyprwm/hyprland-plugins";
+    #   inputs.hyprland.follows = "hyprland";
+    # };
 
     # Firefox addons
     firefox-addons = {
