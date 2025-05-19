@@ -1,9 +1,16 @@
-{ pkgs, inputs, config, lib, ... }:
+{
+  pkgs,
+  inputs,
+  config,
+  lib,
+  ...
+}:
 let
   hw = inputs.hardware.nixosModules;
   hm = config.home-manager.users.keanu;
   hmm = hm.hm-modules;
-in {
+in
+{
   imports = [
     hw.common-cpu-amd
     hw.common-gpu-nvidia
@@ -15,6 +22,7 @@ in {
     ../shared/custom-services/auto-build.nix
     ../shared/custom-services/backup-passwords.nix
     ../shared/specialisations/no-nvidia.nix
+    ../shared/dockers/tradenote.nix
   ];
 
   modules = {
@@ -59,12 +67,14 @@ in {
 
   # Hyprland stuff
   # allow wayland lockers to unlock the screen
-  security.pam.services.swaylock.text =
-    lib.mkIf hmm.hyprland.enable "auth include login";
+  security.pam.services.swaylock.text = lib.mkIf hmm.hyprland.enable "auth include login";
   # Add Hyprland to xsessions
-  services.displayManager.sessionPackages = lib.mkIf hmm.hyprland.enable
-    [ inputs.hyprland.packages.${pkgs.hostPlatform.system}.default ];
+  services.displayManager.sessionPackages = lib.mkIf hmm.hyprland.enable [
+    inputs.hyprland.packages.${pkgs.hostPlatform.system}.default
+  ];
 
   # Flipper zero udev rules
-  hardware.flipperzero = { enable = true; };
+  hardware.flipperzero = {
+    enable = true;
+  };
 }
