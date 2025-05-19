@@ -32,6 +32,7 @@ with lib;
                 numpy
                 scipy
                 pandas
+                requests
                 matplotlib
                 python-lsp-server
                 python-lsp-ruff
