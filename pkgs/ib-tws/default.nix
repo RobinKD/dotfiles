@@ -4,11 +4,13 @@
 with pkgs;
 # Credit to https://github.com/clefru/nur-packages/blob/master/pkgs/ib-tws/default.nix
 let
-  version = "10.36.1c";
+  version = "10.37.1g";
 
   libPath = lib.makeLibraryPath ([
+    atk
     alsa-lib
     at-spi2-atk
+    at-spi2-core
     cairo
     cups
     dbus
@@ -18,10 +20,10 @@ let
     freetype
     gdk-pixbuf
     glib
-    gtk2
     gtk3
     (javaPackages.openjfx17.override { withWebKit = true; })
     libdrm
+    libgbm
     libGL
     libxkbcommon
     libz
@@ -29,6 +31,8 @@ let
     nss_latest
     nspr
     mesa
+    systemd
+    wayland
     xorg.libXfixes
     xorg.libXcomposite
     xorg.libXdamage
@@ -48,7 +52,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh";
-    sha256 = "i3okIlc2HCRtrYBugxSxcDUqBhhdL7rLd3d95tyAyh0=";
+    sha256 = "jJ5MjOZRTv+wOJf0Esjb4v88X4PNFYORtCLS553de5A=";
     executable = true;
   };
 
