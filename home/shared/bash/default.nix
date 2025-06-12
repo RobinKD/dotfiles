@@ -3,6 +3,7 @@ let
   cfg = config.hm-modules.bash;
   homeDir = config.home.homeDirectory;
   dotDir = "${homeDir}/.dotfiles";
+  nixos-buildopts = "--option cores 3 --option max-jobs 6";
 in
 with lib;
 {
@@ -53,14 +54,14 @@ with lib;
         emacs-debug = "emacs --debug-init";
 
         # Alias nixos;
-        nrb = "nfu; sudo nixos-rebuild boot --flake ${dotDir}";
-        nrbwc = "nfu; sudo nixos-rebuild boot -p WorkingConfig --flake ${dotDir}";
-        nrt = "nfu; sudo nixos-rebuild test --flake ${dotDir}";
-        nrs = "nfu; sudo nixos-rebuild switch --flake ${dotDir}";
-        nrtnu = "sudo nixos-rebuild test --flake ${dotDir}";
-        nrsnu = "sudo nixos-rebuild switch --flake ${dotDir}";
-        nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${dotDir}";
-        nfu = "sudo nix flake update --flake ${dotDir}";
+        nrb = "nfu; sudo nixos-rebuild boot --flake ${dotDir} ${nixos-buildopts}";
+        nrbwc = "nfu; sudo nixos-rebuild boot -p WorkingConfig --flake ${dotDir} ${nixos-buildopts}";
+        nrt = "nfu; sudo nixos-rebuild test --flake ${dotDir} ${nixos-buildopts}";
+        nrs = "nfu; sudo nixos-rebuild switch --flake ${dotDir} ${nixos-buildopts}";
+        nrtnu = "sudo nixos-rebuild test --flake ${dotDir} ${nixos-buildopts}";
+        nrsnu = "sudo nixos-rebuild switch --flake ${dotDir} ${nixos-buildopts}";
+        nrdb = "nfu; sudo nixos-rebuild dry-build --flake ${dotDir} ${nixos-buildopts}";
+        nfu = "sudo nix flake update --flake ${dotDir} ${nixos-buildopts}";
         ncg = "nix-collect-garbage";
         fh-init = ''nix run "https://flakehub.com/f/DeterminateSystems/fh/*.tar.gz" -- init'';
 
