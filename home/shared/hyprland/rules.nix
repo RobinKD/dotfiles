@@ -19,6 +19,7 @@
       "workspace name:Mail silent,title:^(.*mu4e.*)"
       "workspace name:Scanners silent,title:^(.*Screener.*)"
       "workspace name:Charts silent,title:^(.*Chart.*|.*chart.*)"
+      "workspace name:Action silent,class:^(install4j-jclient-LoginFrame)$"
     ];
 
     # Workspace binding

@@ -22,6 +22,7 @@ in
       exec-once = [
         "sleep 1; waybar"
         "sleep 10; set-background"
+        "sleep 5; restart-emacs" # Dunno why, some stuff are not loaded at first start
         "configure-gtk"
         "hyprctl setcursor Catppuccin-Mocha-Sapphire-Cursors 32"
       ];

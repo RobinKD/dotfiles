@@ -1,6 +1,12 @@
-{ config, lib, pkgs, ... }:
-/* Styles and types for rofi are a shameless steal from https://github.com/adi1090x/rofi
-   Thanks!!
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+/*
+  Styles and types for rofi are a shameless steal from https://github.com/adi1090x/rofi
+  Thanks!!
 */
 let
   cfg = config.hm-modules.rofi;
@@ -8,21 +14,22 @@ let
   rofi-color-theme = ./style/colors + "/${cfg.color-theme}.rasi";
   launcher-style = cfg.launcher-style;
   launcher-type = cfg.launcher-type;
-  launcher-rasi = type: style:
-    builtins.toFile "launcher.rasi"
-    (builtins.replaceStrings [ "shared/colors.rasi" "black / 10" ] [
-      "${rofi-color-theme}"
-      "black / 75"
-    ] (builtins.readFile (./style/launchers + "/${type}/${style}.rasi")));
-  launcher-rofi = pkgs.writeTextFile {
-    name = "rofi-launcher";
-    destination = "/bin/rofi-launcher";
-    executable = true;
-    text = "rofi -show drun -theme ${
-        launcher-rasi launcher-type launcher-style
-      } -show-icons -icon-theme ${gtk-icon-theme}";
-  };
-in with lib; {
+  launcher-rasi =
+    type: style:
+    builtins.toFile "launcher.rasi" (
+      builtins.replaceStrings
+        [ "shared/colors.rasi" "black / 10" ]
+        [
+          "${rofi-color-theme}"
+          "black / 75"
+        ]
+        (builtins.readFile (./style/launchers + "/${type}/${style}.rasi"))
+    );
+  launcher-rofi = pkgs.writeShellScriptBin "rofi-launcher" ''rofi -show drun -theme ${launcher-rasi launcher-type launcher-style} -show-icons -icon-theme ${gtk-icon-theme}'';
+  window-rofi = pkgs.writeShellScriptBin "rofi-windows" ''rofi -modes window -show window -theme ${launcher-rasi launcher-type "style-5"} -show-icons -icon-theme ${gtk-icon-theme}'';
+in
+with lib;
+{
   options.hm-modules.rofi = {
     enable = mkEnableOption "rofi";
     color-theme = mkOption {
@@ -44,7 +51,10 @@ in with lib; {
 
   config = mkIf cfg.enable {
     # TODO Config to work with both leftwm and hyprland
-    home.packages = with pkgs; [ launcher-rofi ];
+    home.packages = with pkgs; [
+      launcher-rofi
+      window-rofi
+    ];
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
@@ -54,9 +64,7 @@ in with lib; {
     # Rofi network manager dmenu config and style
     home.file.".config/networkmanager-dmenu/config.ini".text = ''
       [dmenu]
-      dmenu_command = rofi -dmenu -width 30 -i -password -theme ${
-        launcher-rasi "type-4" "style-2"
-      }
+      dmenu_command = rofi -dmenu -width 30 -i -password -theme ${launcher-rasi "type-4" "style-2"}
       rofi_highlight = true
       pinentry = pinentry-gtk-2
       wifi_icons = 󰤯󰤟󰤢󰤥󰤨

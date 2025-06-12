@@ -10,6 +10,7 @@ let
   #     "$mod, ${ws}, workspace, ${toString (x + 1)}"
   #     "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
   #   ]) 10);
+  start-trading-day = "tradingview & tws & librewolf & firefox & restart-emacs; sleep 5; emacsclient -c -a emacs";
 in
 {
 
@@ -34,6 +35,7 @@ in
       "$mod, V, togglefloating,"
       "$mod SHIFT, R, exec, pkill waybar; hyprctl reload; waybar &"
       "$mod, R, exec, rofi-launcher"
+      "$mod, TAB, exec, rofi-windows"
       "$mod, F, fullscreen, 0 # Fullscreen"
       "$mod, M, fullscreen, 1 # Maximize"
       "$mod SHIFT, F, togglefloating,"
@@ -49,6 +51,7 @@ in
       "$mod, Q, killactive,"
       "$mod, E, exec, emacsclient -c -a emacs"
       "$mod, W, exec, networkmanager_dmenu"
+      "$mod, K, exec, ${start-trading-day}"
 
       # screenshot
       # stop animations while screenshotting; makes black border go away
