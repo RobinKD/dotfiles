@@ -48,6 +48,9 @@
     signal-desktop
     telegram-desktop
 
+    # Gaming
+    lutris
+
     # LLMs
     (ollama.override { acceleration = "cuda"; })
 
