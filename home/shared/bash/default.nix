@@ -72,9 +72,6 @@ with lib;
         # Win 10 VM with QEMU
         win10 = "quickemu --vm vms/windows-10.conf";
         view_vm = "remote-viewer spice://127.0.0.1:5900 & disown";
-
-        # Trading sound service
-        trading_wakeup = "systemctl start --user trading_wakeup.timer";
       };
       bashrcExtra = ''
         flakify() {
