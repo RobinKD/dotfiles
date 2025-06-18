@@ -1,5 +1,10 @@
 # Auto-generated using compose2nix v0.3.2-pre.
-{ pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   tradenote = pkgs.writeShellScriptBin "tradenote" ''
     is_active=$(systemctl is-active docker-compose-tradenote-root.target)
@@ -142,7 +147,7 @@ in
       TimeoutSec = 300;
     };
     script = ''
-      cd /home/keanu/Trading/TradeNote
+      cd ${config.home-manager.users.keanu.home.homeDirectory}/Trading/TradeNote
       docker build -t tradenote:latest -f ./docker/Dockerfile .
     '';
   };
