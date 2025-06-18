@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   screenshotarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave area; hyprctl keyword animation 'fadeOut,1,4,default'";
 
@@ -10,9 +10,15 @@ let
   #     "$mod, ${ws}, workspace, ${toString (x + 1)}"
   #     "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
   #   ]) 10);
-  start-trading-day = "tradingview & tws & librewolf & firefox & restart-emacs; sleep 5; emacsclient -c -a emacs";
+  start-trading-day = pkgs.writeShellScriptBin "start-trading" ''
+    tradingview & sleep 5; hyprctl dispatch moveworkspacetomonitor Charts desc:Dell Inc. DELL S2425H FZM8M04 &
+    tws & sleep 5; hyprctl dispatch moveworkspacetomonitor Action desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000 &
+    librewolf & firefox & sleep 5; hyprctl dispatch moveworkspacetomonitor Web desc:ASUSTek COMPUTER INC ASUS VA24EQSB S9LMTF185712 &
+    sleep 5; restart-emacs; sleep 1; emacsclient -c -a emacs --eval '(org-roam-node-find)' & sleep 2; hyprctl dispatch focuswindow class:emacs; hyprctl dispatch movetoworkspace 1; hyprctl dispatch movewindow mon:desc:ASUSTek COMPUTER INC ASUS VA24EQSB S9LMTF185712;
+  '';
 in
 {
+  home.packages = [ start-trading-day ];
 
   wayland.windowManager.hyprland.settings = {
 
@@ -51,7 +57,7 @@ in
       "$mod, Q, killactive,"
       "$mod, E, exec, emacsclient -c -a emacs"
       "$mod, W, exec, networkmanager_dmenu"
-      "$mod, K, exec, ${start-trading-day}"
+      "$mod, K, exec, start-trading"
 
       # screenshot
       # stop animations while screenshotting; makes black border go away
