@@ -1,5 +1,5 @@
 { lib, ... }:
-# TODO Not working yet -> Goes to black screen
+# FIXME Not working, hardware.graphics.package requires a package
 with lib;
 {
   specialisation = {
@@ -7,6 +7,7 @@ with lib;
       hardware = {
         graphics = {
           enable = mkForce false;
+          package = null;
         };
         nvidiaOptimus.disable = true;
         nvidia = {
