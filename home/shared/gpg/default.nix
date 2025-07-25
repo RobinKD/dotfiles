@@ -16,6 +16,9 @@ with lib;
   config = mkIf cfg.enable {
     programs.gpg = {
       enable = true;
+      # settings = {
+      #   pinentry-mode = "loopback";
+      # };
     };
 
     home.packages = with pkgs; [ pinentry-all ];
@@ -25,6 +28,10 @@ with lib;
       defaultCacheTtl = 25200; # 7h
       maxCacheTtl = 86400; # 24h
       pinentry.package = pkgs.pinentry-gtk2;
+      extraConfig = ''
+        allow-emacs-pinentry
+        #   allow-loopback-pinentry
+      '';
     };
   };
 }
