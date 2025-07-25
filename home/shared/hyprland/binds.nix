@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   screenshotarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave area; hyprctl keyword animation 'fadeOut,1,4,default'";
+  copyarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copy area; hyprctl keyword animation 'fadeOut,1,4,default'";
 
   # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
   # Would work with a QWERTY keyboard
@@ -62,6 +63,7 @@ in
       # screenshot
       # stop animations while screenshotting; makes black border go away
       ", Print, exec, ${screenshotarea}"
+      "SHIFT, Print, exec, ${copyarea}"
       # Obs recording
       "$mod SHIFT, KP_multiply, exec, obs-cmd recording toggle"
 
