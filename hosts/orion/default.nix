@@ -22,8 +22,8 @@ in
     ../shared/custom-services/auto-build.nix
     ../shared/custom-services/backup-passwords.nix
     ../shared/custom-services/sound_timer
-    ../shared/specialisations/no-nvidia.nix
     ../shared/dockers/tradenote.nix
+    ../shared/gaming.nix
   ];
 
   modules = {
