@@ -15,7 +15,6 @@
     alacritty
     pavucontrol
     brightnessctl
-    networkmanagerapplet
     mpv
     vlc
 
