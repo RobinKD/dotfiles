@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  screenshotarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave area; hyprctl keyword animation 'fadeOut,1,4,default'";
+  screenshot = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave active; hyprctl keyword animation 'fadeOut,1,4,default'";
   copyarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copy area; hyprctl keyword animation 'fadeOut,1,4,default'";
 
   # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
@@ -62,10 +62,8 @@ in
 
       # screenshot
       # stop animations while screenshotting; makes black border go away
-      ", Print, exec, ${screenshotarea}"
-      "SHIFT, Print, exec, ${copyarea}"
-      # Obs recording
-      "$mod SHIFT, KP_multiply, exec, obs-cmd recording toggle"
+      "$mod SHIFT, S, exec, ${screenshot}"
+      "$mod SHIFT CTRL, S, exec, ${copyarea}"
 
       # Move focus with mm + arrow keys
       "$mod, left, workspace, e-1"
@@ -98,27 +96,27 @@ in
       "$mod SHIFT, H, movecurrentworkspacetomonitor, -1"
 
       # Switch workspaces with mm + [0-9]
-      "$mod, ampersand, workspace, name:Action"
-      "$mod, eacute, workspace, name:Charts"
-      "$mod, quotedbl, workspace, name:Web"
-      "$mod, apostrophe, workspace, name:Social"
-      "$mod, parenleft, workspace, 1"
-      "$mod, minus, workspace, 2"
-      "$mod, egrave, workspace, 3"
-      "$mod, underscore, workspace, 4"
-      "$mod, ccedilla, workspace, 5"
-      "$mod, agrave, workspace, previous"
+      "$mod, 1, workspace, name:Action"
+      "$mod, 2, workspace, name:Charts"
+      "$mod, 3, workspace, name:Web"
+      "$mod, 4, workspace, name:Social"
+      "$mod, 5, workspace, 1"
+      "$mod, 6, workspace, 2"
+      "$mod, 7, workspace, 3"
+      "$mod, 8, workspace, 4"
+      "$mod, 9, workspace, 5"
+      "$mod, 0, workspace, previous"
 
       # Move active window to a workspace with mm + SHIFT + [1-9]
-      "$mod SHIFT, ampersand, movetoworkspace, name:Action"
-      "$mod SHIFT, eacute, movetoworkspace, name:Charts"
-      "$mod SHIFT, quotedbl, movetoworkspace, name:Web"
-      "$mod SHIFT, apostrophe, movetoworkspace, name:Social"
-      "$mod SHIFT, parenleft, movetoworkspace, 1"
-      "$mod SHIFT, minus, movetoworkspace, 2"
-      "$mod SHIFT, egrave, movetoworkspace, 3"
-      "$mod SHIFT, underscore, movetoworkspace, 4"
-      "$mod SHIFT, ccedilla, movetoworkspace, 5"
+      "$mod SHIFT, 1, movetoworkspace, name:Action"
+      "$mod SHIFT, 2, movetoworkspace, name:Charts"
+      "$mod SHIFT, 3, movetoworkspace, name:Web"
+      "$mod SHIFT, 4, movetoworkspace, name:Social"
+      "$mod SHIFT, 5, movetoworkspace, 1"
+      "$mod SHIFT, 6, movetoworkspace, 2"
+      "$mod SHIFT, 7, movetoworkspace, 3"
+      "$mod SHIFT, 8, movetoworkspace, 4"
+      "$mod SHIFT, 9, movetoworkspace, 5"
       "$mod SHIFT, N, movetoworkspace, empty"
     ];
 

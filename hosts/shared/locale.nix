@@ -16,5 +16,5 @@ with lib;
   time.timeZone = "Europe/Paris";
 
   console.useXkbConfig = true; # use xkbOptions in tty.
-  services.xserver.xkb.layout = "fr";
+  services.xserver.xkb.layout = "us";
 }

@@ -60,10 +60,10 @@ in
       };
 
       input = {
-        kb_layout = "fr";
+        kb_layout = "us";
+        kb_options = "compose:ralt";
         # kb_variant =
         # kb_model =
-        # kb_options =
         # kb_rules =
 
         numlock_by_default = true;
