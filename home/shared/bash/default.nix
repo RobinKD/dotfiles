@@ -60,6 +60,7 @@ with lib;
         nrs = "sudo nixos-rebuild switch --flake ${dotDir} ${nixos-buildopts}";
         nrtu = "nfu; sudo nixos-rebuild test --flake ${dotDir} ${nixos-buildopts}";
         nrsu = "nfu; sudo nixos-rebuild switch --flake ${dotDir} ${nixos-buildopts}";
+        nrbu = "nfu; sudo nixos-rebuild boot --flake ${dotDir} ${nixos-buildopts}";
         nrdb = "sudo nixos-rebuild dry-build --flake ${dotDir} ${nixos-buildopts}";
         nfu = "sudo nix flake update --flake ${dotDir} ${nixos-buildopts}";
         ncg = "nix-collect-garbage";
