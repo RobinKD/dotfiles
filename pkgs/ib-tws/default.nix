@@ -4,7 +4,7 @@
 with pkgs;
 # Credit to https://github.com/clefru/nur-packages/blob/master/pkgs/ib-tws/default.nix
 let
-  version = "10.40.1a";
+  version = "10.40.1b";
 
   libPath = lib.makeLibraryPath ([
     atk
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh";
-    sha256 = "sha256-COxi7AuopWOQSBenD7/UkEeNjbFSKz+9H1qaS6gs0Jo=";
+    sha256 = "sha256-0ni1bcnxkhsidcajld6mqjml10s7ds5jyif2fy8y7z68m53yizwz";
     executable = true;
   };
 
