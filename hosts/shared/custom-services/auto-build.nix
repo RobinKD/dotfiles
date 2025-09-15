@@ -27,7 +27,8 @@ in
     ];
     script = ''
       nix flake update --flake ${homeDir}/.dotfiles/
-      nix build "${homeDir}/.dotfiles#nixosConfigurations.${hostname}.config.system.build.toplevel" -o ${homeDir}/.dotfiles/build_updates
+      sh ${homeDir}/.dotfiles/pkgs/ib-tws/update.sh
+      nix build --option cores 1 "${homeDir}/.dotfiles#nixosConfigurations.${hostname}.config.system.build.toplevel" -o ${homeDir}/.dotfiles/build_updates
     '';
     serviceConfig = {
       Type = "simple";
