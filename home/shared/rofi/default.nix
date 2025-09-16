@@ -57,7 +57,7 @@ with lib;
     ];
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
       font = "Iosevka Nerd Font 10";
     };
 
