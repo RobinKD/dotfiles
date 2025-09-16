@@ -7,30 +7,30 @@
 let
   sound_file = ./birds-chirping.mp3;
   username = config.home-manager.users.keanu.home.username;
-  trading_wakeup = pkgs.writeShellScriptBin "trading_wakeup" ''
-    is_active=$(systemctl is-active --user trading_wakeup.timer)
+  trading_wakeup = pkgs.writeShellScriptBin "tradingWakeup" ''
+    is_active=$(systemctl is-active --user tradingWakeup.timer)
     if [ $is_active == "active" ]; then
       echo "Systemd service active, stopping..."
-      systemctl stop --user trading_wakeup.timer
+      systemctl stop --user tradingWakeup.timer
     else
       echo "Systemd service inactive, starting..."
-      systemctl start --user trading_wakeup.timer
+      systemctl start --user tradingWakeup.timer
     fi
   '';
 in
 {
 
   environment.systemPackages = [ trading_wakeup ];
-  systemd.user.timers."trading_wakeup" = {
+  systemd.user.timers."tradingWakeup" = {
     wantedBy = lib.mkForce [ ];
     timerConfig = {
-      OnCalendar = "*:*:10";
+      OnCalendar = "*:0,30";
       AccuracySec = "1s";
-      Unit = "trading_wakeup.service";
+      Unit = "tradingWakeup.service";
     };
   };
 
-  systemd.user.services."trading_wakeup" = {
+  systemd.user.services."tradingWakeup" = {
     path = [
       pkgs.pulseaudio
     ];
