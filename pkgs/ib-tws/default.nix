@@ -45,6 +45,8 @@ let
     xorg.libxcb
     xorg.libX11
   ]);
+
+  update = import ./update.nix { inherit pkgs; };
 in
 stdenv.mkDerivation {
   inherit version;
@@ -140,6 +142,9 @@ stdenv.mkDerivation {
 
     # Install desktop item
     install -m 644 -D -t $out/share/applications $desktopItem/share/applications/*
+
+    # Install updater
+    install -Dm 755 ${update.update-ib-tws} $out/bin/update-ib-tws
 
     runHook postInstall
   '';
