@@ -45,6 +45,8 @@
       inputs.hyprgraphics.follows = "hyprland/hyprgraphics";
       inputs.hyprutils.follows = "hyprland/hyprutils";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.hyprwayland-scanner.follows = "hyprland/hyprwayland-scanner";
+      inputs.systems.follows = "hyprland/systems";
     };
     # hyprland-plugins = {
     #   url = "github:hyprwm/hyprland-plugins";
