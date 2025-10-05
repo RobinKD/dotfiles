@@ -9,6 +9,7 @@ let
   username = hm.home.username;
   homeDir = hm.home.homeDirectory;
   hostname = config.networking.hostName;
+  update-ib-tws = import ../../../pkgs/ib-tws/update.nix { inherit pkgs; };
 in
 {
   systemd.timers."system-auto-build" = {
@@ -20,10 +21,13 @@ in
     };
   };
 
+  environment.systemPackages = [ update-ib-tws.update-ib-tws ];
+
   systemd.services."system-auto-build" = {
     path = [
       pkgs.nix
       pkgs.git
+      update-ib-tws.update-ib-tws
     ];
     script = ''
       nix flake update --flake ${homeDir}/.dotfiles/
