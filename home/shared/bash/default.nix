@@ -71,7 +71,7 @@ with lib;
         signal = "signal-desktop --use-tray-icon --no-sandbox %U";
 
         # Win 10 VM with QEMU
-        win10 = "quickemu --vm vms/windows-10.conf";
+        win11 = "quickemu --vm vms/windows-11.conf";
         view_vm = "remote-viewer spice://127.0.0.1:5900 & disown";
       };
       bashrcExtra = ''
