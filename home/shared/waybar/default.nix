@@ -1,11 +1,21 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hm-modules.waybar;
   nix-wayland-waybar = inputs.nixpkgs-wayland.packages.${pkgs.system}.waybar;
   check-updates = ../../../scripts/check_updates.sh;
 
-in with lib; {
-  options.hm-modules.waybar = { enable = mkEnableOption "waybar"; };
+in
+with lib;
+{
+  options.hm-modules.waybar = {
+    enable = mkEnableOption "waybar";
+  };
 
   config = mkIf cfg.enable {
     programs.waybar = {
@@ -34,7 +44,7 @@ in with lib; {
             exec = "${check-updates}";
             return-type = "json";
             interval = 300;
-            format = "{icon}  {}";
+            format = "{icon}  {text}";
             format-icons = "";
             tooltip = true;
           };
@@ -80,12 +90,24 @@ in with lib; {
             separate-outputs = true;
           };
 
-          clock = { format = "{:%H:%M} "; };
+          clock = {
+            format = "{:%H:%M} ";
+          };
 
           backlight = {
             device = "intel_backlight";
             format = "{percent}% {icon}";
-            format-icons = [ "" "" "" "" "" "" "" "" "" ];
+            format-icons = [
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+              ""
+            ];
             tooltip = false;
           };
 
@@ -95,7 +117,16 @@ in with lib; {
             tooltip = true;
             format-icons = {
               headphone = "";
-              default = [ "" "" "󰕾" "󰕾" "󰕾" "" "" "" ];
+              default = [
+                ""
+                ""
+                "󰕾"
+                "󰕾"
+                "󰕾"
+                ""
+                ""
+                ""
+              ];
             };
             scroll-step = 1;
           };
@@ -120,12 +151,20 @@ in with lib; {
 
           battery = {
             format = "{capacity}% {icon}";
-            format-icons = [ "" "" "" "" "" ];
+            format-icons = [
+              ""
+              ""
+              ""
+              ""
+              ""
+            ];
             format-charging = "{capacity}%";
             tooltip = false;
           };
 
-          tray = { spacing = 10; };
+          tray = {
+            spacing = 10;
+          };
         };
       };
       style = ''
