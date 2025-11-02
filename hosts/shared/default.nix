@@ -13,6 +13,7 @@
     ./packages.nix
     ./fonts.nix
     ./external-screen-brightness.nix
+    ./custom-desktop-items.nix
 
     ./desktop
     ./display-manager
