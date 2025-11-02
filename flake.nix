@@ -208,7 +208,7 @@
         # Built with nix build .#nixosConfigurations.live-iso.config.system.build.isoImage
         # As usual sudo dd if=./result/iso/nixos....iso of=/dev/<usb device> bs=1M status=progress
         live-iso = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          nixpkgs.hostPlatform = "x86_64-linux";
           modules = [
             (nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix")
             ./bootstrap.nix

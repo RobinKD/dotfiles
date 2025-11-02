@@ -71,7 +71,7 @@ in
   security.pam.services.swaylock.text = lib.mkIf hmm.hyprland.enable "auth include login";
   # Add Hyprland to xsessions
   services.displayManager.sessionPackages = lib.mkIf hmm.hyprland.enable [
-    inputs.hyprland.packages.${pkgs.hostPlatform.system}.default
+    inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # Flipper zero udev rules
