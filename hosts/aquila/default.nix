@@ -75,6 +75,6 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-  webex
+    webex
   ];
 }
