@@ -9,7 +9,47 @@ let
   cfg = config.hm-modules.waybar;
   nix-wayland-waybar = inputs.nixpkgs-wayland.packages.${pkgs.system}.waybar;
   check-updates = ../../../scripts/check_updates.sh;
+  audio-switch = pkgs.writeShellScriptBin "audio-switch" ''
+        mapfile -t sinks < <(wpctl status | awk '
+        /^\s*├─ Sinks:/ || /^\s*│\s*├─ Sinks:/ || /^\s*│\s*└─ Sinks:/ { in_sinks=1; next }
+        /^\s*├─ Sources:/ || /^\s*│\s*├─ Sources:/ { in_sinks=0 }
+        in_sinks && /^\s*│\s*((\*)?\s*)?([0-9]+)\.\s*(.+?)\s*(\[|$)/ {
+        	if ($2 == "*") {
+    	        id=substr($3, 0, length($3) - 1)
+            	name=$4
+        		for(i=5;i<=NF;i++) name=name" "$i
+            	gsub(/\[.*$/,"",name)           # remove [vol: ...] part
+            	name=substr(name,1,length(name)-1)  # remove trailing space
+            	print id "|yes|" name
+    		}
+    	else {
+    	        id=substr($2, 0, length($2) - 1)
+            	name=$3
+        		for(i=4;i<=NF;i++) name=name" "$i
+            	gsub(/\[.*$/,"",name)           # remove [vol: ...] part
+            	name=substr(name,1,length(name)-1)  # remove trailing space
+            	print id "|no|" name
+    		}
+        }
+    ')
 
+    menu=""
+    current=""
+
+    for line in "''${sinks[@]}"; do
+    	IFS='|' read -r id active name <<<"$line"
+    	[[ $active == "yes" ]] && current="$id" && prefix="➜ " || prefix="  "
+    	menu+="$prefix$id : $name\n"
+    done
+
+    # Show menu
+    chosen=$(echo -e "$menu" | rofi -dmenu -p "Audio Output ↦" -i -format s | awk '{print $1}')
+
+    # Switch if selected
+    if [[ -n $chosen ]]; then
+    	wpctl set-default "$chosen"
+    fi
+  '';
 in
 with lib;
 {
@@ -18,6 +58,7 @@ with lib;
   };
 
   config = mkIf cfg.enable {
+    home.packages = [ audio-switch ];
     programs.waybar = {
       enable = true;
       package = pkgs.waybar.override { wireplumberSupport = false; };
@@ -71,7 +112,6 @@ with lib;
             #   alacritty = "";
             #   emacs = "";
             #   dolphin = "";
-            #   webcord = "󰙯";
             #   element = "";
             # };
           };
@@ -84,7 +124,7 @@ with lib;
               "emacs (.*)" = " $1";
               "Alacritty (.*)" = " [$1]";
               ".*nemo (.*)" = " $1";
-              ".*WebCord - (.*)" = "󰙯 $1";
+              "(.*) - Discord" = "󰙯 $1";
               ".*Element.*" = " Element";
             };
             separate-outputs = true;
@@ -115,6 +155,7 @@ with lib;
             format = "{volume}% {icon}";
             format-muted = "";
             tooltip = true;
+            on-click = "audio-switch";
             format-icons = {
               headphone = "";
               default = [
