@@ -21,7 +21,7 @@ let
     gdk-pixbuf
     glib
     gtk3
-    (javaPackages.openjfx17.override { withWebKit = true; })
+    (openjfx25.override { withWebKit = true; })
     libdrm
     libgbm
     libGL
