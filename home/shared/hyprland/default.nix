@@ -48,7 +48,6 @@ with lib;
         conky
         nagiosPlugins.check_uptime
         libsForQt5.qt5ct
-        webcord
         slurp
         libsForQt5.qtwayland
         hyprcontrib.grimblast
