@@ -14,6 +14,7 @@
     ./fonts.nix
     ./external-screen-brightness.nix
     ./custom-desktop-items.nix
+    ./oomd.nix
 
     ./desktop
     ./display-manager
