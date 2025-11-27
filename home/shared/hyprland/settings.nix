@@ -16,7 +16,7 @@ in
   wayland.windowManager.hyprland = {
 
     # plugins = [
-    #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+    #   inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
     # ];
     settings = {
       exec-once = [

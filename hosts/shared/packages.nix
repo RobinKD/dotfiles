@@ -35,7 +35,7 @@
     eza
     fzf
     ripgrep-all
-    inputs.nix-alien.packages.${pkgs.system}.nix-alien
+    inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
 
     # Trading
     tradingview

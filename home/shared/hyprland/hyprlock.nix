@@ -11,7 +11,7 @@ let
     wait &&
     hyprlock
   '';
-  hyprlock-package = inputs.hyprlock.packages.${pkgs.system}.hyprlock;
+  hyprlock-package = inputs.hyprlock.packages.${pkgs.stdenv.hostPlatform.system}.hyprlock;
 in
 {
   home.packages = [

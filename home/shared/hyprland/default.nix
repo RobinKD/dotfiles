@@ -9,8 +9,8 @@
 let
   hmm = config.hm-modules;
   cfg = config.hm-modules.hyprland;
-  hyprcontrib = inputs.hyprwm-contrib.packages.${pkgs.system};
-  nix-wayland = inputs.nixpkgs-wayland.packages.${pkgs.system};
+  hyprcontrib = inputs.hyprwm-contrib.packages.${pkgs.stdenv.hostPlatform.system};
+  nix-wayland = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system};
 in
 with lib;
 {
@@ -70,7 +70,7 @@ with lib;
       portalPackage =
         inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       # plugins = [
-      #   inputs.hyprland-plugins.packages.${pkgs.system}.hyprexpo
+      #   inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}.hyprexpo
       # ];
     };
 

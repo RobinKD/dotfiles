@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.hm-modules.waybar;
-  nix-wayland-waybar = inputs.nixpkgs-wayland.packages.${pkgs.system}.waybar;
+  nix-wayland-waybar = inputs.nixpkgs-wayland.packages.${pkgs.stdenv.hostPlatform.system}.waybar;
   check-updates = ../../../scripts/check_updates.sh;
   audio-switch = pkgs.writeShellScriptBin "audio-switch" ''
         mapfile -t sinks < <(wpctl status | awk '
