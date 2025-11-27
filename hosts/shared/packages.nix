@@ -19,7 +19,7 @@
     vlc
 
     # Always useful
-    librewolf
+    librewolf-bin
     gparted
     gpg-tui
     featherpad
