@@ -79,8 +79,8 @@ rec {
 
   wayland.windowManager.hyprland.settings = {
     windowrule = [
-      "fullscreen,class:^(steam_app*)$"
-      "monitor:desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000,class:^(steam_app*)$"
+      # "fullscreen,class:^(steam_app*)$"
+      # "monitor:desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000,class:^(steam_app*)$"
     ];
   };
 }

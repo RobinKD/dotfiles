@@ -15,7 +15,6 @@ let
     tradingWakeup; tradingview & sleep 5; hyprctl dispatch moveworkspacetomonitor Charts desc:Dell Inc. DELL S2425H FZM8M04 &
     tws & sleep 5; hyprctl dispatch moveworkspacetomonitor Action desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000 &
     librewolf & firefox & sleep 5; hyprctl dispatch moveworkspacetomonitor Web desc:ASUSTek COMPUTER INC ASUS VA24EQSB S9LMTF185712 &
-    sleep 5; restart-emacs; sleep 1; emacsclient -c -a emacs --eval '(org-roam-node-find)' & sleep 2; hyprctl dispatch focuswindow class:emacs; hyprctl dispatch movetoworkspace 1; hyprctl dispatch movewindow mon:desc:ASUSTek COMPUTER INC ASUS VA24EQSB S9LMTF185712;
   '';
 in
 {
