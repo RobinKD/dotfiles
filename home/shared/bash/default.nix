@@ -75,44 +75,48 @@ with lib;
         view_vm = "remote-viewer spice://127.0.0.1:5900 & disown";
       };
       bashrcExtra = ''
-        flakify() {
-          if [ ! -e flake.nix ]; then
-            nix flake new -t github:nix-community/nix-direnv .
-          elif [ ! -e .envrc ]; then
-            echo "use flake" > .envrc
-            direnv allow
-          fi
-        }
+                flakify() {
+                  if [ ! -e flake.nix ]; then
+                    nix flake new -t github:nix-community/nix-direnv .
+                  elif [ ! -e .envrc ]; then
+                    echo "use flake" > .envrc
+                    direnv allow
+                  fi
+                }
 
-        show_updates() {
-          echo "Updated packages:"
-          nix store diff-closures /run/current-system ${dotDir}/build_updates
-        }
+                gex() {
+        	  direnv exec ${homeDir}/Trading/CustomTV python ${homeDir}/Trading/CustomTV/possible_gamma.py "$@"
+                }
 
-        show_booted_updates() {
-          nix store diff-closures /run/booted-system /run/current-system
-        }
+                show_updates() {
+                  echo "Updated packages:"
+                  nix store diff-closures /run/current-system ${dotDir}/build_updates
+                }
 
-        update_passwords() {
-          if [ $(stat --format "%Z" ${homeDir}/.password-store) -gt $(stat --format "%Z" ${dotDir}/secrets/pass_bkp.tar.gz) ]; then
-            echo "Archive is older, nothing to do..."
-          else
-            echo "Archive is newer, update and delete removed files!"
-            sops --config ${dotDir}/.sops.yaml -d ${dotDir}/secrets/pass_bkp.tar.gz > ${dotDir}/pass.tar.gz
-            mkdir ${dotDir}/passwords
-            tar -xf ${dotDir}/pass.tar.gz -C ${dotDir}/passwords
-            echo -e "Preview synchronisation:\n"
-            rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete --dry-run
-            echo -e "\n\n"
-            read -p "Update? (y/N) " confirm
-            if [ $confirm == "y" ]; then
-               echo -e "\nPerforming update...\n"
-               rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete
-            fi
-            rm -rf ${dotDir}/passwords
-            rm ${dotDir}/pass.tar.gz
-          fi
-        }
+                show_booted_updates() {
+                  nix store diff-closures /run/booted-system /run/current-system
+                }
+
+                update_passwords() {
+                  if [ $(stat --format "%Z" ${homeDir}/.password-store) -gt $(stat --format "%Z" ${dotDir}/secrets/pass_bkp.tar.gz) ]; then
+                    echo "Archive is older, nothing to do..."
+                  else
+                    echo "Archive is newer, update and delete removed files!"
+                    sops --config ${dotDir}/.sops.yaml -d ${dotDir}/secrets/pass_bkp.tar.gz > ${dotDir}/pass.tar.gz
+                    mkdir ${dotDir}/passwords
+                    tar -xf ${dotDir}/pass.tar.gz -C ${dotDir}/passwords
+                    echo -e "Preview synchronisation:\n"
+                    rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete --dry-run
+                    echo -e "\n\n"
+                    read -p "Update? (y/N) " confirm
+                    if [ $confirm == "y" ]; then
+                       echo -e "\nPerforming update...\n"
+                       rsync -aP ${dotDir}/passwords${homeDir}/.password-store/ ${homeDir}/.password-store/ --delete
+                    fi
+                    rm -rf ${dotDir}/passwords
+                    rm ${dotDir}/pass.tar.gz
+                  fi
+                }
       '';
     };
   };
