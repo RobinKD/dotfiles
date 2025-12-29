@@ -9,7 +9,9 @@ let
   username = hm.home.username;
   homeDir = hm.home.homeDirectory;
   hostname = config.networking.hostName;
-  update-ib-tws = import ../../../pkgs/ib-tws/update.nix { inherit pkgs; };
+  updateIbTws = pkgs.writeShellScriptBin "update-ib-tws" (
+    builtins.readFile ../../../pkgs/ib-tws/update.sh
+  );
 in
 {
   systemd.timers."system-auto-build" = {
@@ -21,17 +23,19 @@ in
     };
   };
 
-  environment.systemPackages = [ update-ib-tws.update-ib-tws ];
+  # environment.systemPackages = [ update-ib-tws.update-ib-tws ];
 
   systemd.services."system-auto-build" = {
     path = [
       pkgs.nix
       pkgs.git
-      update-ib-tws.update-ib-tws
+      pkgs.curl
+      pkgs.gnused
+      updateIbTws
     ];
     script = ''
       nix flake update --flake ${homeDir}/.dotfiles/
-      update-ib-tws
+      update-ib-tws ${homeDir}/.dotfiles/pkgs/ib-tws
       nix build --option cores 1 "${homeDir}/.dotfiles#nixosConfigurations.${hostname}.config.system.build.toplevel" -o ${homeDir}/.dotfiles/build_updates
     '';
     serviceConfig = {
