@@ -387,7 +387,7 @@ In-buffer auto completion
         :custom
         (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
         (corfu-auto t)                 ;; Enable auto completion
-        ;; (corfu-separator ?\s)          ;; Orderless field separator
+        (corfu-separator ?\s)          ;; Orderless field separator
         ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
         ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
         ;; (corfu-preview-current nil)    ;; Disable current candidate preview
@@ -1390,7 +1390,8 @@ Apheleia seems easier to work with for now
     (setq-local completion-at-point-functions
     	      (list (cape-capf-super
     		     #'eglot-completion-at-point
-    		     #'cape-dabbrev
+  		   #'cape-dabbrev
+  		   #'yasnippet-capf
     		     ))))
 
   (use-package eglot
@@ -1414,7 +1415,7 @@ Apheleia seems easier to work with for now
     		'(:pylsp
     		  (:plugins
     		   (:jedi
-    		    (:auto_import_modules [ "numpy" "torch" "pandas" "pytorch_lightning" "matplotlib" ])
+    		    (:auto_import_modules [ "numpy" "torch" "pandas" "pytorch_lightning" "matplotlib" ]) 
     		    :jedi_completion
     		    (:fuzzy t)
     		    :jedi_definition
@@ -1431,7 +1432,7 @@ Apheleia seems easier to work with for now
     				    :select [ "ALL" ]
     				    :ignore [ "D211" "D213" "S101" "ANN101" "PLR0913" ]
     				    :format [ "I" ]
-    				    :targetVersion "py311")
+    				    )
     		    :pycodestyle (:enabled :json-false)
     		    :pyflakes (:enabled :json-false)
     		    :mccabe (:enabled :json-false)
