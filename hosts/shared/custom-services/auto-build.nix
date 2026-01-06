@@ -18,7 +18,7 @@ in
     wantedBy = [ "timers.target" ];
     timerConfig = {
       OnBootSec = "5m";
-      OnUnitActiveSec = "2h";
+      # OnUnitActiveSec = "2h";
       Unit = "system-auto-build.service";
     };
   };
