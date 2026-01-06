@@ -4,21 +4,20 @@
     # windowrule = float, ^(kitty)$
 
     windowrule = [
-      "opacity 0.97 override 0.93 override,title:^(.*Emacs.*|.*Alacritty.*)$"
-      "opacity 0.97 override 0.93 override,class:^(Alacritty)$"
+      "opacity 0.97 override 0.93 override,match:title ^(.*Emacs.*|.*Alacritty.*)$"
+      "opacity 0.97 override 0.93 override,match:class ^(Alacritty)$"
 
-      "maximize,class:^(firefox|librewolf|WebCord|Element|org.telegram.desktop|signal)$"
-      "maximize,title:^(.*Mint-XFCE.*)"
-      "float, title:^(Picture-in-Picture)$"
-      "pin, title:^(Picture-in-Picture)$"
-      "float, title:^(alacritty_float)$"
-      "float, title:^(kitty_float)$"
+      "maximize on,match:class ^(firefox|librewolf|WebCord|Element|org.telegram.desktop|signal)$"
+      "float on, match:title ^(Picture-in-Picture)$"
+      "pin on, match:title ^(Picture-in-Picture)$"
+      "float on, match:title ^(alacritty_float)$"
+      "float on, match:title ^(kitty_float)$"
 
-      "workspace name:Social silent,class:^(WebCord|Element|org.telegram.desktop|signal)$"
-      "workspace name:Web silent,class:^(firefox|librewolf)$"
-      "workspace name:Mail silent,title:^(.*mu4e.*)"
-      "workspace name:Action silent,class:^(install4j-jclient-LoginFrame)$"
-      "workspace name:Charts silent,class:TradingView"
+      "workspace name:Social silent,match:class ^(WebCord|Element|org.telegram.desktop|signal)$"
+      "workspace name:Web silent,match:class ^(firefox|librewolf)$"
+      "workspace name:Mail silent,match:title ^(.*mu4e.*)"
+      "workspace name:Action silent,match:class ^(install4j-jclient-LoginFrame)$"
+      "workspace name:Charts silent,match:class TradingView"
     ];
 
     # Workspace binding

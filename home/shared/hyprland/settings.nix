@@ -8,7 +8,7 @@
 let
   set-background = pkgs.writeShellScriptBin "set-background" ''
     WALLPAPER=$(${pkgs.findutils}/bin/find ${wallpapers} -type f | ${pkgs.coreutils}/bin/shuf -n 1)
-    hyprctl hyprpaper reload ,"$WALLPAPER"
+    hyprctl hyprpaper wallpaper ,$WALLPAPER
   '';
 in
 {
@@ -128,6 +128,10 @@ in
       gestures = {
         # See https://wiki.hyprland.org/Configuring/Variables/ for more
         workspace_swipe_touch = "off";
+      };
+
+      misc = {
+        on_focus_under_fullscreen = 1;
       };
 
       debug = {
