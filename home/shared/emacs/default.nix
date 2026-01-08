@@ -73,7 +73,7 @@ let
             shellcheck
             enchant
             pandoc
-            nixfmt-rfc-style # Format nix files
+            nixfmt # Format nix files
             nil # Nix LSP
             shfmt
             shellcheck
