@@ -62,9 +62,7 @@ with lib;
 
     wayland.windowManager.hyprland = {
       enable = true;
-      xwayland = {
-        enable = true;
-      };
+      settings.xwayland = true;
       systemd.enable = false;
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.default;
       portalPackage =
