@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 let
-  screenshot = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave active; hyprctl keyword animation 'fadeOut,1,4,default'";
-  copyarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copy area; hyprctl keyword animation 'fadeOut,1,4,default'";
+  screenshot = "shader=$(hyprshade current) && hyprshade off && hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave active; hyprctl keyword animation 'fadeOut,1,4,default' && hyprshade on $shader";
+  copyarea = "shader=$(hyprshade current) && hyprshade off && hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copy area; hyprctl keyword animation 'fadeOut,1,4,default' && hyprshade on $shader";
 
   # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
   # Would work with a QWERTY keyboard
