@@ -17,5 +17,5 @@ if [ "$UPSTREAM_VERSION" != "$LOCAL_VERSION" -a -n "$UPSTREAM_VERSION" ]; then
 	sed -i -e 's/version = ".*/version = "'$UPSTREAM_VERSION'";/' "$DEFAULT_NIX"
 	HASH=$(nix-prefetch-url $URL_INSTALLER --executable | xargs nix hash convert --hash-algo sha256)
 	echo 'HASH: '$HASH
-	sed -i -e 's/sha256 = ".*/sha256 = "'$HASH'";/' "$DEFAULT_NIX"
+	sed -i -e 's|sha256 = ".*|sha256 = "'$HASH'";|' "$DEFAULT_NIX"
 fi
