@@ -1391,7 +1391,6 @@ Apheleia seems easier to work with for now
     	      (list (cape-capf-super
     		     #'eglot-completion-at-point
   		   #'cape-dabbrev
-  		   #'yasnippet-capf
     		     ))))
 
   (use-package eglot
