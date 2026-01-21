@@ -16,7 +16,6 @@
       "workspace name:Social silent,match:class ^(WebCord|Element|org.telegram.desktop|signal)$"
       "workspace name:Web silent,match:class ^(firefox|librewolf)$"
       "workspace name:Mail silent,match:title ^(.*mu4e.*)"
-      "workspace name:Action silent,match:class ^(install4j-jclient-LoginFrame)$"
       "workspace name:Charts silent,match:class TradingView"
     ];
 
