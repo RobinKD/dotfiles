@@ -12,9 +12,7 @@ let
   #     "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
   #   ]) 10);
   start-trading-day = pkgs.writeShellScriptBin "start-trading" ''
-    tradingWakeup; tradingview & sleep 5; hyprctl dispatch moveworkspacetomonitor Charts desc:Dell Inc. DELL S2425H FZM8M04 &
-    tws & sleep 5; hyprctl dispatch moveworkspacetomonitor Action desc:Beihai Century Joint Innovation Technology Co.Ltd QMC-VA30-02 0000000000000 &
-    librewolf & firefox & sleep 5; hyprctl dispatch moveworkspacetomonitor Web desc:ASUSTek COMPUTER INC ASUS VA24EQSB S9LMTF185712 &
+    tradingWakeup & tws & librewolf & firefox &
   '';
 in
 {
