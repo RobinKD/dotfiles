@@ -22,7 +22,6 @@ in
     ../shared/custom-services/auto-build.nix
     ../shared/custom-services/backup-passwords.nix
     ../shared/custom-services/sound_timer
-    ../shared/dockers/tradenote.nix
     ../shared/gaming.nix
   ];
 
