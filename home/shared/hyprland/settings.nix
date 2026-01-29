@@ -132,6 +132,7 @@ in
 
       misc = {
         on_focus_under_fullscreen = 1;
+        disable_splash_rendering = true;
       };
 
       debug = {
