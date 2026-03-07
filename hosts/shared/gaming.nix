@@ -21,8 +21,8 @@
   };
 
   environment.systemPackages = with pkgs; [
-    wineWowPackages.stable
+    wineWow64Packages.stable
     winetricks
-    wineWowPackages.waylandFull
+    wineWow64Packages.waylandFull
   ];
 }
