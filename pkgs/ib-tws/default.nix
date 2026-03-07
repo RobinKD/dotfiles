@@ -4,7 +4,9 @@
 with pkgs;
 # Credit to https://github.com/clefru/nur-packages/blob/master/pkgs/ib-tws/default.nix
 let
-  version = "10.43.1c";
+  version = "10.44.1g";
+
+  openjfx25-webkit = (openjfx25.override { withWebKit = true; });
 
   libPath = lib.makeLibraryPath ([
     atk
@@ -21,7 +23,7 @@ let
     gdk-pixbuf
     glib
     gtk3
-    (openjfx25.override { withWebKit = true; })
+    openjfx25-webkit
     libdrm
     libgbm
     libGL
@@ -33,17 +35,17 @@ let
     mesa
     systemd
     wayland
-    xorg.libXfixes
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libXi
-    xorg.libXxf86vm
-    xorg.libxcb
-    xorg.libX11
+    libXfixes
+    libXcomposite
+    libXdamage
+    libXext
+    libXrandr
+    libXrender
+    libXtst
+    libXi
+    libXxf86vm
+    libxcb
+    libX11
   ]);
 in
 stdenv.mkDerivation {
@@ -52,7 +54,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh";
-    sha256 = "sha256-1eb2U1IfJ9aA6ZPI10sAz2cTFE3OhuRvvd9VN6u2Cus=";
+    sha256 = "sha256-6iv4d9HPIj93DhNpdcYxFBiTWOUkfD2x9cUN8g+3zPI=";
     executable = true;
   };
 
