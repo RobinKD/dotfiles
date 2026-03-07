@@ -14,6 +14,13 @@ let
   );
 in
 {
+  # Hard containment of builds
+  systemd.slices."nix-daemon".sliceConfig = {
+    CPUQuota = "300%";
+    MemoryHigh = "12G";
+    MemoryMax = "16G";
+  };
+
   systemd.timers."system-auto-build" = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
