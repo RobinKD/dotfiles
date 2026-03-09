@@ -72,7 +72,7 @@ let
       Name = "Youtube";
       URLTemplate = "https://www.youtube.com/results?search_query={searchTerms}";
       Method = "GET";
-      IconURL = "https://fr.m.wikipedia.org/wiki/Fichier:YouTube_full-color_icon_%282017%29.svg";
+      IconURL = "https://www.youtube.com/favicon.ico";
       Alias = "@yt";
       Description = "Search in Youtube";
     }
