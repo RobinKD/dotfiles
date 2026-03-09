@@ -41,12 +41,27 @@ let
     icon = gemini-icon;
     terminal = false;
   };
+
+  euria-icon = pkgs.fetchurl {
+    url = "https://f-droid.org/repo/com.infomaniak.euria/en-US/icon_GsKHXPVXpD19e1UZeq_Lqo0iX5pvOvV7NFQeXpNPpuI%3D.png";
+    sha256 = "sha256-GsKHXPVXpD19e1UZeq/Lqo0iX5pvOvV7NFQeXpNPpuI=";
+  };
+
+  euria = pkgs.makeDesktopItem {
+    name = "Euria";
+    desktopName = "Euria";
+    comment = "Open Euria in librewolf";
+    exec = "librewolf --new-tab https://euria.infomaniak.com/";
+    icon = euria-icon;
+    terminal = false;
+  };
 in
 {
   environment.systemPackages = with pkgs; [
     chatgpt
     grok
     gemini
+    euria
   ];
 
 }
