@@ -22,7 +22,7 @@ let
   added-engines = [
     {
       Name = "Qwant";
-      URLTemplate = "https://www.qwant.com/?q={searchTerms}";
+      URLTemplate = "https://www.qwant.com/?q={searchTerms}&locale=en_GB";
       Method = "GET";
       IconURL = "https://www.qwant.com/public/favicon.066f5ee2ab77b590bb5846c32c57cb84.ico";
       Alias = "@qwant";
