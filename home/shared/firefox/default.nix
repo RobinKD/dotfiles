@@ -46,7 +46,7 @@ let
     }
     {
       Name = "NixOS Wiki";
-      URLTemplate = "https://nixos.wiki/index.php?search={searchTerms}";
+      URLTemplate = "https://wiki.nixos.org/w/index.php?search={searchTerms}";
       Method = "GET";
       IconURL = "https://nixos.org/favicon.ico";
       Alias = "@nixw";
