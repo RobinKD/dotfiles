@@ -6,8 +6,110 @@
   ...
 }:
 let
-  cfg = config.hm-modules.firefox;
-  addons = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
+  cfgff = config.hm-modules.firefox;
+  cfglw = config.hm-modules.librewolf;
+  extensions = {
+    "uBlock0@raymondhill.net" = {
+      installation_mode = "force_installed";
+      install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+      private_browsing = true;
+    };
+    "browserpass@maximbaz.com" = {
+      installation_mode = "force_installed";
+      install_url = "https://addons.mozilla.org/firefox/downloads/latest/browserpass-ce/latest.xpi";
+    };
+  };
+  added-engines = [
+    {
+      Name = "Qwant";
+      URLTemplate = "https://www.qwant.com/?q={searchTerms}";
+      Method = "GET";
+      IconURL = "https://www.qwant.com/public/favicon.066f5ee2ab77b590bb5846c32c57cb84.ico";
+      Alias = "@qwant";
+      Description = "Search with Qwant";
+    }
+    {
+      Name = "Nixpkgs (unstable)";
+      URLTemplate = "https://search.nixos.org/packages?channel=unstable&query={searchTerms}";
+      Method = "GET";
+      IconURL = "https://nixos.org/favicon.ico";
+      Alias = "@nixpkg";
+      Description = "Search in nixpkgs (unstable)";
+    }
+    {
+      Name = "Nixpkgs (unstable) options";
+      URLTemplate = "https://search.nixos.org/options?channel=unstable&query={searchTerms}";
+      Method = "GET";
+      IconURL = "https://nixos.org/favicon.ico";
+      Alias = "@nixopt";
+      Description = "Search in nixpkgs (unstable) options";
+    }
+    {
+      Name = "NixOS Wiki";
+      URLTemplate = "https://nixos.wiki/index.php?search={searchTerms}";
+      Method = "GET";
+      IconURL = "https://nixos.org/favicon.ico";
+      Alias = "@nixw";
+      Description = "Search in nixOS Wiki";
+    }
+    {
+      Name = "Home manager options";
+      URLTemplate = "https://home-manager-options.extranix.com/?query={searchTerms}";
+      Method = "GET";
+      IconURL = "https://nixos.org/favicon.ico";
+      Alias = "@hmo";
+      Description = "Home manager options";
+    }
+    {
+      Name = "Google Scholar";
+      URLTemplate = "https://scholar.google.com/scholar?q={searchTerms}";
+      Method = "GET";
+      IconURL = "https://scholar.google.com/favicon.ico";
+      Alias = "@scholar";
+      Description = "Search in Google Scholar";
+    }
+    {
+      Name = "Youtube";
+      URLTemplate = "https://www.youtube.com/results?search_query={searchTerms}";
+      Method = "GET";
+      IconURL = "https://fr.m.wikipedia.org/wiki/Fichier:YouTube_full-color_icon_%282017%29.svg";
+      Alias = "@yt";
+      Description = "Search in Youtube";
+    }
+  ];
+  common-params = {
+    PromptForDownloadLocation = true;
+    DontCheckDefaultBrowser = true;
+    DisableFormHistory = true;
+    DisableProfileImport = true;
+    DisableTelemetry = true;
+    DisableFirefoxStudies = true;
+    EnableTrackingProtection = {
+      Value = true;
+      Cryptomining = true;
+      Fingerprinting = true;
+      EmailTracking = true;
+      SuspectedFingerprinting = true;
+    };
+    FirefoxHome = {
+      TopSites = false;
+      SponsoredTopSites = false;
+    };
+    RequestedLocales = [ "en-GB" ];
+    Homepage = {
+      StartPage = "previous-session";
+    };
+    GenerativeAI = {
+      Enabled = false; # Disables everything by default
+      Locked = true;
+    };
+    AutofillAddressEnabled = false;
+    AutofilleCreditCardEnabled = false;
+    PasswordManagerEnabled = false;
+    Preferences = {
+      "geo.enabled" = false;
+    };
+  };
 in
 with lib;
 {
@@ -15,180 +117,71 @@ with lib;
     enable = mkEnableOption "firefox";
   };
 
-  config = mkIf cfg.enable {
+  options.hm-modules.librewolf = {
+    enable = mkEnableOption "librewolf";
+  };
 
-    programs.firefox = {
-      enable = true;
-      nativeMessagingHosts = [ pkgs.browserpass ];
-      profiles.keanu = {
-        extensions.packages = with addons; [
-          ublock-origin
-          browserpass
-        ];
-        settings = {
-          # General settings
-          "browser.startup.couldRestoreSession.count" = 1;
-          "browser.startup.page" = 3;
-          "layout.spellcheckDefault" = 0;
-          "browser.download.useDownloadDir" = false;
-          "browser.download.always_ask_before_handling_new_types" = true;
-          # Do not share geoloc ip
-          "geo.enabled" = false;
-          # Home settings
-          "browser.newtabpage.activity-stream.feeds.topsites" = false;
-
-          # Search settings
-          "browser.urlbar.placeholderName" = "DuckDuckGo";
-          "browser.urlbar.placeholderName.private" = "DuckDuckGo";
-
-          "browser.download.panel.shown" = true;
-          "browser.search.region" = "GB";
-          "distribution.searchplugins.defaultLocale" = "en-GB";
-          "general.useragent.locale" = "en-GB";
-          "browser.translations.panelShown" = false;
-
-          # To make org-protocol captures work with extension
-          "dom.no_unknown_protocol_error.enabled" = false;
-          "security.external_protocol_requires_permission" = false;
-
-          # Some security settings
-          "privacy.globalprivacycontrol.enabled" = true;
-          "privacy.donottrackheader.enabled" = true;
-          "signon.rememberSignons" = false;
-          "extensions.formautofill.creditCards.enabled" = false;
-          "datareporting.healthreport.uploadEnabled" = false;
-          "app.shield.optoutstudies.enabled" = false;
-          "datareporting.policy.dataSubmissionEnabled" = false;
-          "dom.forms.autocomplete.formautofill" = false;
-          "toolkit.telemetry.pioneer-new-studies-available" = false;
-
-          # Authorize org-protocol
-          # Add bookmark with url : javascript:location.href='org-protocol://capture?'+new URLSearchParams({template: 'p', url: window.location.href, title: document.title, body: window.getSelection()});
-          "network.protocol-handler.expose.org-protocol" = false;
-
-          # "browser.disableResetPrompt" = true;
-          # "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
-          # "browser.shell.checkDefaultBrowser" = false;
-          # "browser.shell.defaultBrowserCheckCount" = 1;
-          # "browser.startup.homepage" = "https://start.duckduckgo.com";
-          # "browser.uiCustomization.state" = ''{"placements":{"widget-overflow-fixed-list":[],"nav-bar":["back-button","forward-button","stop-reload-button","home-button","urlbar-container","downloads-button","library-button","ublock0_raymondhill_net-browser-action","_testpilot-containers-browser-action"],"toolbar-menubar":["menubar-items"],"TabsToolbar":["tabbrowser-tabs","new-tab-button","alltabs-button"],"PersonalToolbar":["import-button","personal-bookmarks"]},"seen":["save-to-pocket-button","developer-button","ublock0_raymondhill_net-browser-action","_testpilot-containers-browser-action"],"dirtyAreaCache":["nav-bar","PersonalToolbar","toolbar-menubar","TabsToolbar","widget-overflow-fixed-list"],"currentVersion":18,"newElementCount":4}'';
-          # "dom.security.https_only_mode" = true;
-          # "identity.fxaccounts.enabled" = false;
-          # "privacy.trackingprotection.enabled" = true;
-          # "signon.rememberSignons" = false;
-        };
-
-        search = {
-          force = true;
-          engines = {
-            "bing".metaData.hidden = true;
-            "Amazon.co.uk".metaData.hidden = true;
-            "ebay".metaData.hidden = true;
-            "NixOS Packages" = {
-              urls = [
-                {
-                  template = "https://search.nixos.org/packages";
-                  params = [
-                    {
-                      name = "channel";
-                      value = "unstable";
-                    }
-                    {
-                      name = "type";
-                      value = "packages";
-                    }
-                    {
-                      name = "query";
-                      value = "{searchTerms}";
-                    }
-                  ];
-                }
-              ];
-
-              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-              definedAliases = [ "@nop" ];
-            };
-            "NixOS options" = {
-              urls = [
-                {
-                  template = "https://search.nixos.org/options";
-                  params = [
-                    {
-                      name = "channel";
-                      value = "unstable";
-                    }
-                    {
-                      name = "type";
-                      value = "packages";
-                    }
-                    {
-                      name = "query";
-                      value = "{searchTerms}";
-                    }
-                  ];
-                }
-              ];
-
-              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-              definedAliases = [ "@noo" ];
-            };
-
-            "NixOS Wiki" = {
-              urls = [
-                {
-                  template = "https://nixos.wiki/index.php?search={searchTerms}";
-                }
-              ];
-              icon = "https://nixos.wiki/favicon.png";
-              definedAliases = [ "@now" ];
-            };
-
-            "Home Manager options" = {
-              urls = [
-                {
-                  template = "https://home-manager-options.extranix.com/?query={searchTerms}";
-                }
-              ];
-              icon = "https://nixos.wiki/favicon.png";
-              definedAliases = [ "@hmo" ];
-            };
-            "GitLab" = {
-              urls = [
-                {
-                  template = "https://gitlab.com/search?search={searchTerms}";
-                }
-              ];
-              icon = "https://images.ctfassets.net/xz1dnu24egyd/3JZABhkTjUT76LCIclV7sH/17a92be9bce78c2adcc43e23aabb7ca1/gitlab-logo-500.svg";
-              definedAliases = [ "@gitl" ];
-            };
-            "GitHub" = {
-              urls = [
-                {
-                  template = "https://github.com/search?q={searchTerms}&type=repositories";
-                }
-              ];
-              icon = "https://cdn-icons-png.flaticon.com/512/25/25231.png";
-              definedAliases = [ "@gith" ];
-            };
-            "Youtube" = {
-              urls = [
-                {
-                  template = "https://www.youtube.com/results?search_query={searchTerms}";
-                }
-              ];
-              icon = "https://fr.m.wikipedia.org/wiki/Fichier:YouTube_full-color_icon_%282017%29.svg";
-              definedAliases = [ "@yt" ];
+  config = mkMerge [
+    (mkIf cfgff.enable {
+      programs.firefox = {
+        enable = true;
+        languagePacks = [ "en-GB" ];
+        nativeMessagingHosts = [ pkgs.browserpass ];
+        policies = {
+          ExtensionSettings = extensions // {
+            "78272b6fa58f4a1abaac99321d503a20@proton.me" = {
+              installation_mode = "normal_installed";
+              install_url = "https://addons.mozilla.org/firefox/downloads/latest/proton-pass/latest.xpi";
             };
           };
-        };
+          SanitizeOnShutdown = {
+            Cache = true;
+            Cookies = false;
+            FormData = true;
+            History = false;
+            Sessions = false;
+            SiteSettings = false;
+            Locked = false;
+          };
+          SearchEngines = {
+            Remove = [
+              "Bing"
+              "DuckDuckGo"
+              "eBay"
+            ];
+            Add = added-engines;
+            Default = "Qwant";
+          };
+        }
+        // common-params;
       };
-    };
 
-    xdg.mimeApps.defaultApplications = {
-      "text/html" = [ "firefox.desktop" ];
-      "text/xml" = [ "firefox.desktop" ];
-      "x-scheme-handler/http" = [ "firefox.desktop" ];
-      "x-scheme-handler/https" = [ "firefox.desktop" ];
-    };
-  };
+      xdg.mimeApps.defaultApplications = {
+        "text/html" = [ "firefox.desktop" ];
+        "text/xml" = [ "firefox.desktop" ];
+        "x-scheme-handler/http" = [ "firefox.desktop" ];
+        "x-scheme-handler/https" = [ "firefox.desktop" ];
+      };
+    })
+    (mkIf cfglw.enable {
+      programs.librewolf = {
+        enable = true;
+        languagePacks = [ "en-GB" ];
+        nativeMessagingHosts = [ pkgs.browserpass ];
+        policies = {
+          ExtensionSettings = extensions;
+          SanitizeOnShutdown = true;
+          SearchEngines = {
+            Remove = [
+              "DuckDuckGo"
+              "eBay"
+            ];
+            Add = added-engines;
+            Default = "Qwant";
+          };
+        }
+        // common-params;
+      };
+    })
+  ];
 }

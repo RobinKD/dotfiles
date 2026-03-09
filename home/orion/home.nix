@@ -25,6 +25,7 @@ rec {
     git.enable = true;
     gpg.enable = true;
     firefox.enable = true;
+    librewolf.enable = true;
     bash.enable = true;
     gtk-theme.enable = true;
     ssh.enable = true;
