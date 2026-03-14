@@ -45,7 +45,7 @@ in
       "$mod SHIFT, F, togglefloating,"
       # "$mod, A, hyprexpo:expo, toggle" # can be: toggle, off/disable or on/enable
       # Change split mode for dwindle layout
-      "$mod, D, togglesplit,"
+      "$mod, D, layoutmsg, togglesplit"
 
       # Apps
       "$mod, Return, exec, alacritty"
