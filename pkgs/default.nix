@@ -17,12 +17,4 @@ with pkgs;
   #     pkgs
   #     ;
   # };
-  loa-logs = pkgs.callPackage ./loa-logs {
-    inherit
-      lib
-      appimageTools
-      pkgs
-      ;
-  };
-
 }

@@ -9,6 +9,9 @@
 
       "maximize on,match:class ^(firefox|librewolf|WebCord|Element|org.telegram.desktop|signal)$"
       "float on, match:title ^(Picture-in-Picture)$"
+      "pin on, match:class ^(Loa-logs)$"
+      "float on, match:class ^(Loa-logs)$"
+      "border_size 0, match:float yes, match:focus no"
       "pin on, match:title ^(Picture-in-Picture)$"
       "float on, match:title ^(alacritty_float)$"
       "float on, match:title ^(kitty_float)$"

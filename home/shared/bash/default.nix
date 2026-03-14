@@ -75,6 +75,10 @@ with lib;
         view_vm = "remote-viewer spice://127.0.0.1:5900 & disown";
       };
       bashrcExtra = ''
+        	loa-logs() {
+                  sudo -b ${dotDir}/pkgs/loa-logs/nineveh --stop-after-timeout 0 --proxy-without-ipc
+                  ${dotDir}/pkgs/loa-logs/result/AppRun &
+                }
                 flakify() {
                   if [ ! -e flake.nix ]; then
                     nix flake new -t github:nix-community/nix-direnv .

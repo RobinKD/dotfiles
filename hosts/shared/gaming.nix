@@ -29,14 +29,4 @@ in
     winetricks
     wineWow64Packages.waylandFull
   ];
-
-  systemd.services."nineveh" = {
-    script = ''
-      ./${dotDir}/pkgs/loa-logs/nineveh  --stop-after-timeout 0 --proxy-without-ipc
-    '';
-    serviceConfig = {
-      Type = "simple";
-      User = "root";
-    };
-  };
 }
