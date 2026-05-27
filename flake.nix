@@ -32,7 +32,7 @@
 
     # Hyprland
     hyprland = {
-      url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=4b07770b9ef1cceb2e6f56d33538aaffb9186b9c"; # v0.54.1
+      url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=39d7e209c79d451efab1b21151d5938289da838d"; # v0.55.2
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprwm-contrib = {
@@ -40,7 +40,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprlock = {
-      url = "github:hyprwm/hyprlock?rev=c48279d1e0f0a4399b5a2d56c16f2ec677ba18f8"; # v0.9.2
+      url = "github:hyprwm/hyprlock?rev=d75e93f8ee1721d70549d96f4d14bf2948aab70c"; # v0.9.5
       inputs.hyprlang.follows = "hyprland/hyprlang";
       inputs.hyprgraphics.follows = "hyprland/hyprgraphics";
       inputs.hyprutils.follows = "hyprland/hyprutils";
