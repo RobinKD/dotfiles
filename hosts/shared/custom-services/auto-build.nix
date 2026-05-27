@@ -14,13 +14,6 @@ let
   );
 in
 {
-  # Hard containment of builds
-  systemd.slices."nix-daemon".sliceConfig = {
-    CPUQuota = "300%";
-    MemoryHigh = "12G";
-    MemoryMax = "16G";
-  };
-
   systemd.timers."system-auto-build" = {
     wantedBy = [ "timers.target" ];
     timerConfig = {
@@ -29,8 +22,6 @@ in
       Unit = "system-auto-build.service";
     };
   };
-
-  # environment.systemPackages = [ update-ib-tws.update-ib-tws ];
 
   systemd.services."system-auto-build" = {
     path = [
@@ -48,6 +39,10 @@ in
     serviceConfig = {
       Type = "simple";
       User = "${username}";
+      CPUQuota = "300%";
+      MemoryHigh = "12G";
+      MemoryMax = "16G";
+      OOMPolicy = "kill";
     };
   };
 }
