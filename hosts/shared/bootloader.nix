@@ -10,14 +10,13 @@
         editor = false;
       };
       efi = {
-        canTouchEfiVariables = false;
+        canTouchEfiVariables = true;
       };
       grub = {
         enable = true;
         default = "saved";
         configurationLimit = 10;
         copyKernels = true;
-        efiInstallAsRemovable = true;
         efiSupport = true;
         fsIdentifier = "uuid";
         splashMode = "stretch";
