@@ -3,23 +3,78 @@
     # Example windowrule
     # windowrule = float, ^(kitty)$
 
-    windowrule = [
-      "opacity 0.97 override 0.93 override,match:title ^(.*Emacs.*|.*Alacritty.*)$"
-      "opacity 0.97 override 0.93 override,match:class ^(Alacritty)$"
-
-      "maximize on,match:class ^(firefox|librewolf|WebCord|Element|org.telegram.desktop|signal)$"
-      "float on, match:title ^(Picture-in-Picture)$"
-      "pin on, match:class ^(Loa-logs)$"
-      "float on, match:class ^(Loa-logs)$"
-      "border_size 0, match:float yes, match:focus no"
-      "pin on, match:title ^(Picture-in-Picture)$"
-      "float on, match:title ^(alacritty_float)$"
-      "float on, match:title ^(kitty_float)$"
-
-      "workspace name:Social silent,match:class ^(WebCord|Element|org.telegram.desktop|signal)$"
-      "workspace name:Web silent,match:class ^(firefox|librewolf)$"
-      "workspace name:Mail silent,match:title ^(.*mu4e.*)"
-      "workspace name:Charts silent,match:class TradingView"
+    window_rule = [
+      {
+        name = "transparent-emacs-terminal";
+        match = {
+          class = "^(.*emacs.*|.*Alacritty.*)$";
+        };
+        opacity = "0.97 override 0.93 override";
+      }
+      {
+        name = "maximizedApps";
+        match = {
+          class = "^(firefox|librewolf|WebCord|Element|org.telegram.desktop|signal)$";
+        };
+        maximize = true;
+      }
+      {
+        name = "alwaysFloat";
+        match = {
+          title = "^(Picture-in-Picture|alacritty_float)$";
+        };
+        float = true;
+      }
+      {
+        name = "PinPiP";
+        match = {
+          title = "^(Picture-in-Picture)$";
+        };
+        pin = true;
+      }
+      {
+        name = "pinLogs";
+        match = {
+          class = "^(Loa-logs)$";
+        };
+        pin = true;
+      }
+      {
+        name = "floatLogs";
+        match = {
+          class = "^(Loa-logs)$";
+        };
+        float = true;
+      }
+      {
+        name = "noBorderFloat";
+        match = {
+          float = true;
+          focus = false;
+        };
+        border_size = 0;
+      }
+      {
+        name = "socialApps";
+        match = {
+          class = "^(WebCord|Element|org.telegram.desktop|signal)$";
+        };
+        workspace = "name:Social silent";
+      }
+      {
+        name = "webApps";
+        match = {
+          class = "^(firefox|librewolf)$";
+        };
+        workspace = "name:Web silent";
+      }
+      {
+        name = "chartsApps";
+        match = {
+          class = "TradingView";
+        };
+        workspace = "name:Charts silent";
+      }
     ];
 
     # Workspace binding
