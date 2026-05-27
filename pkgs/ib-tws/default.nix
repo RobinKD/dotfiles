@@ -4,7 +4,7 @@
 with pkgs;
 # Credit to https://github.com/clefru/nur-packages/blob/master/pkgs/ib-tws/default.nix
 let
-  version = "10.44.1g";
+  version = "10.47.1c";
 
   openjfx25-webkit = (openjfx25.override { withWebKit = true; });
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh";
-    sha256 = "sha256-6iv4d9HPIj93DhNpdcYxFBiTWOUkfD2x9cUN8g+3zPI=";
+    sha256 = "sha256-omiGcVsKce1CHBeM88XeHA5DB/tT+/q5VLE0Awtwrjg=";
     executable = true;
   };
 
