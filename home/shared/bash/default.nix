@@ -76,8 +76,8 @@ with lib;
       };
       bashrcExtra = ''
         	loa-logs() {
-                  sudo -b ${dotDir}/pkgs/loa-logs/nineveh --stop-after-timeout 0 --proxy-without-ipc
-                  ${dotDir}/pkgs/loa-logs/result/AppRun &
+                  sudo -b ${dotDir}/pkgs/loa-logs/result/bin/nineveh --stop-after-timeout 0 --proxy-without-ipc
+                  ${dotDir}/pkgs/loa-logs/result/bin/loa-logs &
                 }
                 flakify() {
                   if [ ! -e flake.nix ]; then
