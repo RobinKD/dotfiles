@@ -50,6 +50,7 @@ with lib;
       signing = {
         key = "1891BFB363E4E118";
         signByDefault = true;
+        format = "openpgp";
       };
     };
 
