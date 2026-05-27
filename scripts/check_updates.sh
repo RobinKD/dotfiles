@@ -35,10 +35,15 @@ else
 	fi
 fi
 
+is_active=$(systemctl is-active system-auto-build.service)
 if [ $nb_updates -eq 1 ]; then
 	text="$nb_updates update"
 elif [ $nb_updates -eq 0 ]; then
-	text="Nothing to do"
+	if [ $is_active == "active" ]; then
+		text="Building..."
+	else
+		text="Nothing to do"
+	fi
 else
 	text="$nb_updates updates"
 fi
