@@ -48,7 +48,7 @@ with lib;
             # YAML LSP server
             yaml-language-server
             # Yaml formatting
-            nodePackages.prettier
+            prettier
           ];
       })
       (mkIf (cfg.python_gpu.enable && nvidia-enabled) {

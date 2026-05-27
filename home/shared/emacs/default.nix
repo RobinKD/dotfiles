@@ -77,7 +77,7 @@ let
             nil # Nix LSP
             shfmt
             shellcheck
-            nodePackages.bash-language-server # Bash LSP
+            bash-language-server # Bash LSP
           ];
 
         # Optionally override derivations.
