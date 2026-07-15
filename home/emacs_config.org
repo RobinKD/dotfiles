@@ -14,9 +14,6 @@ Basic things such as user vars, basic keyboard stuff or trashing and scrolling b
   ;;; My personal Emacs config
 
   ;;; Very basic stuff
-  (setq user-full-name "Name1"
-	user-mail-address "example@email.com")
-
   (setq auth-sources '(password-store)
 	auth-source-cache-expiry 86400) ; default is 7200 (2h)
   (auth-source-pass-enable)
@@ -72,6 +69,12 @@ Basic things such as user vars, basic keyboard stuff or trashing and scrolling b
 
   (keymap-global-set "C-x 2" #'my/split-window-below)
   (keymap-global-set "C-x 3" #'my/split-window-right)
+#+end_src
+
+** Personal :noexport:
+#+begin_src elisp
+  (setq user-full-name "Name1"
+	user-mail-address "example@email.com")
 #+end_src
 
 * Basic Theming stuff
@@ -1070,7 +1073,6 @@ TODO keywords do not have correct font in super-agenda
     )
 #+end_src
 
-
 ** Org noter
 #+begin_src elisp
   (use-package org-noter
@@ -2005,7 +2007,7 @@ Models from ollama need to be pulled before using in emacs
     )
 #+end_src
 
-* Mu4e
+* Mu4e :noexport:
 #+begin_src elisp
   (setq mm-discouraged-alternatives
   	  '("text/html" "multipart/*" "text/richtext"))
