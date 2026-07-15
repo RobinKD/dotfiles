@@ -17,7 +17,7 @@ let
   #     "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
   #   ]) 10);
   start-trading-day = pkgs.writeShellScriptBin "start-trading" ''
-    tradingWakeup & tws & librewolf & firefox &
+    tradingWakeup & tws & tradingview & librewolf & firefox &
   '';
 in
 {
