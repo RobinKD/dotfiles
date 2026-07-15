@@ -1,12 +1,11 @@
 {
   pkgs ? import <nixpkgs> { },
+  openjfx-webkit,
 }:
 with pkgs;
 # Credit to https://github.com/clefru/nur-packages/blob/master/pkgs/ib-tws/default.nix
 let
-  version = "10.47.1c";
-
-  openjfx25-webkit = (openjfx25.override { withWebKit = true; });
+  version = "10.48.1e";
 
   libPath = lib.makeLibraryPath ([
     atk
@@ -23,7 +22,7 @@ let
     gdk-pixbuf
     glib
     gtk3
-    openjfx25-webkit
+    openjfx-webkit
     libdrm
     libgbm
     libGL
@@ -54,7 +53,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download2.interactivebrokers.com/installers/tws/latest-standalone/tws-latest-standalone-linux-x64.sh";
-    sha256 = "sha256-omiGcVsKce1CHBeM88XeHA5DB/tT+/q5VLE0Awtwrjg=";
+    sha256 = "sha256-VyAlWgyx591yptkuV40Qh2jrR/oFRm4QCUpJRUqlqKY=";
     executable = true;
   };
 
