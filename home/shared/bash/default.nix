@@ -72,6 +72,7 @@ with lib;
 
         # Win 10 VM with QEMU
         win11 = "quickemu --vm vms/windows-11.conf";
+        kalibb = "quickemu --vm vms/kali-kali-weekly.conf";
         view_vm = "remote-viewer spice://127.0.0.1:5900 & disown";
       };
       bashrcExtra = ''
