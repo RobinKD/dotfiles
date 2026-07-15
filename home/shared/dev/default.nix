@@ -59,9 +59,8 @@ with lib;
         home.packages =
           with pkgs;
           [
-            (texlive.combine {
-              inherit (texlive)
-                scheme-medium
+            (texliveMedium.withPackages (
+              ps: with ps; [
                 biblatex
                 sttools
                 datetime2
@@ -109,9 +108,9 @@ with lib;
                 tikz-qtree
                 forest
                 tikzmark
-                ;
-              #  animate media9 zref ocgx2 are for animated tikz
-            })
+                #  animate media9 zref ocgx2 are for animated tikz
+              ]
+            ))
           ]
           ++ [
             # Latex LSP
