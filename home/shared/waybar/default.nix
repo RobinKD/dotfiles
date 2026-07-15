@@ -77,6 +77,8 @@ with lib;
             "network"
             "pulseaudio"
             "backlight"
+            "memory"
+            "cpu"
             "battery"
             "clock"
           ];
@@ -85,7 +87,7 @@ with lib;
             exec = "${check-updates}";
             return-type = "json";
             interval = 300;
-            format = "{icon}  {text}";
+            format = "<span font_size='20000' baseline_shift='-2000'>{icon}</span> {text}";
             format-icons = "";
             tooltip = true;
           };
@@ -131,12 +133,12 @@ with lib;
           };
 
           clock = {
-            format = "{:%H:%M} ";
+            format = "{:%H:%M} <span font_size='20000' baseline_shift='-2000'></span>";
           };
 
           backlight = {
             device = "intel_backlight";
-            format = "{percent}% {icon}";
+            format = "{percent}% <span font_size='20000' baseline_shift='-2000'>{icon}</span>";
             format-icons = [
               ""
               ""
@@ -151,8 +153,21 @@ with lib;
             tooltip = false;
           };
 
+          memory = {
+            interval = 10;
+            format = "{percentage}% <span font_size='20000' baseline_shift='-2000'>{icon}</span>";
+            format-icons = "";
+            tooltip-format = "{used:0.1f}G/{total:0.1f}G RAM\n {swapUsed:0.1f}G/{swapTotal:0.1f}G Swap";
+          };
+
+          cpu = {
+            interval = 10;
+            format = "{usage}% <span font_size='20000' baseline_shift='-2000'>{icon}</span>";
+            format-icons = "";
+          };
+
           pulseaudio = {
-            format = "{volume}% {icon}";
+            format = "{volume}% <span font_size='20000' baseline_shift='-2000'>{icon}</span>";
             format-muted = "";
             tooltip = true;
             on-click = "audio-switch";
@@ -174,9 +189,9 @@ with lib;
 
           network = {
             format = "{ifname}";
-            format-wifi = "";
-            format-ethernet = "";
-            format-disconnected = "󰖪";
+            format-wifi = "<span font_size='20000' baseline_shift='-2000'></span>";
+            format-ethernet = "<span font_size='20000' baseline_shift='-2000'></span>";
+            format-disconnected = "<span font_size='20000' baseline_shift='-2000'>󰖪</span>";
             tooltip-format-wifi = ''
               {essid} ({signalStrength}%)
               Connected with IP: {ipaddr}
@@ -191,7 +206,7 @@ with lib;
           };
 
           battery = {
-            format = "{capacity}% {icon}";
+            format = "{capacity}% <span font_size='20000' baseline_shift='-2000'>{icon}</span>";
             format-icons = [
               ""
               ""
@@ -256,7 +271,7 @@ with lib;
           transition: none; /* Disable predefined animations */
         }
 
-        #clock, #backlight, #pulseaudio, #network, #battery, #tray, #custom-nixos-updates {
+        #clock, #backlight, #pulseaudio, #network, #battery, #tray, #custom-nixos-updates, #memory, #cpu {
           border-radius: 10px;
           background-color: rgba(17, 17, 27, 0.5);
           color: #b4befe;
