@@ -55,6 +55,20 @@ let
     icon = euria-icon;
     terminal = false;
   };
+
+  mammouth-icon = pkgs.fetchurl {
+    url = "https://mammouth.ai/logos/mammouth-ai-logo.svg";
+    sha256 = "sha256-VDnN1QBQZBJuiHDE0G7cWYLourkj5VxFAxxsdOSNRiI=";
+  };
+
+  mammouth = pkgs.makeDesktopItem {
+    name = "Mammouth";
+    desktopName = "Mammouth";
+    comment = "Open Mammouth in librewolf";
+    exec = "librewolf --new-tab https://mammouth.ai/app/a/default";
+    icon = mammouth-icon;
+    terminal = false;
+  };
 in
 {
   environment.systemPackages = with pkgs; [
@@ -62,6 +76,7 @@ in
     grok
     gemini
     euria
+    mammouth
   ];
 
 }
