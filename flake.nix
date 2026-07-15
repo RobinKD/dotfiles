@@ -32,7 +32,7 @@
 
     # Hyprland
     hyprland = {
-      url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=39d7e209c79d451efab1b21151d5938289da838d"; # v0.55.2
+      url = "git+https://github.com/hyprwm/Hyprland?submodules=1&rev=a0136d8c04687bb36eb8a28eb9d1ff92aea99704"; # v0.55.4
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprwm-contrib = {
